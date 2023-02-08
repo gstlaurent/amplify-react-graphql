@@ -26,12 +26,12 @@ const App = ({ signOut }) => {
   }, []);
 
   async function fetchNotes() {
-    const apiData = await API.graphql({ query: listNotes });
+    const apiData = await API.graphql({ query: listNotes, authMode: 'AMAZON_COGNITO_USER_POOLS' });
     const notesFromAPI = apiData.data.listNotes.items;
     await Promise.all(
       notesFromAPI.map(async (note) => {
         if (note.image) {
-          const url = await Storage.get(note.name);
+          const url = await Storage.vault.get(note.name);
           note.image = url;
         }
         return note;
@@ -49,23 +49,27 @@ const App = ({ signOut }) => {
       description: form.get("description"),
       image: image.name,
     };
-    if (!!data.image) await Storage.put(data.name, image);
+    if (!!data.image) await Storage.vault.put(data.name, image);
     await API.graphql({
       query: createNoteMutation,
       variables: { input: data },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
     fetchNotes();
     event.target.reset();
   }
 
-  async function deleteNote({ id }) {
+  async function deleteNote({ id, name }) {
     const newNotes = notes.filter((note) => note.id !== id);
     setNotes(newNotes);
+    await Storage.vault.remove(name);
     await API.graphql({
       query: deleteNoteMutation,
       variables: { input: { id } },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
   }
+
 
   return (
     <View className="App">
