@@ -4,3 +4,28 @@ type Note @model @auth(rules: [ { allow: owner } ] ){
   description: String
   image: String
 }
+
+type Article @model @auth(rules: [ { allow: owner } ] ){
+  id: ID!
+  image: String!
+  seasons: [Season]!
+  usage: Usage
+}
+
+enum Season {
+  SPRING
+  SUMMER
+  FALL
+  WINTER
+}
+
+enum Usage {
+  TOP
+  BOTTOM
+  DRESS
+  OUTERWEAR
+  SHOES
+  ACCESSORY
+  SWEATER
+  SHORTS
+}

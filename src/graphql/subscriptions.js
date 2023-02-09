@@ -49,3 +49,51 @@ export const onDeleteNote = /* GraphQL */ `
     }
   }
 `;
+export const onCreateArticle = /* GraphQL */ `
+  subscription OnCreateArticle(
+    $filter: ModelSubscriptionArticleFilterInput
+    $owner: String
+  ) {
+    onCreateArticle(filter: $filter, owner: $owner) {
+      id
+      image
+      seasons
+      usage
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateArticle = /* GraphQL */ `
+  subscription OnUpdateArticle(
+    $filter: ModelSubscriptionArticleFilterInput
+    $owner: String
+  ) {
+    onUpdateArticle(filter: $filter, owner: $owner) {
+      id
+      image
+      seasons
+      usage
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteArticle = /* GraphQL */ `
+  subscription OnDeleteArticle(
+    $filter: ModelSubscriptionArticleFilterInput
+    $owner: String
+  ) {
+    onDeleteArticle(filter: $filter, owner: $owner) {
+      id
+      image
+      seasons
+      usage
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

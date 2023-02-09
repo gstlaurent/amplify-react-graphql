@@ -49,3 +49,51 @@ export const deleteNote = /* GraphQL */ `
     }
   }
 `;
+export const createArticle = /* GraphQL */ `
+  mutation CreateArticle(
+    $input: CreateArticleInput!
+    $condition: ModelArticleConditionInput
+  ) {
+    createArticle(input: $input, condition: $condition) {
+      id
+      image
+      seasons
+      usage
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateArticle = /* GraphQL */ `
+  mutation UpdateArticle(
+    $input: UpdateArticleInput!
+    $condition: ModelArticleConditionInput
+  ) {
+    updateArticle(input: $input, condition: $condition) {
+      id
+      image
+      seasons
+      usage
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteArticle = /* GraphQL */ `
+  mutation DeleteArticle(
+    $input: DeleteArticleInput!
+    $condition: ModelArticleConditionInput
+  ) {
+    deleteArticle(input: $input, condition: $condition) {
+      id
+      image
+      seasons
+      usage
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
