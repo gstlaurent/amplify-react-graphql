@@ -17,6 +17,8 @@ import {
   createNote as createNoteMutation,
   deleteNote as deleteNoteMutation,
 } from "./graphql/mutations";
+import { SEASONS } from "./season";
+import { USAGES } from "./usage";
 
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
@@ -70,6 +72,20 @@ const App = ({ signOut }) => {
     });
   }
 
+  const [seasons, setSeasons] = useState(
+    new Array(SEASONS.length).fill(false)
+  );
+
+  const [usages, setUsages] = useState(
+    new Array(USAGES.length).fill(false)
+  );
+
+  const handleOnChange = (checkboxes, setCheckboxes, position) => {
+    const updatedCheckboxes = checkboxes.map((item, index) =>
+      index === position ? !item : item
+    );
+    setCheckboxes(updatedCheckboxes);
+  };
 
   return (
     <View className="App">
@@ -101,6 +117,47 @@ const App = ({ signOut }) => {
           <Button type="submit" variation="primary">
             Create Note
           </Button>
+          <h4>Seasons</h4>
+          <ul className="seasons-list">
+            {SEASONS.map(({ label, _ }, index) => {
+              return (
+                <li key={label}>
+                  <div className="seasons-list-item">
+                    <input
+                      type="checkbox"
+                      id={`custom-checkbox-${label}`}
+                      name={label}
+                      value={label}
+                      checked={seasons[index]}
+                      onChange={() => handleOnChange(seasons, setSeasons, index)}
+                    />
+                    <label htmlFor={`custom-checkbox-${label}`}>{label}</label>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          <h4>Usage</h4>
+          <ul className="seasons-list">
+            {USAGES.map(({ label, _ }, index) => {
+              return (
+                <li key={label}>
+                  <div className="seasons-list-item">
+                    <input
+                      type="checkbox"
+                      id={`custom-checkbox-${label}`}
+                      name={label}
+                      value={label}
+                      checked={usages[index]}
+                      onChange={() => handleOnChange(usages, setUsages, index)}
+                    />
+                    <label htmlFor={`custom-checkbox-${label}`}>{label}</label>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </Flex>
       </View>
       <Heading level={2}>Current Notes</Heading>
