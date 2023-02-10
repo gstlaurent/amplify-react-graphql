@@ -8,69 +8,19 @@ import {
   Heading,
   Image,
   Text,
-  TextField,
   View,
   withAuthenticator,
 } from '@aws-amplify/ui-react';
-import { listNotes } from "./graphql/queries";
+import { listArticles } from "./graphql/queries";
 import {
-  createNote as createNoteMutation,
-  deleteNote as deleteNoteMutation,
+  createArticle as createArticleMutation,
+  deleteArticle as deleteArticleMutation,
 } from "./graphql/mutations";
 import { SEASONS } from "./season";
 import { USAGES } from "./usage";
 
 const App = ({ signOut }) => {
-  const [notes, setNotes] = useState([]);
-
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
-  async function fetchNotes() {
-    const apiData = await API.graphql({ query: listNotes, authMode: 'AMAZON_COGNITO_USER_POOLS' });
-    const notesFromAPI = apiData.data.listNotes.items;
-    await Promise.all(
-      notesFromAPI.map(async (note) => {
-        if (note.image) {
-          const url = await Storage.vault.get(note.name);
-          note.image = url;
-        }
-        return note;
-      })
-    );
-    setNotes(notesFromAPI);
-  }
-
-  async function createNote(event) {
-    event.preventDefault();
-    const form = new FormData(event.target);
-    const image = form.get("image");
-    const data = {
-      name: form.get("name"),
-      description: form.get("description"),
-      image: image.name,
-    };
-    if (!!data.image) await Storage.vault.put(data.name, image);
-    await API.graphql({
-      query: createNoteMutation,
-      variables: { input: data },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-    fetchNotes();
-    event.target.reset();
-  }
-
-  async function deleteNote({ id, name }) {
-    const newNotes = notes.filter((note) => note.id !== id);
-    setNotes(newNotes);
-    await Storage.vault.remove(name);
-    await API.graphql({
-      query: deleteNoteMutation,
-      variables: { input: { id } },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-  }
+  const [articles, setArticles] = useState([]);
 
   const [seasons, setSeasons] = useState(
     new Array(SEASONS.length).fill(false)
@@ -87,27 +37,66 @@ const App = ({ signOut }) => {
     setCheckboxes(updatedCheckboxes);
   };
 
+  const getGraphqlEnums = (checkboxes, enumtypes) => {
+    return enumtypes
+      .map((enumtype) => enumtype.graphqlEnum)
+      .filter((_, i) => checkboxes[i]);
+  };
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  async function fetchArticles() {
+    const apiData = await API.graphql({ query: listArticles, authMode: 'AMAZON_COGNITO_USER_POOLS' });
+    const articlesFromAPI = apiData.data.listArticles.items;
+    await Promise.all(
+      articlesFromAPI.map(async (article) => {
+        if (article.image) {
+          const url = await Storage.vault.get(article.image);
+          article.image = url;
+        }
+        return article;
+      })
+    );
+    setArticles(articlesFromAPI);
+  }
+
+  async function createArticle(event) {
+    event.preventDefault();
+    const form = new FormData(event.target);
+    const image = form.get("image");
+    const data = {
+      image: image.name,
+      seasons: getGraphqlEnums(seasons, SEASONS),
+      usage: getGraphqlEnums(usages, USAGES)[0]
+    };
+    if (!!data.image) await Storage.vault.put(data.image, image);
+    await API.graphql({
+      query: createArticleMutation,
+      variables: { input: data },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
+    });
+    fetchArticles();
+    event.target.reset();
+  }
+
+  async function deleteArticle({ id, name }) {
+    const newArticles = articles.filter((article) => article.id !== id);
+    setArticles(newArticles);
+    await Storage.vault.remove(name);
+    await API.graphql({
+      query: deleteArticleMutation,
+      variables: { input: { id } },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
+    });
+  }
+
   return (
     <View className="App">
-      <Heading level={1}>My Notes App</Heading>
-      <View as="form" margin="3rem 0" onSubmit={createNote}>
+      <Heading level={1}>My Articles App</Heading>
+      <View as="form" margin="3rem 0" onSubmit={createArticle}>
         <Flex direction="row" justifyContent="center">
-          <TextField
-            name="name"
-            placeholder="Note Name"
-            label="Note Name"
-            labelHidden
-            variation="quiet"
-            required
-          />
-          <TextField
-            name="description"
-            placeholder="Note Description"
-            label="Note Description"
-            labelHidden
-            variation="quiet"
-            required
-          />
           <View
             name="image"
             as="input"
@@ -115,7 +104,7 @@ const App = ({ signOut }) => {
             style={{ alignSelf: "end" }}
           />
           <Button type="submit" variation="primary">
-            Create Note
+            Create Article
           </Button>
           <h4>Seasons</h4>
           <ul className="seasons-list">
@@ -160,28 +149,31 @@ const App = ({ signOut }) => {
           </ul>
         </Flex>
       </View>
-      <Heading level={2}>Current Notes</Heading>
+      <Heading level={2}>Current Articles</Heading>
       <View margin="3rem 0">
-        {notes.map((note) => (
+        {articles.map((article) => (
           <Flex
-            key={note.id || note.name}
+            key={article.id || article.name}
             direction="row"
             justifyContent="center"
             alignItems="center"
           >
             <Text as="strong" fontWeight={700}>
-              {note.name}
+              {article.name}
             </Text>
-            <Text as="span">{note.description}</Text>
-            {note.image && (
+            <Text as="span">{article.description}</Text>
+            <Text as="span"><strong>Seasons: </strong>{article.seasons.join(", ")}</Text>
+            <Text as="span"><strong>Usage: </strong>{article.usage}</Text>
+
+            {article.image && (
               <Image
-                src={note.image}
-                alt={`visual aid for ${notes.name}`}
+                src={article.image}
+                alt={`visual aid for ${articles.name}`}
                 style={{ width: 400 }}
               />
             )}
-            <Button variation="link" onClick={() => deleteNote(note)}>
-              Delete note
+            <Button variation="link" onClick={() => deleteArticle(article)}>
+              Delete article
             </Button>
           </Flex>
         ))}
