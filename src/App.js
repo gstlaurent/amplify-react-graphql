@@ -22,23 +22,6 @@ import { USAGES } from "./usage";
 const App = ({ signOut }) => {
   const [articles, setArticles] = useState([]);
 
-  const [seasons, setSeasons] = useState(
-    new Array(SEASONS.length).fill(false)
-  );
-
-  const handleOnChange = (checkboxes, setCheckboxes, position) => {
-    const updatedCheckboxes = checkboxes.map((item, index) =>
-      index === position ? !item : item
-    );
-    setCheckboxes(updatedCheckboxes);
-  };
-
-  const getGraphqlEnums = (checkboxes, enumtypes) => {
-    return enumtypes
-      .map((enumtype) => enumtype.graphqlEnum)
-      .filter((_, i) => checkboxes[i]);
-  };
-
   useEffect(() => {
     fetchArticles();
   }, []);
@@ -64,7 +47,7 @@ const App = ({ signOut }) => {
     const image = form.get("image");
     const data = {
       image: image.name,
-      seasons: getGraphqlEnums(seasons, SEASONS),
+      seasons: form.getAll("seasons"),
       usage: form.get("usage")
     };
     if (!!data.image) await Storage.vault.put(data.image, image);
@@ -102,28 +85,23 @@ const App = ({ signOut }) => {
           <Button type="submit" variation="primary">
             Create Article
           </Button>
-          <h4>Seasons</h4>
-          <ul className="seasons-list">
-            {SEASONS.map(({ label, _ }, index) => {
+          <fieldset>
+            <legend>Seasons</legend>
+            {SEASONS.map(({ label, graphqlEnum }, index) => {
+              const id = `season-${graphqlEnum}`;
               return (
-                <li key={label}>
-                  <div className="seasons-list-item">
-                    <input
-                      type="checkbox"
-                      id={`custom-checkbox-${label}`}
-                      name={label}
-                      value={label}
-                      checked={seasons[index]}
-                      onChange={() => handleOnChange(seasons, setSeasons, index)}
-                    />
-                    <label htmlFor={`custom-checkbox-${label}`}>{label}</label>
-                  </div>
-                </li>
+                <div className="seasons-list-item">
+                  <input
+                    type="checkbox"
+                    id={id}
+                    name="seasons"
+                    value={graphqlEnum}
+                  />
+                  <label htmlFor={id}>{label}</label>
+                </div>
               );
             })}
-          </ul>
-
-
+          </fieldset>
           <fieldset>
             <legend>Usage</legend>
             {USAGES.map(({ label, graphqlEnum }, index) => {
