@@ -76,21 +76,12 @@ const App = ({ signOut }) => {
       <Heading level={1}>My Clothing App</Heading>
       <View as="form" margin="3rem 0" onSubmit={createArticle}>
         <Flex direction="row" justifyContent="center">
-          <View
-            name="image"
-            as="input"
-            type="file"
-            style={{ alignSelf: "end" }}
-          />
-          <Button type="submit" variation="primary">
-            Create Article
-          </Button>
           <fieldset>
             <legend>Seasons</legend>
             {SEASONS.map(({ label, graphqlEnum }) => {
               const id = `season-${graphqlEnum}`;
               return (
-                <div className="seasons-list-item" key={id}>
+                <div className="list-item" key={id}>
                   <input
                     type="checkbox"
                     id={id}
@@ -107,7 +98,7 @@ const App = ({ signOut }) => {
             {USAGES.map(({ label, graphqlEnum }) => {
               const id = `usage-${graphqlEnum}`;
               return (
-                <div className="usage-radio-item" key={id}>
+                <div className="list-item" key={id}>
                   <input
                     type="radio"
                     id={id}
@@ -119,6 +110,15 @@ const App = ({ signOut }) => {
               );
             })}
           </fieldset>
+          <View
+            name="image"
+            as="input"
+            type="file"
+            style={{ alignSelf: "center" }}
+          />
+          <Button type="submit" variation="primary">
+            Create Article
+          </Button>
         </Flex>
       </View>
       <Heading level={2}>Current Clothing</Heading>
