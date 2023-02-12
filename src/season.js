@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // https://masteringjs.io/tutorials/fundamentals/enum
 class Season {
   static Spring = new Season('Spring', 'SPRING');
@@ -18,6 +20,16 @@ class Season {
 const SEASONS = Object.keys(Season).map(season => Season[season]);
 
 export const SeasonGroup = () => {
+  const [numChecked, setNumChecked] = useState(0);
+
+  const handleCheckChange = (isChecked) => {
+    if (isChecked) {
+      setNumChecked(numChecked + 1);
+    } else {
+      setNumChecked(numChecked - 1);
+    }
+  }
+
   return (
     <fieldset>
       <legend>Seasons</legend>
@@ -30,6 +42,8 @@ export const SeasonGroup = () => {
               id={id}
               name="seasons"
               value={graphqlEnum}
+              onChange={(e) => handleCheckChange(e.target.checked)}
+              required={numChecked === 0}
             />
             <label htmlFor={id}>{label}</label>
           </div>
