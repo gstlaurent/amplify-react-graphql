@@ -83,6 +83,7 @@ const App = ({ signOut }) => {
             as="input"
             type="file"
             style={{ alignSelf: "center" }}
+            required
           />
           <Button type="submit" variation="primary">
             Create Article

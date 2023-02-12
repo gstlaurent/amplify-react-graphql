@@ -33,6 +33,7 @@ export const UsageRadioGroup = () => {
               id={id}
               name="usage"
               value={graphqlEnum}
+              required
             />
             <label htmlFor={id}>{label}</label>
           </div>
