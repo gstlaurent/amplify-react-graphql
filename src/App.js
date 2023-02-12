@@ -87,10 +87,10 @@ const App = ({ signOut }) => {
           </Button>
           <fieldset>
             <legend>Seasons</legend>
-            {SEASONS.map(({ label, graphqlEnum }, index) => {
+            {SEASONS.map(({ label, graphqlEnum }) => {
               const id = `season-${graphqlEnum}`;
               return (
-                <div className="seasons-list-item">
+                <div className="seasons-list-item" key={id}>
                   <input
                     type="checkbox"
                     id={id}
@@ -104,10 +104,10 @@ const App = ({ signOut }) => {
           </fieldset>
           <fieldset>
             <legend>Usage</legend>
-            {USAGES.map(({ label, graphqlEnum }, index) => {
+            {USAGES.map(({ label, graphqlEnum }) => {
               const id = `usage-${graphqlEnum}`;
               return (
-                <div className="usage-radio-item">
+                <div className="usage-radio-item" key={id}>
                   <input
                     type="radio"
                     id={id}
