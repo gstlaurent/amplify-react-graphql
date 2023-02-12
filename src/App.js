@@ -26,10 +26,6 @@ const App = ({ signOut }) => {
     new Array(SEASONS.length).fill(false)
   );
 
-  const [usages, setUsages] = useState(
-    new Array(USAGES.length).fill(false)
-  );
-
   const handleOnChange = (checkboxes, setCheckboxes, position) => {
     const updatedCheckboxes = checkboxes.map((item, index) =>
       index === position ? !item : item
@@ -69,7 +65,7 @@ const App = ({ signOut }) => {
     const data = {
       image: image.name,
       seasons: getGraphqlEnums(seasons, SEASONS),
-      usage: getGraphqlEnums(usages, USAGES)[0]
+      usage: form.get("usage")
     };
     if (!!data.image) await Storage.vault.put(data.image, image);
     await API.graphql({
@@ -127,26 +123,24 @@ const App = ({ signOut }) => {
             })}
           </ul>
 
-          <h4>Usage</h4>
-          <ul className="seasons-list">
-            {USAGES.map(({ label, _ }, index) => {
+
+          <fieldset>
+            <legend>Usage</legend>
+            {USAGES.map(({ label, graphqlEnum }, index) => {
+              const id = `usage-${graphqlEnum}`;
               return (
-                <li key={label}>
-                  <div className="seasons-list-item">
-                    <input
-                      type="checkbox"
-                      id={`custom-checkbox-${label}`}
-                      name={label}
-                      value={label}
-                      checked={usages[index]}
-                      onChange={() => handleOnChange(usages, setUsages, index)}
-                    />
-                    <label htmlFor={`custom-checkbox-${label}`}>{label}</label>
-                  </div>
-                </li>
+                <div className="usage-radio-item">
+                  <input
+                    type="radio"
+                    id={id}
+                    name="usage"
+                    value={graphqlEnum}
+                  />
+                  <label htmlFor={id}>{label}</label>
+                </div>
               );
             })}
-          </ul>
+          </fieldset>
         </Flex>
       </View>
       <Heading level={2}>Current Articles</Heading>
