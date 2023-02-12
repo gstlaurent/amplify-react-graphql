@@ -16,8 +16,8 @@ import {
   createArticle as createArticleMutation,
   deleteArticle as deleteArticleMutation,
 } from "./graphql/mutations";
-import { SEASONS } from "./season";
-import { USAGES } from "./usage";
+import { SeasonGroup } from "./season";
+import { UsageRadioGroup } from "./usage";
 
 const App = ({ signOut }) => {
   const [articles, setArticles] = useState([]);
@@ -76,40 +76,8 @@ const App = ({ signOut }) => {
       <Heading level={1}>My Clothing App</Heading>
       <View as="form" margin="3rem 0" onSubmit={createArticle}>
         <Flex direction="row" justifyContent="center">
-          <fieldset>
-            <legend>Seasons</legend>
-            {SEASONS.map(({ label, graphqlEnum }) => {
-              const id = `season-${graphqlEnum}`;
-              return (
-                <div className="list-item" key={id}>
-                  <input
-                    type="checkbox"
-                    id={id}
-                    name="seasons"
-                    value={graphqlEnum}
-                  />
-                  <label htmlFor={id}>{label}</label>
-                </div>
-              );
-            })}
-          </fieldset>
-          <fieldset>
-            <legend>Usage</legend>
-            {USAGES.map(({ label, graphqlEnum }) => {
-              const id = `usage-${graphqlEnum}`;
-              return (
-                <div className="list-item" key={id}>
-                  <input
-                    type="radio"
-                    id={id}
-                    name="usage"
-                    value={graphqlEnum}
-                  />
-                  <label htmlFor={id}>{label}</label>
-                </div>
-              );
-            })}
-          </fieldset>
+          <SeasonGroup />
+          <UsageRadioGroup />
           <View
             name="image"
             as="input"
