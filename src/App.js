@@ -73,7 +73,7 @@ const App = ({ signOut }) => {
 
   return (
     <View className="App">
-      <Heading level={1}>My Articles App</Heading>
+      <Heading level={1}>My Clothing App</Heading>
       <View as="form" margin="3rem 0" onSubmit={createArticle}>
         <Flex direction="row" justifyContent="center">
           <View
@@ -121,7 +121,7 @@ const App = ({ signOut }) => {
           </fieldset>
         </Flex>
       </View>
-      <Heading level={2}>Current Articles</Heading>
+      <Heading level={2}>Current Clothing</Heading>
       <View margin="3rem 0">
         {articles.map((article) => (
           <Flex
@@ -145,7 +145,7 @@ const App = ({ signOut }) => {
               />
             )}
             <Button variation="link" onClick={() => deleteArticle(article)}>
-              Delete article
+              Delete item
             </Button>
           </Flex>
         ))}
