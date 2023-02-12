@@ -8,7 +8,6 @@ export class Usage {
     static Shoes = new Usage('Shoes', 'SHOES');
     static Accessory = new Usage('Accessory', 'ACCESSORY');
     static Sweater = new Usage('Sweater', 'SWEATER');
-    static Shorts = new Usage('Shorts', 'SHORTS');
 
     constructor(label, graphqlEnum) {
         this.label = label;
