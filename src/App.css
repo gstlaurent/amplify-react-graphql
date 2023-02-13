@@ -42,3 +42,7 @@
   text-align: initial;
   width: max-content
 }
+
+.page-toggle {
+  display: inline-table;
+}
