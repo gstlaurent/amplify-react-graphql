@@ -18,6 +18,7 @@ import {
 } from "./graphql/mutations";
 import { SeasonGroup } from "./season";
 import { UsageRadioGroup } from "./usage";
+import md5 from "md5";
 
 const App = ({ signOut }) => {
   const [articles, setArticles] = useState([]);
@@ -42,16 +43,23 @@ const App = ({ signOut }) => {
     setArticles(articlesFromAPI);
   }
 
+  async function generateImageName(image) {
+    console.log(md5("bobcat"));
+    const hash = md5(await image.arrayBuffer());
+    const extension = image.name.split(".").at(-1);
+    return `${hash}-${Date.now()}.${extension}`;
+  };
+
   async function createArticle(event) {
     event.preventDefault();
     const form = new FormData(event.target);
     const image = form.get("image");
     const data = {
-      image: image.name,
+      image: await generateImageName(image),
       seasons: form.getAll("seasons"),
       usage: form.get("usage")
     };
-    if (!!data.image) await Storage.vault.put(data.image, image);
+    await Storage.vault.put(data.image, image);
     await API.graphql({
       query: createArticleMutation,
       variables: { input: data },
