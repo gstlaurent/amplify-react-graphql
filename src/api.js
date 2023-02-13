@@ -6,7 +6,7 @@ import {
     deleteArticle as deleteArticleMutation,
 } from "./graphql/mutations";
 
-export const fetchArticles = async (setArticles) => {
+export const fetchArticles = async () => {
     const apiData = await API.graphql({ query: listArticles, authMode: 'AMAZON_COGNITO_USER_POOLS' });
     const articlesFromAPI = apiData.data.listArticles.items;
     await Promise.all(
@@ -18,7 +18,7 @@ export const fetchArticles = async (setArticles) => {
             return article;
         })
     );
-    setArticles(articlesFromAPI);
+    return articlesFromAPI;
 }
 
 export const generateImageName = async (image) => {

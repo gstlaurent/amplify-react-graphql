@@ -19,7 +19,9 @@ export const Wardrobe = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    fetchArticles(setArticles);
+    (async function () {
+      setArticles(await fetchArticles());
+    })();
   }, []);
 
   const onImageSelected = (event) => {
@@ -30,7 +32,7 @@ export const Wardrobe = () => {
 
   const submitForm = async (event) => {
     await createArticle(event);
-    fetchArticles(setArticles);
+    setArticles(await fetchArticles());
     event.target.reset();
     setSelectedImage(null);
   };
