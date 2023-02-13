@@ -91,15 +91,13 @@ const App = ({ signOut }) => {
     <View className="App">
       <Heading level={1}>My Clothing App</Heading>
       <View as="form" margin="3rem 0" onSubmit={createArticle}>
-        {selectedImage && (
-          <div>
-            <Image
-              src={selectedImage}
-              alt={"Preview Image"}
-              style={{ width: 400 }}
-            />
-          </div>
-        )}
+        <Button type="submit" variation="primary">
+          Create Article
+        </Button>
+        <Flex direction="row" justifyContent="center">
+          <SeasonGroup />
+          <UsageRadioGroup />
+        </Flex>
         <View
           name="image"
           as="input"
@@ -109,13 +107,15 @@ const App = ({ signOut }) => {
           onChange={onImageSelected}
           required
         />
-        <Flex direction="row" justifyContent="center">
-          <SeasonGroup />
-          <UsageRadioGroup />
-        </Flex>
-        <Button type="submit" variation="primary">
-          Create Article
-        </Button>
+        {selectedImage && (
+          <div>
+            <Image
+              src={selectedImage}
+              alt={"Preview Image"}
+              style={{ width: 400 }}
+            />
+          </div>
+        )}
       </View>
       <Heading level={2}>Current Clothing</Heading>
       <View margin="3rem 0">
