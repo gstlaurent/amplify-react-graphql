@@ -40,4 +40,5 @@
 
 .list-item {
   text-align: initial;
+  width: max-content
 }

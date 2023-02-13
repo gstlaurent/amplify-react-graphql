@@ -75,20 +75,29 @@ const App = ({ signOut }) => {
     <View className="App">
       <Heading level={1}>My Clothing App</Heading>
       <View as="form" margin="3rem 0" onSubmit={createArticle}>
+        {/* {selectedImage && (
+          <Image
+            src={selectedImage}
+            alt={"Selected Image"}
+            style={{ width: 400 }}
+          />
+        )} */}
+
+        <View
+          name="image"
+          as="input"
+          type="file"
+          accept="image/*"
+          style={{ alignSelf: "center" }}
+          required
+        />
         <Flex direction="row" justifyContent="center">
           <SeasonGroup />
           <UsageRadioGroup />
-          <View
-            name="image"
-            as="input"
-            type="file"
-            style={{ alignSelf: "center" }}
-            required
-          />
-          <Button type="submit" variation="primary">
-            Create Article
-          </Button>
         </Flex>
+        <Button type="submit" variation="primary">
+          Create Article
+        </Button>
       </View>
       <Heading level={2}>Current Clothing</Heading>
       <View margin="3rem 0">
