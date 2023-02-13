@@ -21,6 +21,7 @@ import { UsageRadioGroup } from "./usage";
 
 const App = ({ signOut }) => {
   const [articles, setArticles] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetchArticles();
@@ -58,6 +59,7 @@ const App = ({ signOut }) => {
     });
     fetchArticles();
     event.target.reset();
+    setSelectedImage(null);
   }
 
   async function deleteArticle({ id, name }) {
@@ -71,24 +73,32 @@ const App = ({ signOut }) => {
     });
   }
 
+  const onImageSelected = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedImage(URL.createObjectURL(event.target.files[0]));
+    }
+  }
+
   return (
     <View className="App">
       <Heading level={1}>My Clothing App</Heading>
       <View as="form" margin="3rem 0" onSubmit={createArticle}>
-        {/* {selectedImage && (
-          <Image
-            src={selectedImage}
-            alt={"Selected Image"}
-            style={{ width: 400 }}
-          />
-        )} */}
-
+        {selectedImage && (
+          <div>
+            <Image
+              src={selectedImage}
+              alt={"Preview Image"}
+              style={{ width: 400 }}
+            />
+          </div>
+        )}
         <View
           name="image"
           as="input"
           type="file"
           accept="image/*"
           style={{ alignSelf: "center" }}
+          onChange={onImageSelected}
           required
         />
         <Flex direction="row" justifyContent="center">
