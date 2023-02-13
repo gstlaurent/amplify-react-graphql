@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { API, Storage } from 'aws-amplify';
 import {
   Button,
   Flex,
@@ -8,14 +7,10 @@ import {
   Text,
   View,
 } from '@aws-amplify/ui-react';
-import { listArticles } from "./graphql/queries";
-import {
-  createArticle as createArticleMutation,
-  deleteArticle as deleteArticleMutation,
-} from "./graphql/mutations";
 import { SeasonGroup } from "./season";
 import { UsageRadioGroup } from "./usage";
-import md5 from "md5";
+import { createArticle, fetchArticles, deleteArticle } from "api";
+import React from "react";
 
 
 export const Wardrobe = () => {
@@ -24,61 +19,8 @@ export const Wardrobe = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    fetchArticles();
+    fetchArticles(setArticles);
   }, []);
-
-  async function fetchArticles() {
-    const apiData = await API.graphql({ query: listArticles, authMode: 'AMAZON_COGNITO_USER_POOLS' });
-    const articlesFromAPI = apiData.data.listArticles.items;
-    await Promise.all(
-      articlesFromAPI.map(async (article) => {
-        if (article.image) {
-          const url = await Storage.vault.get(article.image);
-          article.image = url;
-        }
-        return article;
-      })
-    );
-    setArticles(articlesFromAPI);
-  }
-
-  async function generateImageName(image) {
-    console.log(md5("bobcat"));
-    const hash = md5(await image.arrayBuffer());
-    const extension = image.name.split(".").at(-1);
-    return `${hash}-${Date.now()}.${extension}`;
-  };
-
-  async function createArticle(event) {
-    event.preventDefault();
-    const form = new FormData(event.target);
-    const image = form.get("image");
-    const data = {
-      image: await generateImageName(image),
-      seasons: form.getAll("seasons"),
-      usage: form.get("usage")
-    };
-    await Storage.vault.put(data.image, image);
-    await API.graphql({
-      query: createArticleMutation,
-      variables: { input: data },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-    fetchArticles();
-    event.target.reset();
-    setSelectedImage(null);
-  }
-
-  async function deleteArticle({ id, name }) {
-    const newArticles = articles.filter((article) => article.id !== id);
-    setArticles(newArticles);
-    await Storage.vault.remove(name);
-    await API.graphql({
-      query: deleteArticleMutation,
-      variables: { input: { id } },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-  }
 
   const onImageSelected = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -86,9 +28,16 @@ export const Wardrobe = () => {
     }
   }
 
+  const submitForm = async (event) => {
+    await createArticle(event);
+    fetchArticles(setArticles);
+    event.target.reset();
+    setSelectedImage(null);
+  };
+
   return (
     <div>
-      <View as="form" margin="3rem 0" onSubmit={createArticle}>
+      <View as="form" margin="3rem 0" onSubmit={submitForm}>
         <Button type="submit" variation="primary">
           Create Article
         </Button>
@@ -138,12 +87,12 @@ export const Wardrobe = () => {
                 style={{ width: 400 }}
               />
             )}
-            <Button variation="link" onClick={() => deleteArticle(article)}>
+            <Button variation="link" onClick={() => deleteArticle(article, articles, setArticles)}>
               Delete item
             </Button>
           </Flex>
         ))}
       </View>
-    </div>
+    </div >
   );
 };
