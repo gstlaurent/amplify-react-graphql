@@ -18,7 +18,7 @@ class Usage {
   }
 }
 
-const USAGES = Object.keys(Usage).map(usage => Usage[usage]);
+export const USAGES = Object.keys(Usage).map(usage => Usage[usage]);
 
 export const UsageRadioGroup = () => {
   return (

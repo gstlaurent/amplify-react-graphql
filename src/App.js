@@ -12,10 +12,11 @@ import {
 } from '@aws-amplify/ui-react';
 import { Wardrobe } from './wardrobe';
 import React from "react";
+import { Outfit } from "outfit";
 
 
 const App = ({ signOut }) => {
-  const [page, setPage] = useState('wardrobe');
+  const [page, setPage] = useState('outfit');
 
   return (
     <View className="App">
@@ -30,6 +31,7 @@ const App = ({ signOut }) => {
           <ToggleButton value="wardrobe">Wardrobe</ToggleButton>
         </ToggleButtonGroup>
       </div>
+      {page === 'outfit' && <Outfit />}
       {page === 'wardrobe' && <Wardrobe />}
       <Button onClick={signOut}>Sign Out</Button>
     </View>
