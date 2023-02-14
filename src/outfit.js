@@ -51,7 +51,7 @@ export const Outfit = () => {
                                 src={article.image}
                                 alt={article.usage}
                                 title={article.usage}
-                                style={{ width: 400 }}
+                                style={{ width: 125 }}
                             />)
                         )}
                     </div>
