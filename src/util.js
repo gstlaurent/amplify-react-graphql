@@ -8,3 +8,22 @@ export const groupBy = (xs, key) => {
 
 
 export const getRandomInt = (max) => Math.floor(Math.random() * max);
+
+export const sortByStringProperty = (xs, sortKey) => {
+    return xs.sort((a, b) => {
+        if (a[sortKey] === null || b[sortKey] === null) {
+            return 0;
+        }
+        const stringA = a[sortKey].toUpperCase(); // ignore upper and lowercase
+        const stringB = b[sortKey].toUpperCase(); // ignore upper and lowercase
+        if (stringA < stringB) {
+            return -1;
+        }
+        if (stringA > stringB) {
+            return 1;
+        }
+
+        // names must be equal
+        return 0;
+    });
+};

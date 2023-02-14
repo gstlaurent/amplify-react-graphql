@@ -37,6 +37,12 @@ export const Wardrobe = () => {
     setSelectedImage(null);
   };
 
+  const deleteArticleFromWardrobe = (articleToDelete) => {
+    const newArticles = articles.filter((article) => article.id !== articleToDelete.id);
+    setArticles(newArticles);
+    deleteArticle(articleToDelete)
+  };
+
   return (
     <div>
       <View as="form" margin="3rem 0" onSubmit={submitForm}>
@@ -89,7 +95,7 @@ export const Wardrobe = () => {
                 style={{ width: 400 }}
               />
             )}
-            <Button variation="link" onClick={() => deleteArticle(article, articles, setArticles)}>
+            <Button variation="link" onClick={() => deleteArticleFromWardrobe(article)}>
               Delete item
             </Button>
           </Flex>

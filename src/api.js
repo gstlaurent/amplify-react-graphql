@@ -44,9 +44,7 @@ export const createArticle = async (event) => {
     });
 }
 
-export const deleteArticle = async ({ id, name }, articles, setArticles) => {
-    const newArticles = articles.filter((article) => article.id !== id);
-    setArticles(newArticles);
+export const deleteArticle = async ({ id, name }) => {
     await Storage.vault.remove(name);
     await API.graphql({
         query: deleteArticleMutation,
