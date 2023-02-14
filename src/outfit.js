@@ -1,27 +1,50 @@
-import { fetchArticles } from "api";
+import { fetchArticles } from "./api";
 import { useEffect, useState } from "react"
-import { groupBy } from "util";
+import { groupBy, getRandomInt } from "./util";
+import {
+    Image,
+} from '@aws-amplify/ui-react';
+
+const RandomArticle = ({ usage, articles }) => {
+    const index = getRandomInt(articles.length);
+    const article = articles.at(index);
+    return (
+        <div>
+            <span>{usage}</span>
+            <div>
+                <Image
+                    src={article.image}
+                    alt={usage}
+                    style={{ width: 400 }}
+                />
+            </div>
+        </div>
+    );
+};
 
 
 export const Outfit = () => {
-    const [articlesByRole, setArticlesByRole] = useState(null);
+    const [articlesByUsage, setArticlesByUsage] = useState(null);
 
-    const fetchArticlesByRole = async () => {
+    const fetchArticlesByUsage = async () => {
         const articles = await fetchArticles();
-        setArticlesByRole(groupBy(articles, "usage"));
+        setArticlesByUsage(groupBy(articles, "usage"));
     };
 
-
     useEffect(() => {
-        fetchArticlesByRole();
+        fetchArticlesByUsage();
     }, []);
 
 
 
     return (
         <div>
-            {!articlesByRole && <span>Generating Random Outfit...</span>}
-            {articlesByRole && <span>{JSON.stringify(articlesByRole)}</span>}
+            {!articlesByUsage && <span>Generating Random Outfit...</span>}
+            {articlesByUsage &&
+                Object.entries(articlesByUsage).map(([usage, articles]) => {
+                    return (<RandomArticle key={usage} usage={usage} articles={articles} />);
+                })
+            }
         </div>
 
     )

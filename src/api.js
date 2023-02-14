@@ -1,4 +1,4 @@
-import { listArticles } from "graphql/queries";
+import { listArticles } from "./graphql/queries";
 import md5 from "md5";
 import { API, Storage } from 'aws-amplify';
 import {

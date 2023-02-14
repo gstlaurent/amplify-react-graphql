@@ -5,3 +5,6 @@ export const groupBy = (xs, key) => {
         return rv;
     }, {});
 };
+
+
+export const getRandomInt = (max) => Math.floor(Math.random() * max);

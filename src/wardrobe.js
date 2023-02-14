@@ -9,7 +9,7 @@ import {
 } from '@aws-amplify/ui-react';
 import { SeasonGroup } from "./season";
 import { UsageRadioGroup } from "./usage";
-import { createArticle, fetchArticles, deleteArticle } from "api";
+import { createArticle, fetchArticles, deleteArticle } from "./api";
 import React from "react";
 
 
@@ -85,7 +85,7 @@ export const Wardrobe = () => {
             {article.image && (
               <Image
                 src={article.image}
-                alt={`visual aid for ${articles.name}`}
+                alt={`visual aid for a ${article.usage}`}
                 style={{ width: 400 }}
               />
             )}

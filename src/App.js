@@ -12,7 +12,7 @@ import {
 } from '@aws-amplify/ui-react';
 import { Wardrobe } from './wardrobe';
 import React from "react";
-import { Outfit } from "outfit";
+import { Outfit } from "./outfit";
 
 
 const App = ({ signOut }) => {
