@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { groupBy, getRandomInt, sortByStringProperty } from "./util";
 import {
     Image,
+    Button,
 } from '@aws-amplify/ui-react';
 
 export const Outfit = () => {
@@ -35,15 +36,27 @@ export const Outfit = () => {
     return (
         <div>
             {!randomArticles && <span>Generating Random Outfit...</span>}
-            {randomArticles && randomArticles.map((article) => (
-                <Image
-                    key={article.id}
-                    src={article.image}
-                    alt={article.usage}
-                    title={article.usage}
-                    style={{ width: 400 }}
-                />
-            ))}
+            {randomArticles && (
+                <div>
+                    <Button
+                        size="large"
+                        onClick={generateRandomArticles}
+                    >
+                        🔄
+                    </Button>
+                    <div>
+                        {randomArticles.map((article) => (
+                            <Image
+                                key={article.id}
+                                src={article.image}
+                                alt={article.usage}
+                                title={article.usage}
+                                style={{ width: 400 }}
+                            />)
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
