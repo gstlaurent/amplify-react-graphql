@@ -5,8 +5,6 @@ import {
   Button,
   Tabs,
   TabItem,
-  Flex,
-  Heading,
   View,
   withAuthenticator,
 } from '@aws-amplify/ui-react';
@@ -27,15 +25,9 @@ const App = ({ signOut }) => {
 
   return (
     <View className="App">
-      <Heading level={1}>My Clothing App</Heading>
-      <Flex
-        direction="row"
-        wrap="nowrap"
-        justifyContent="space-between"
+      <Tabs defaultIndex={0}
+        style={{ display: "block" }}
       >
-        <Button onClick={signOut}>Sign Out</Button>
-      </Flex>
-      <Tabs defaultIndex={0}>
         <TabItem title="Outfit">
           <Outfit articles={articles} />
         </TabItem>
@@ -43,6 +35,7 @@ const App = ({ signOut }) => {
           <Wardrobe articles={articles} setArticles={setArticles} />
         </TabItem>
       </Tabs>
+      <Button onClick={signOut}>Sign Out</Button>
     </View>
   );
 };

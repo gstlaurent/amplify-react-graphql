@@ -31,6 +31,7 @@ export const Outfit = ({ articles }) => {
     return (
         <div>
             <ToggleButtonGroup
+                style={{ display: "block" }}
                 value={currentSeason}
                 isExclusive
                 isSelectionRequired

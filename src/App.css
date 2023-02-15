@@ -43,6 +43,6 @@
   width: max-content
 }
 
-.page-toggle {
-  display: inline-table;
+.center {
+  display: block;
 }
