@@ -1,15 +1,16 @@
 import { useState } from "react";
 
 // https://masteringjs.io/tutorials/fundamentals/enum
-class Season {
-  static Spring = new Season('Spring', 'SPRING');
-  static Summer = new Season('Summer', 'SUMMER');
-  static Fall = new Season('Fall', 'FALL');
-  static Winter = new Season('Winter', 'WINTER');
+export class Season {
+  static Spring = new Season('Spring', 'SPRING', '🌱');
+  static Summer = new Season('Summer', 'SUMMER', '🌞');
+  static Autumn = new Season('Autumn', 'FALL', '🍂');
+  static Winter = new Season('Winter', 'WINTER', '❄️');
 
-  constructor(label, graphqlEnum) {
+  constructor(label, graphqlEnum, emoji) {
     this.label = label;
     this.graphqlEnum = graphqlEnum;
+    this.emoji = emoji;
   }
 
   toString() {
@@ -17,7 +18,7 @@ class Season {
   }
 };
 
-const SEASONS = Object.keys(Season).map(season => Season[season]);
+export const SEASONS = Object.keys(Season).map(season => Season[season]);
 
 export const SeasonGroup = () => {
   const [numChecked, setNumChecked] = useState(0);
