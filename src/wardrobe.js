@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, } from "react";
 import {
   Button,
   Flex,
@@ -13,16 +13,11 @@ import { createArticle, fetchArticles, deleteArticle } from "./api";
 import React from "react";
 
 
-export const Wardrobe = () => {
+export const Wardrobe = ({ articles, setArticles }) => {
 
-  const [articles, setArticles] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  useEffect(() => {
-    (async function () {
-      setArticles(await fetchArticles());
-    })();
-  }, []);
+
 
   const onImageSelected = (event) => {
     if (event.target.files && event.target.files[0]) {

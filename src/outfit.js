@@ -1,24 +1,14 @@
-import { fetchArticles } from "./api";
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { groupBy, getRandomInt, sortByStringProperty } from "./util";
 import {
     Image,
     Button,
 } from '@aws-amplify/ui-react';
 
-export const Outfit = () => {
-    const [articlesByUsage, setArticlesByUsage] = useState(null);
-    const [randomArticles, setRandomArticles] = useState(null);
+export const Outfit = ({ articles }) => {
+    const [randomArticles, setRandomArticles] = useState([]);
 
-    useEffect(() => {
-        fetchArticlesByUsage();
-    }, []);
-
-
-    const fetchArticlesByUsage = async () => {
-        const articles = await fetchArticles();
-        setArticlesByUsage(groupBy(articles, "usage"));
-    };
+    const articlesByUsage = groupBy(articles, "usage");
 
     const generateRandomArticles = () => {
         const newRandomArticles = Object.values(articlesByUsage).map((articles) => {
@@ -29,7 +19,7 @@ export const Outfit = () => {
         setRandomArticles(sortByStringProperty(newRandomArticles, "usage"));
     }
 
-    if (articlesByUsage && !randomArticles) {
+    if (Object.keys(articlesByUsage).length > 0 && randomArticles.length === 0) {
         generateRandomArticles();
     }
 

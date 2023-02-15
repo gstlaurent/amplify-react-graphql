@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
 import {
@@ -11,12 +10,20 @@ import {
   withAuthenticator,
 } from '@aws-amplify/ui-react';
 import { Wardrobe } from './wardrobe';
-import React from "react";
+import { fetchArticles } from "./api";
 import { Outfit } from "./outfit";
 
 
 const App = ({ signOut }) => {
   const [page, setPage] = useState('outfit');
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    (async function () {
+      setArticles(await fetchArticles());
+    })();
+  }, []);
+
 
   return (
     <View className="App">
@@ -31,8 +38,8 @@ const App = ({ signOut }) => {
           <ToggleButton value="wardrobe">Wardrobe</ToggleButton>
         </ToggleButtonGroup>
       </div>
-      {page === 'outfit' && <Outfit />}
-      {page === 'wardrobe' && <Wardrobe />}
+      {page === 'outfit' && <Outfit articles={articles} />}
+      {page === 'wardrobe' && <Wardrobe articles={articles} setArticles={setArticles} />}
       <Button onClick={signOut}>Sign Out</Button>
     </View>
   );
