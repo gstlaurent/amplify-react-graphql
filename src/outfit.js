@@ -6,7 +6,7 @@ import {
 } from '@aws-amplify/ui-react';
 
 export const Outfit = ({ articles }) => {
-    const [randomArticles, setRandomArticles] = useState([]);
+    const [randomArticles, setRandomArticles] = useState(null);
 
     const articlesByUsage = groupBy(articles, "usage");
 
@@ -19,7 +19,7 @@ export const Outfit = ({ articles }) => {
         setRandomArticles(sortByStringProperty(newRandomArticles, "usage"));
     }
 
-    if (Object.keys(articlesByUsage).length > 0 && randomArticles.length === 0) {
+    if (articlesByUsage && !randomArticles) {
         generateRandomArticles();
     }
 

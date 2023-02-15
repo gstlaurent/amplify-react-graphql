@@ -17,8 +17,6 @@ export const Wardrobe = ({ articles, setArticles }) => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-
-
   const onImageSelected = (event) => {
     if (event.target.files && event.target.files[0]) {
       setSelectedImage(URL.createObjectURL(event.target.files[0]));
@@ -69,7 +67,7 @@ export const Wardrobe = ({ articles, setArticles }) => {
       </View>
       <Heading level={2}>Current Clothing</Heading>
       <View margin="3rem 0">
-        {articles.map((article) => (
+        {articles && articles.map((article) => (
           <Flex
             key={article.id || article.name}
             direction="row"

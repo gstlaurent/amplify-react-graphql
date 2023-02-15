@@ -16,7 +16,7 @@ import { Outfit } from "./outfit";
 
 const App = ({ signOut }) => {
   const [page, setPage] = useState('outfit');
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState(null);
 
   useEffect(() => {
     (async function () {
@@ -32,6 +32,7 @@ const App = ({ signOut }) => {
         <ToggleButtonGroup
           value={page}
           isExclusive
+          isSelectionRequired
           onChange={(value) => setPage(value)}
         >
           <ToggleButton value="outfit">Outfit</ToggleButton>
