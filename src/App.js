@@ -3,21 +3,18 @@ import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
 import {
   Button,
+  Tabs,
+  TabItem,
   Flex,
   Heading,
-  ToggleButton,
-  ToggleButtonGroup,
   View,
   withAuthenticator,
 } from '@aws-amplify/ui-react';
 import { Wardrobe } from './wardrobe';
 import { fetchArticles } from "./api";
 import { Outfit } from "./outfit";
-import { Season, SEASONS } from "./season";
 
 const App = ({ signOut }) => {
-  const [page, setPage] = useState('outfit');
-  const [currentSeason, setCurrentSeason] = useState(Season.Winter.label)//(Season.WINTER);
 
   const [articles, setArticles] = useState(null);
 
@@ -36,30 +33,16 @@ const App = ({ signOut }) => {
         wrap="nowrap"
         justifyContent="space-between"
       >
-        <ToggleButtonGroup
-          value={currentSeason}
-          isExclusive
-          isSelectionRequired
-          onChange={(value) => setCurrentSeason(value)}
-        >
-          {SEASONS.map(({ label, emoji }) => (
-            <ToggleButton value={label} title={label}>{emoji}</ToggleButton>
-          ))}
-        </ToggleButtonGroup>
-        <ToggleButtonGroup
-          value={page}
-          isExclusive
-          isSelectionRequired
-          onChange={(value) => setPage(value)}
-        >
-          <ToggleButton value="outfit">Outfit</ToggleButton>
-          <ToggleButton value="wardrobe">Wardrobe</ToggleButton>
-        </ToggleButtonGroup>
         <Button onClick={signOut}>Sign Out</Button>
       </Flex>
-      {page === 'outfit' && <Outfit articles={articles} />}
-      {page === 'wardrobe' && <Wardrobe articles={articles} setArticles={setArticles} />}
-
+      <Tabs defaultIndex={0}>
+        <TabItem title="Outfit">
+          <Outfit articles={articles} />
+        </TabItem>
+        <TabItem title="Wardrobe">
+          <Wardrobe articles={articles} setArticles={setArticles} />
+        </TabItem>
+      </Tabs>
     </View>
   );
 };

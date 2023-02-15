@@ -3,10 +3,15 @@ import { groupBy, getRandomInt, sortByStringProperty } from "./util";
 import {
     Image,
     Button,
+    ToggleButtonGroup,
+    ToggleButton,
 } from '@aws-amplify/ui-react';
+import { Season, SEASONS } from "./season";
 
 export const Outfit = ({ articles }) => {
     const [randomArticles, setRandomArticles] = useState(null);
+    const [currentSeason, setCurrentSeason] = useState(Season.Winter.label)//(Season.WINTER);
+
 
     const articlesByUsage = groupBy(articles, "usage");
 
@@ -25,6 +30,16 @@ export const Outfit = ({ articles }) => {
 
     return (
         <div>
+            <ToggleButtonGroup
+                value={currentSeason}
+                isExclusive
+                isSelectionRequired
+                onChange={(value) => setCurrentSeason(value)}
+            >
+                {SEASONS.map(({ label, emoji }) => (
+                    <ToggleButton value={label} title={label}>{emoji}</ToggleButton>
+                ))}
+            </ToggleButtonGroup>
             {!randomArticles && <span>Generating Random Outfit...</span>}
             {randomArticles && (
                 <div>
