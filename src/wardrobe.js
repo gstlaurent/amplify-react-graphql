@@ -69,25 +69,18 @@ export const Wardrobe = ({ articles, setArticles }) => {
       <View margin="3rem 0">
         {articles && articles.map((article) => (
           <Flex
-            key={article.id || article.name}
+            key={article.id}
             direction="row"
             justifyContent="center"
             alignItems="center"
           >
-            <Text as="strong" fontWeight={700}>
-              {article.name}
-            </Text>
-            <Text as="span">{article.description}</Text>
             <Text as="span"><strong>Seasons: </strong>{article.seasons.join(", ")}</Text>
             <Text as="span"><strong>Usage: </strong>{article.usage}</Text>
-
-            {article.image && (
-              <Image
-                src={article.image}
-                alt={`visual aid for a ${article.usage}`}
-                style={{ width: 400 }}
-              />
-            )}
+            <Image
+              src={article.imageUrl}
+              alt={`visual aid for a ${article.usage}`}
+              style={{ width: 400 }}
+            />
             <Button variation="link" onClick={() => deleteArticleFromWardrobe(article)}>
               Delete item
             </Button>

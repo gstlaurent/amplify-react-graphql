@@ -13,7 +13,7 @@ export const fetchArticles = async () => {
         articlesFromAPI.map(async (article) => {
             if (article.image) {
                 const url = await Storage.vault.get(article.image);
-                article.image = url;
+                article.imageUrl = url;
             }
             return article;
         })
@@ -44,8 +44,8 @@ export const createArticle = async (event) => {
     });
 }
 
-export const deleteArticle = async ({ id, name }) => {
-    await Storage.vault.remove(name);
+export const deleteArticle = async ({ id, image }) => {
+    await Storage.vault.remove(image);
     await API.graphql({
         query: deleteArticleMutation,
         variables: { input: { id } },

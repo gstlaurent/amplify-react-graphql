@@ -38,7 +38,7 @@ export const Outfit = ({ articles }) => {
                         {randomArticles.map((article) => (
                             <Image
                                 key={article.id}
-                                src={article.image}
+                                src={article.imageUrl}
                                 alt={article.usage}
                                 title={article.usage}
                                 style={{ width: 125 }}
