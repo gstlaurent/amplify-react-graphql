@@ -5,6 +5,7 @@ import {
     Button,
     ToggleButtonGroup,
     ToggleButton,
+    Flex,
 } from '@aws-amplify/ui-react';
 import { Season, SEASONS } from "./season";
 
@@ -30,39 +31,42 @@ export const Outfit = ({ articles }) => {
 
     return (
         <div>
-            <ToggleButtonGroup
-                style={{ display: "block" }}
-                value={currentSeason}
-                isExclusive
-                isSelectionRequired
-                onChange={(value) => setCurrentSeason(value)}
-            >
-                {SEASONS.map(({ label, emoji }) => (
-                    <ToggleButton value={label} title={label}>{emoji}</ToggleButton>
-                ))}
-            </ToggleButtonGroup>
-            {!randomArticles && <span>Generating Random Outfit...</span>}
-            {randomArticles && (
-                <div>
+            <Flex justifyContent="space-between">
+                <ToggleButtonGroup
+                    value={currentSeason}
+                    isExclusive
+                    isSelectionRequired
+                    onChange={(value) => setCurrentSeason(value)}
+                >
+                    {SEASONS.map(({ label, emoji }) => (
+                        <ToggleButton value={label} title={label}>{emoji}</ToggleButton>
+                    ))}
+                </ToggleButtonGroup>
+                {randomArticles && (
                     <Button
                         size="large"
                         onClick={generateRandomArticles}
                     >
                         🔄
                     </Button>
-                    <div>
-                        {randomArticles.map((article) => (
-                            <Image
-                                key={article.id}
-                                src={article.imageUrl}
-                                alt={article.usage}
-                                title={article.usage}
-                                style={{ width: 125 }}
-                            />)
-                        )}
-                    </div>
+                )}
+            </Flex>
+            {randomArticles && (
+                <div>
+                    {randomArticles.map((article) => (
+                        <Image
+                            key={article.id}
+                            src={article.imageUrl}
+                            alt={article.usage}
+                            title={article.usage}
+                            style={{ width: 125 }}
+                        />)
+                    )}
                 </div>
+
             )}
+            {!randomArticles && <span>Generating Random Outfit...</span>}
+
         </div>
     )
 }
