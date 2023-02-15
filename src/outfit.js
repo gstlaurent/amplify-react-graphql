@@ -31,8 +31,11 @@ export const Outfit = ({ articles }) => {
 
     return (
         <div>
-            <Flex justifyContent="space-between">
+            <Flex justifyContent="space-between" align="top">
                 <ToggleButtonGroup
+                    alignItems="flex-start"
+                    style={{ "margin-top": 7, "margin-bottom": 7 }}
+                    size="small"
                     value={currentSeason}
                     isExclusive
                     isSelectionRequired
