@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { groupBy, getRandomInt, sortByStringProperty } from "./util";
 import {
     Image,
@@ -9,52 +9,73 @@ import {
 } from '@aws-amplify/ui-react';
 import { Season, SEASONS } from "./season";
 
-export const Outfit = ({ articles }) => {
-    const [randomArticles, setRandomArticles] = useState(null);
-    const [currentSeason, setCurrentSeason] = useState(Season.Winter.label)//(Season.WINTER);
 
 
-    const articlesByUsage = groupBy(articles, "usage");
-
-    const generateRandomArticles = () => {
-        const newRandomArticles = Object.values(articlesByUsage).map((articles) => {
-            const index = getRandomInt(articles.length);
-            const article = articles.at(index);
+const generateRandomArticles = (articlesByUsage) => {
+    const randomArticles = Object.values(articlesByUsage)
+        .map((usageArticles) => {
+            const index = getRandomInt(usageArticles.length);
+            const article = usageArticles.at(index);
             return article;
         });
-        setRandomArticles(sortByStringProperty(newRandomArticles, "usage"));
-    }
+    return sortByStringProperty(randomArticles, "usage")
+}
 
-    if (articlesByUsage && !randomArticles) {
-        generateRandomArticles();
+const isArticleInSeason = (article, currentSeason) => {
+    return article.seasons.includes(currentSeason);
+};
+
+const groupSeasonalArticlesByUsage = (season, articles) => {
+    if (!articles) {
+        return {};
     }
+    const seasonalArticles = articles.filter((a) => isArticleInSeason(a, season));
+    return groupBy(seasonalArticles, "usage");
+};
+
+
+export const Outfit = ({ articles }) => {
+    const [currentSeason, setCurrentSeason] = useState(Season.Winter.graphqlEnum);//(Season.WINTER);
+    const [articlesByUsage, setArticlesByUsage] = useState({});
+    const [randomArticles, setRandomArticles] = useState([]);
+
+    useEffect(() => {
+        const newArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
+        setArticlesByUsage(newArticlesByUsage);
+    }, [articles, currentSeason]);
+
+
+    useEffect(() => {
+        const newRandomArticles = generateRandomArticles(articlesByUsage);
+        setRandomArticles(newRandomArticles);
+    }, [articlesByUsage]);
 
     return (
         <div>
             <Flex justifyContent="space-between" align="top">
                 <ToggleButtonGroup
                     alignItems="flex-start"
-                    style={{ "margin-top": 7, "margin-bottom": 7 }}
+                    style={{ "marginTop": 7, "marginBottom": 7 }}
                     size="small"
                     value={currentSeason}
                     isExclusive
                     isSelectionRequired
                     onChange={(value) => setCurrentSeason(value)}
                 >
-                    {SEASONS.map(({ label, emoji }) => (
-                        <ToggleButton value={label} title={label}>{emoji}</ToggleButton>
+                    {SEASONS.map(({ label, graphqlEnum, emoji }) => (
+                        <ToggleButton key={graphqlEnum} value={graphqlEnum} title={label}>{emoji}</ToggleButton>
                     ))}
                 </ToggleButtonGroup>
                 {randomArticles && (
                     <Button
                         size="large"
-                        onClick={generateRandomArticles}
+                        onClick={() => setRandomArticles(generateRandomArticles(articlesByUsage))}
                     >
                         🔄
                     </Button>
                 )}
             </Flex>
-            {randomArticles && (
+            {randomArticles.length > 0 && (
                 <div>
                     {randomArticles.map((article) => (
                         <Image
@@ -68,7 +89,7 @@ export const Outfit = ({ articles }) => {
                 </div>
 
             )}
-            {!randomArticles && <span>Generating Random Outfit...</span>}
+            {randomArticles.length === 0 && <span>Generating Random Outfit...</span>}
 
         </div>
     )
