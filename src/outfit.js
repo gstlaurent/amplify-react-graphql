@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { groupBy, getRandomInt, sortByStringProperty } from "./util";
+import { groupBy, getRandomInt, sortByStringProperty, isEmpty } from "./util";
 import {
     Image,
     Button,
@@ -8,17 +8,26 @@ import {
     Flex,
 } from '@aws-amplify/ui-react';
 import { Season, SEASONS } from "./season";
+import { Usage } from "./usage";
 
-
+const setRandomArticleByUsage = (randomArticles, usage, articlesByUsage) => {
+    const usageArticles = articlesByUsage[usage.graphqlEnum];
+    if (usageArticles) {
+        const index = getRandomInt(usageArticles.length);
+        randomArticles[usage.label] = usageArticles.at(index);
+    }
+};
 
 const generateRandomArticles = (articlesByUsage) => {
-    const randomArticles = Object.values(articlesByUsage)
-        .map((usageArticles) => {
-            const index = getRandomInt(usageArticles.length);
-            const article = usageArticles.at(index);
-            return article;
-        });
-    return sortByStringProperty(randomArticles, "usage")
+    const randomArticles = {};
+    setRandomArticleByUsage(randomArticles, Usage.Top, articlesByUsage);
+    setRandomArticleByUsage(randomArticles, Usage.Bottom, articlesByUsage);
+    setRandomArticleByUsage(randomArticles, Usage.Dress, articlesByUsage);
+    setRandomArticleByUsage(randomArticles, Usage.Outerwear, articlesByUsage);
+    setRandomArticleByUsage(randomArticles, Usage.Shoes, articlesByUsage);
+    setRandomArticleByUsage(randomArticles, Usage.Accessory, articlesByUsage);
+    setRandomArticleByUsage(randomArticles, Usage.Sweater, articlesByUsage);
+    return randomArticles;
 }
 
 const isArticleInSeason = (article, currentSeason) => {
@@ -37,7 +46,7 @@ const groupSeasonalArticlesByUsage = (season, articles) => {
 export const Outfit = ({ articles }) => {
     const [currentSeason, setCurrentSeason] = useState(Season.Winter.graphqlEnum);//(Season.WINTER);
     const [articlesByUsage, setArticlesByUsage] = useState({});
-    const [randomArticles, setRandomArticles] = useState([]);
+    const [randomArticles, setRandomArticles] = useState({});
 
     useEffect(() => {
         const newArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
@@ -66,7 +75,7 @@ export const Outfit = ({ articles }) => {
                         <ToggleButton key={graphqlEnum} value={graphqlEnum} title={label}>{emoji}</ToggleButton>
                     ))}
                 </ToggleButtonGroup>
-                {randomArticles && (
+                {!isEmpty(randomArticles) && (
                     <Button
                         size="large"
                         onClick={() => setRandomArticles(generateRandomArticles(articlesByUsage))}
@@ -75,21 +84,22 @@ export const Outfit = ({ articles }) => {
                     </Button>
                 )}
             </Flex>
-            {randomArticles.length > 0 && (
+            {!isEmpty(randomArticles) && (
                 <div>
-                    {randomArticles.map((article) => (
-                        <Image
-                            key={article.id}
-                            src={article.imageUrl}
-                            alt={article.usage}
-                            title={article.usage}
-                            style={{ width: 125 }}
-                        />)
-                    )}
+                    {sortByStringProperty(Object.entries(randomArticles), 0)
+                        .map(([usage, article]) => (
+                            <Image
+                                key={article.id}
+                                src={article.imageUrl}
+                                alt={article.usage}
+                                title={article.usage}
+                                style={{ width: 125 }}
+                            />)
+                        )}
                 </div>
 
             )}
-            {randomArticles.length === 0 && <span>Generating Random Outfit...</span>}
+            {isEmpty(randomArticles) && <span>Generating Random Outfit...</span>}
 
         </div>
     )

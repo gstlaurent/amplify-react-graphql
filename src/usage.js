@@ -1,5 +1,5 @@
 // https://masteringjs.io/tutorials/fundamentals/enum
-class Usage {
+export class Usage {
   static Top = new Usage('Top', 'TOP');
   static Bottom = new Usage('Bottom', 'BOTTOM');
   static Dress = new Usage('Dress', 'DRESS');
