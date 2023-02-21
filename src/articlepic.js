@@ -3,13 +3,15 @@ import {
     Image,
     Button
 } from '@aws-amplify/ui-react';
+import { setRandomArticleByUsage } from "./util";
 
 
-export const ArticlePic = ({ article }) => {
+
+export const ArticlePic = ({ randomArticles, usage, articlesByUsage, setRandomArticles }) => {
+    const article = randomArticles[usage.graphqlEnum];
     return (article &&
         <div className="outfit-article">
             <Image
-                className='pic'
                 key={article.id}
                 src={article.imageUrl}
                 alt={article.usage}
@@ -19,7 +21,12 @@ export const ArticlePic = ({ article }) => {
             <Button
                 className="article-refresh"
                 size="small"
-                onClick={() => console.log(`Article Refresh clicked: ${article.usage}`)}
+                onClick={() => {
+                    const newRandomArticles = { ...randomArticles };
+                    setRandomArticleByUsage(newRandomArticles, usage, articlesByUsage);
+                    setRandomArticles(newRandomArticles);
+
+                }}
             >
                 🔄
             </Button>

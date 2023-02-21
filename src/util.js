@@ -34,3 +34,12 @@ export const sortByStringProperty = (xs, sortKey) => {
 export const isEmpty = (obj) => {
     return Object.keys(obj).length === 0;
 }
+
+export const setRandomArticleByUsage = (randomArticles, usage, articlesByUsage) => {
+    const usageArticles = articlesByUsage[usage.graphqlEnum];
+    if (usageArticles) {
+        const index = getRandomInt(usageArticles.length);
+        randomArticles[usage.graphqlEnum] = usageArticles.at(index);
+    }
+};
+

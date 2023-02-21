@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { groupBy, getRandomInt, isEmpty } from "./util";
+import { groupBy, setRandomArticleByUsage, isEmpty } from "./util";
 import {
     Button,
     ToggleButtonGroup,
@@ -9,14 +9,7 @@ import {
 import { Season, SEASONS } from "./season";
 import { Usage, USAGES } from "./usage";
 import { ArticlePic } from "./articlepic";
-
-const setRandomArticleByUsage = (randomArticles, usage, articlesByUsage) => {
-    const usageArticles = articlesByUsage[usage.graphqlEnum];
-    if (usageArticles) {
-        const index = getRandomInt(usageArticles.length);
-        randomArticles[usage.graphqlEnum] = usageArticles.at(index);
-    }
-};
+import './styles.css';
 
 const generateRandomArticles = (articlesByUsage) => {
     const randomArticles = {};
@@ -69,7 +62,7 @@ export const Outfit = ({ articles }) => {
     const topArticle = randomArticles[Usage.Top.graphqlEnum];
 
     return (
-        <div>
+        <div className="outfit">
             <Flex justifyContent="space-between" align="top">
                 <ToggleButtonGroup
                     alignItems="flex-start"
@@ -95,15 +88,15 @@ export const Outfit = ({ articles }) => {
             </Flex>
             {!isEmpty(randomArticles) && (
                 <div>
-                    <ArticlePic article={randomArticles[Usage.Top.graphqlEnum]} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.Top} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
                     {(!topArticle || topArticle.usage !== Usage.Dress.graphqlEnum) &&
-                        <ArticlePic article={randomArticles[Usage.Bottom.graphqlEnum]} />
+                        <ArticlePic randomArticles={randomArticles} usage={Usage.Bottom} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
                     }
-                    <ArticlePic article={randomArticles[Usage.Sweater.graphqlEnum]} />
-                    <ArticlePic article={randomArticles[Usage.Outerwear.graphqlEnum]} />
-                    <ArticlePic article={randomArticles[Usage.Shoes.graphqlEnum]} />
-                    <ArticlePic article={randomArticles[Usage.Accessory.graphqlEnum]} />
-                    <ArticlePic article={randomArticles[Usage.Bag.graphqlEnum]} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.Sweater} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.Outerwear} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.Shoes} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.Accessory} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.Bag} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
                 </div>
 
             )}
