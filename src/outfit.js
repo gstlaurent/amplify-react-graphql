@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { groupBy, getRandomInt, isEmpty } from "./util";
 import {
-    Image,
     Button,
     ToggleButtonGroup,
     ToggleButton,
@@ -97,7 +96,7 @@ export const Outfit = ({ articles }) => {
             {!isEmpty(randomArticles) && (
                 <div>
                     <ArticlePic article={randomArticles[Usage.Top.graphqlEnum]} />
-                    {topArticle && topArticle.usage !== Usage.Dress.graphqlEnum &&
+                    {(!topArticle || topArticle.usage !== Usage.Dress.graphqlEnum) &&
                         <ArticlePic article={randomArticles[Usage.Bottom.graphqlEnum]} />
                     }
                     <ArticlePic article={randomArticles[Usage.Sweater.graphqlEnum]} />
