@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { groupBy, getRandomInt, sortByStringProperty, isEmpty } from "./util";
+import { groupBy, getRandomInt, isEmpty } from "./util";
 import {
     Image,
     Button,
@@ -8,7 +8,7 @@ import {
     Flex,
 } from '@aws-amplify/ui-react';
 import { Season, SEASONS } from "./season";
-import { Usage } from "./usage";
+import { Usage, USAGES } from "./usage";
 import { ArticlePic } from "./articlepic";
 
 const setRandomArticleByUsage = (randomArticles, usage, articlesByUsage) => {
@@ -21,14 +21,10 @@ const setRandomArticleByUsage = (randomArticles, usage, articlesByUsage) => {
 
 const generateRandomArticles = (articlesByUsage) => {
     const randomArticles = {};
-    setRandomArticleByUsage(randomArticles, Usage.Top, articlesByUsage);
-    setRandomArticleByUsage(randomArticles, Usage.Bottom, articlesByUsage);
-    setRandomArticleByUsage(randomArticles, Usage.Dress, articlesByUsage);
-    setRandomArticleByUsage(randomArticles, Usage.Outerwear, articlesByUsage);
-    setRandomArticleByUsage(randomArticles, Usage.Shoes, articlesByUsage);
-    setRandomArticleByUsage(randomArticles, Usage.Accessory, articlesByUsage);
-    setRandomArticleByUsage(randomArticles, Usage.Bag, articlesByUsage);
-    setRandomArticleByUsage(randomArticles, Usage.Sweater, articlesByUsage);
+    USAGES.forEach((usage) => {
+        setRandomArticleByUsage(randomArticles, usage, articlesByUsage);
+
+    });
     return randomArticles;
 }
 
@@ -71,6 +67,8 @@ export const Outfit = ({ articles }) => {
         setRandomArticles(newRandomArticles);
     }, [articlesByUsage]);
 
+    const topArticle = randomArticles[Usage.Top.graphqlEnum];
+
     return (
         <div>
             <Flex justifyContent="space-between" align="top">
@@ -99,8 +97,9 @@ export const Outfit = ({ articles }) => {
             {!isEmpty(randomArticles) && (
                 <div>
                     <ArticlePic article={randomArticles[Usage.Top.graphqlEnum]} />
-                    <ArticlePic article={randomArticles[Usage.Bottom.graphqlEnum]} />
-                    <ArticlePic article={randomArticles[Usage.Dress.graphqlEnum]} />
+                    {topArticle && topArticle.usage !== Usage.Dress.graphqlEnum &&
+                        <ArticlePic article={randomArticles[Usage.Bottom.graphqlEnum]} />
+                    }
                     <ArticlePic article={randomArticles[Usage.Sweater.graphqlEnum]} />
                     <ArticlePic article={randomArticles[Usage.Outerwear.graphqlEnum]} />
                     <ArticlePic article={randomArticles[Usage.Shoes.graphqlEnum]} />
