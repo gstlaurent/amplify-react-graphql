@@ -19,5 +19,6 @@ enum Usage {
   OUTERWEAR
   SHOES
   ACCESSORY
+  BAG
   SWEATER
 }

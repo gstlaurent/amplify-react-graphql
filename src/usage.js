@@ -6,6 +6,7 @@ export class Usage {
   static Outerwear = new Usage('Outerwear', 'OUTERWEAR');
   static Shoes = new Usage('Shoes', 'SHOES');
   static Accessory = new Usage('Accessory', 'ACCESSORY');
+  static Bag = new Usage('Bag', 'BAG');
   static Sweater = new Usage('Sweater', 'SWEATER');
 
   constructor(label, graphqlEnum) {

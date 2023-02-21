@@ -26,6 +26,7 @@ const generateRandomArticles = (articlesByUsage) => {
     setRandomArticleByUsage(randomArticles, Usage.Outerwear, articlesByUsage);
     setRandomArticleByUsage(randomArticles, Usage.Shoes, articlesByUsage);
     setRandomArticleByUsage(randomArticles, Usage.Accessory, articlesByUsage);
+    setRandomArticleByUsage(randomArticles, Usage.Bag, articlesByUsage);
     setRandomArticleByUsage(randomArticles, Usage.Sweater, articlesByUsage);
     return randomArticles;
 }
