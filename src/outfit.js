@@ -40,7 +40,17 @@ const groupSeasonalArticlesByUsage = (season, articles) => {
         return {};
     }
     const seasonalArticles = articles.filter((a) => isArticleInSeason(a, season));
-    return groupBy(seasonalArticles, "usage");
+    const groupedSeasonalArticles = groupBy(seasonalArticles, "usage");
+
+    // Move DRESS to TOP, but first must ensure both exit
+    groupedSeasonalArticles[Usage.Top.graphqlEnum] ??= [];
+    groupedSeasonalArticles[Usage.Dress.graphqlEnum] ??= [];
+    groupedSeasonalArticles[Usage.Top.graphqlEnum].push(
+        ...groupedSeasonalArticles[Usage.Dress.graphqlEnum]
+    );
+    delete groupedSeasonalArticles[Usage.Dress.graphqlEnum];
+
+    return groupedSeasonalArticles;
 };
 
 
@@ -88,7 +98,7 @@ export const Outfit = ({ articles }) => {
             {!isEmpty(randomArticles) && (
                 <div>
                     {sortByStringProperty(Object.entries(randomArticles), 0)
-                        .map(([usage, article]) => (
+                        .map(([usageLabel, article]) => (
                             <Image
                                 key={article.id}
                                 src={article.imageUrl}
