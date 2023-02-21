@@ -9,12 +9,13 @@ import {
 } from '@aws-amplify/ui-react';
 import { Season, SEASONS } from "./season";
 import { Usage } from "./usage";
+import { ArticlePic } from "./articlepic";
 
 const setRandomArticleByUsage = (randomArticles, usage, articlesByUsage) => {
     const usageArticles = articlesByUsage[usage.graphqlEnum];
     if (usageArticles) {
         const index = getRandomInt(usageArticles.length);
-        randomArticles[usage.label] = usageArticles.at(index);
+        randomArticles[usage.graphqlEnum] = usageArticles.at(index);
     }
 };
 
@@ -97,16 +98,14 @@ export const Outfit = ({ articles }) => {
             </Flex>
             {!isEmpty(randomArticles) && (
                 <div>
-                    {sortByStringProperty(Object.entries(randomArticles), 0)
-                        .map(([usageLabel, article]) => (
-                            <Image
-                                key={article.id}
-                                src={article.imageUrl}
-                                alt={article.usage}
-                                title={article.usage}
-                                style={{ width: 125 }}
-                            />)
-                        )}
+                    <ArticlePic article={randomArticles[Usage.Top.graphqlEnum]} />
+                    <ArticlePic article={randomArticles[Usage.Bottom.graphqlEnum]} />
+                    <ArticlePic article={randomArticles[Usage.Dress.graphqlEnum]} />
+                    <ArticlePic article={randomArticles[Usage.Sweater.graphqlEnum]} />
+                    <ArticlePic article={randomArticles[Usage.Outerwear.graphqlEnum]} />
+                    <ArticlePic article={randomArticles[Usage.Shoes.graphqlEnum]} />
+                    <ArticlePic article={randomArticles[Usage.Accessory.graphqlEnum]} />
+                    <ArticlePic article={randomArticles[Usage.Bag.graphqlEnum]} />
                 </div>
 
             )}
