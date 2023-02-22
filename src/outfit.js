@@ -87,7 +87,7 @@ export const Outfit = ({ articles }) => {
                 )}
             </Flex>
             {!isEmpty(randomArticles) && (
-                <div>
+                <Flex wrap="wrap" alignItems="flex-start" justifyContent="space-around">
                     <ArticlePic randomArticles={randomArticles} usage={Usage.Top} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
                     {(!topArticle || topArticle.usage !== Usage.Dress.graphqlEnum) &&
                         <ArticlePic randomArticles={randomArticles} usage={Usage.Bottom} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
@@ -97,7 +97,7 @@ export const Outfit = ({ articles }) => {
                     <ArticlePic randomArticles={randomArticles} usage={Usage.Shoes} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
                     <ArticlePic randomArticles={randomArticles} usage={Usage.Accessory} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
                     <ArticlePic randomArticles={randomArticles} usage={Usage.Bag} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                </div>
+                </Flex>
 
             )}
             {isEmpty(randomArticles) && <span>Generating Random Outfit...</span>}
