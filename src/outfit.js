@@ -32,19 +32,19 @@ const groupSeasonalArticlesByUsage = (season, articles) => {
     const groupedSeasonalArticles = groupBy(seasonalArticles, "usage");
 
     // Move DRESS to TOP, but first must ensure both exit
-    groupedSeasonalArticles[Usage.Top.graphqlEnum] ??= [];
-    groupedSeasonalArticles[Usage.Dress.graphqlEnum] ??= [];
-    groupedSeasonalArticles[Usage.Top.graphqlEnum].push(
-        ...groupedSeasonalArticles[Usage.Dress.graphqlEnum]
+    groupedSeasonalArticles[Usage.TOP.graphqlEnum] ??= [];
+    groupedSeasonalArticles[Usage.DRESS.graphqlEnum] ??= [];
+    groupedSeasonalArticles[Usage.TOP.graphqlEnum].push(
+        ...groupedSeasonalArticles[Usage.DRESS.graphqlEnum]
     );
-    delete groupedSeasonalArticles[Usage.Dress.graphqlEnum];
+    delete groupedSeasonalArticles[Usage.DRESS.graphqlEnum];
 
     return groupedSeasonalArticles;
 };
 
 
 export const Outfit = ({ articles }) => {
-    const [currentSeason, setCurrentSeason] = useState(Season.Winter.graphqlEnum);//(Season.WINTER);
+    const [currentSeason, setCurrentSeason] = useState(Season.WINTER.graphqlEnum);//(Season.WINTER);
     const [articlesByUsage, setArticlesByUsage] = useState({});
     const [randomArticles, setRandomArticles] = useState({});
 
@@ -59,7 +59,7 @@ export const Outfit = ({ articles }) => {
         setRandomArticles(newRandomArticles);
     }, [articlesByUsage]);
 
-    const topArticle = randomArticles[Usage.Top.graphqlEnum];
+    const topArticle = randomArticles[Usage.TOP.graphqlEnum];
 
     return (
         <div className="outfit">
@@ -88,15 +88,15 @@ export const Outfit = ({ articles }) => {
             </Flex>
             {!isEmpty(randomArticles) && (
                 <Flex className="article-pics" wrap="wrap" alignItems="flex-start" justifyContent="space-around">
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.Top} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    {(!topArticle || topArticle.usage !== Usage.Dress.graphqlEnum) &&
-                        <ArticlePic randomArticles={randomArticles} usage={Usage.Bottom} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.TOP} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    {(!topArticle || topArticle.usage !== Usage.DRESS.graphqlEnum) &&
+                        <ArticlePic randomArticles={randomArticles} usage={Usage.BOTTOM} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
                     }
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.Sweater} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.Outerwear} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.Shoes} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.Accessory} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.Bag} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.SWEATER} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.OUTERWEAR} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.SHOES} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.ACCESSORY} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    <ArticlePic randomArticles={randomArticles} usage={Usage.BAG} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
                 </Flex>
 
             )}

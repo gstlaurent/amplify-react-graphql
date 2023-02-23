@@ -1,13 +1,13 @@
 // https://masteringjs.io/tutorials/fundamentals/enum
 export class Usage {
-  static Top = new Usage('Top', 'TOP');
-  static Bottom = new Usage('Bottom', 'BOTTOM');
-  static Dress = new Usage('Dress', 'DRESS');
-  static Outerwear = new Usage('Outerwear', 'OUTERWEAR');
-  static Shoes = new Usage('Shoes', 'SHOES');
-  static Accessory = new Usage('Accessory', 'ACCESSORY');
-  static Bag = new Usage('Bag', 'BAG');
-  static Sweater = new Usage('Sweater', 'SWEATER');
+  static TOP = new Usage('Top', 'TOP');
+  static BOTTOM = new Usage('Bottom', 'BOTTOM');
+  static DRESS = new Usage('Dress', 'DRESS');
+  static OUTERWEAR = new Usage('Outerwear', 'OUTERWEAR');
+  static SHOES = new Usage('Shoes', 'SHOES');
+  static ACCESSORY = new Usage('Accessory', 'ACCESSORY');
+  static BAG = new Usage('Bag', 'BAG');
+  static SWEATER = new Usage('Sweater', 'SWEATER');
 
   constructor(label, graphqlEnum) {
     this.label = label;

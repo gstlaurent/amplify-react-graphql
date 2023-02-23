@@ -2,10 +2,10 @@ import { useState } from "react";
 
 // https://masteringjs.io/tutorials/fundamentals/enum
 export class Season {
-  static Spring = new Season('Spring', 'SPRING', '🌱');
-  static Summer = new Season('Summer', 'SUMMER', '🌞');
-  static Autumn = new Season('Autumn', 'FALL', '🍂');
-  static Winter = new Season('Winter', 'WINTER', '❄️');
+  static SPRING = new Season('Spring', 'SPRING', '🌱');
+  static SUMMER = new Season('Summer', 'SUMMER', '🌞');
+  static FALL = new Season('Autumn', 'FALL', '🍂');
+  static WINTER = new Season('Winter', 'WINTER', '❄️');
 
   constructor(label, graphqlEnum, emoji) {
     this.label = label;
