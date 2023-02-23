@@ -17,10 +17,8 @@ export const fetchArticles = async () => {
     });
     await Promise.all(
         articlesFromAPI.map(async (article) => {
-            if (article.image) {
-                const url = await Storage.vault.get(article.image);
-                article.imageUrl = url;
-            }
+            const url = await Storage.vault.get(article.image);
+            article.imageUrl = url;
             return article;
         })
     );
