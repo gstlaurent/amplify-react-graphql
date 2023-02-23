@@ -28,7 +28,8 @@ export const fetchArticles = async () => {
 }
 
 export const generateImageName = async (image) => {
-    const hash = md5(await image.arrayBuffer());
+    const data = await image.text();
+    const hash = md5(data);
     const extension = image.name.split(".").at(-1);
     return `${hash}-${Date.now()}.${extension}`;
 };
