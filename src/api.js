@@ -5,8 +5,8 @@ import {
     createArticle as createArticleMutation,
     deleteArticle as deleteArticleMutation,
 } from "./graphql/mutations";
-import { Season, SEASONS } from "./season";
-import { Usage, USAGES } from "./usage";
+import { Season } from "./season";
+import { Usage } from "./usage";
 
 export const fetchArticles = async () => {
     const apiData = await API.graphql({ query: listArticles, authMode: 'AMAZON_COGNITO_USER_POOLS' });
