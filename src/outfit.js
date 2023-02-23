@@ -32,19 +32,19 @@ const groupSeasonalArticlesByUsage = (season, articles) => {
     const groupedSeasonalArticles = groupBy(seasonalArticles, "usage");
 
     // Move DRESS to TOP, but first must ensure both exit
-    groupedSeasonalArticles[Usage.TOP.graphqlEnum] ??= [];
-    groupedSeasonalArticles[Usage.DRESS.graphqlEnum] ??= [];
-    groupedSeasonalArticles[Usage.TOP.graphqlEnum].push(
-        ...groupedSeasonalArticles[Usage.DRESS.graphqlEnum]
+    groupedSeasonalArticles[Usage.TOP] ??= [];
+    groupedSeasonalArticles[Usage.DRESS] ??= [];
+    groupedSeasonalArticles[Usage.TOP].push(
+        ...groupedSeasonalArticles[Usage.DRESS]
     );
-    delete groupedSeasonalArticles[Usage.DRESS.graphqlEnum];
+    delete groupedSeasonalArticles[Usage.DRESS];
 
     return groupedSeasonalArticles;
 };
 
 
 export const Outfit = ({ articles }) => {
-    const [currentSeason, setCurrentSeason] = useState(Season.WINTER.graphqlEnum);//(Season.WINTER);
+    const [currentSeason, setCurrentSeason] = useState(Season.WINTER);
     const [articlesByUsage, setArticlesByUsage] = useState({});
     const [randomArticles, setRandomArticles] = useState({});
 
@@ -59,7 +59,7 @@ export const Outfit = ({ articles }) => {
         setRandomArticles(newRandomArticles);
     }, [articlesByUsage]);
 
-    const topArticle = randomArticles[Usage.TOP.graphqlEnum];
+    const topArticle = randomArticles[Usage.TOP];
 
     return (
         <div className="outfit">
@@ -73,8 +73,8 @@ export const Outfit = ({ articles }) => {
                     isSelectionRequired
                     onChange={(value) => setCurrentSeason(value)}
                 >
-                    {SEASONS.map(({ label, graphqlEnum, emoji }) => (
-                        <ToggleButton key={graphqlEnum} value={graphqlEnum} title={label}>{emoji}</ToggleButton>
+                    {SEASONS.map((season) => (
+                        <ToggleButton key={season.graphqlEnum} value={season} title={season.label}>{season.emoji}</ToggleButton>
                     ))}
                 </ToggleButtonGroup>
                 {!isEmpty(randomArticles) && (
@@ -89,7 +89,7 @@ export const Outfit = ({ articles }) => {
             {!isEmpty(randomArticles) && (
                 <Flex className="article-pics" wrap="wrap" alignItems="flex-start" justifyContent="space-around">
                     <ArticlePic randomArticles={randomArticles} usage={Usage.TOP} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    {(!topArticle || topArticle.usage !== Usage.DRESS.graphqlEnum) &&
+                    {(!topArticle || topArticle.usage !== Usage.DRESS) &&
                         <ArticlePic randomArticles={randomArticles} usage={Usage.BOTTOM} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
                     }
                     <ArticlePic randomArticles={randomArticles} usage={Usage.SWEATER} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />

@@ -14,7 +14,7 @@ export class Season {
   }
 
   toString() {
-    return `Season.${this.label}`;
+    return `Season.${this.graphqlEnum}`;
   }
 };
 

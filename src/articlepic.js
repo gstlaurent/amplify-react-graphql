@@ -8,14 +8,14 @@ import { setRandomArticleByUsage } from "./util";
 
 
 export const ArticlePic = ({ randomArticles, usage, articlesByUsage, setRandomArticles }) => {
-    const article = randomArticles[usage.graphqlEnum];
+    const article = randomArticles[usage];
     return (article &&
         <div className="outfit-article">
             <Image
                 key={article.id}
                 src={article.imageUrl}
-                alt={article.usage}
-                title={article.usage}
+                alt={article.usage.label}
+                title={article.usage.label}
                 style={{ width: 125 }}
             />
             <Button

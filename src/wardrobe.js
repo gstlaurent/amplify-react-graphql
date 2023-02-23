@@ -74,8 +74,8 @@ export const Wardrobe = ({ articles, setArticles }) => {
             justifyContent="center"
             alignItems="center"
           >
-            <Text as="span"><strong>Seasons: </strong>{article.seasons.join(", ")}</Text>
-            <Text as="span"><strong>Usage: </strong>{article.usage}</Text>
+            <Text as="span"><strong>Seasons: </strong>{article.seasons.map(s => s.label).join(", ")}</Text>
+            <Text as="span"><strong>Usage: </strong>{article.usage.label}</Text>
             <Image
               src={article.imageUrl}
               alt={`visual aid for a ${article.usage}`}

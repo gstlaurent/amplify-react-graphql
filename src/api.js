@@ -5,10 +5,16 @@ import {
     createArticle as createArticleMutation,
     deleteArticle as deleteArticleMutation,
 } from "./graphql/mutations";
+import { Season, SEASONS } from "./season";
+import { Usage, USAGES } from "./usage";
 
 export const fetchArticles = async () => {
     const apiData = await API.graphql({ query: listArticles, authMode: 'AMAZON_COGNITO_USER_POOLS' });
     const articlesFromAPI = apiData.data.listArticles.items;
+    articlesFromAPI.forEach((article) => {
+        article.usage = Usage[article.usage];
+        article.seasons = article.seasons.map((season) => Season[season]);
+    });
     await Promise.all(
         articlesFromAPI.map(async (article) => {
             if (article.image) {

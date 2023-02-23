@@ -36,10 +36,10 @@ export const isEmpty = (obj) => {
 }
 
 export const setRandomArticleByUsage = (randomArticles, usage, articlesByUsage) => {
-    const usageArticles = articlesByUsage[usage.graphqlEnum];
+    const usageArticles = articlesByUsage[usage];
     if (usageArticles) {
         const index = getRandomInt(usageArticles.length);
-        randomArticles[usage.graphqlEnum] = usageArticles.at(index);
+        randomArticles[usage] = usageArticles.at(index);
     }
 };
 

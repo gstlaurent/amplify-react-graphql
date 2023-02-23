@@ -15,7 +15,7 @@ export class Usage {
   }
 
   toString() {
-    return `Usage.${this.label}`;
+    return `Usage.${this.graphqlEnum}`;
   }
 }
 
