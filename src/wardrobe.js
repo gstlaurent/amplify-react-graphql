@@ -11,6 +11,7 @@ import { SeasonGroup } from "./season";
 import { UsageRadioGroup } from "./usage";
 import { createArticle, fetchArticles, deleteArticle } from "./api";
 import React from "react";
+import './styles.css';
 
 
 export const Wardrobe = ({ articles, setArticles }) => {
@@ -38,32 +39,34 @@ export const Wardrobe = ({ articles, setArticles }) => {
 
   return (
     <div>
-      <View as="form" margin="3rem 0" onSubmit={submitForm}>
-        <Button type="submit" variation="primary">
-          Create Article
-        </Button>
-        <Flex direction="row" justifyContent="center">
-          <SeasonGroup />
-          <UsageRadioGroup />
+      <View as="form" onSubmit={submitForm}>
+        <Flex
+          direction="column"
+          alignItems="center">
+          <Image
+            className="new-article-image"
+            src={selectedImage ?? "logoyorkshirehanger-md.png"}
+            alt={"Preview Image"}
+            height="200px"
+            objectFit="initial"
+
+          />
+          <View
+            name="image"
+            as="input"
+            type="file"
+            accept="image/*"
+            onChange={onImageSelected}
+            required
+          />
+          <Flex direction="row" justifyContent="center">
+            <SeasonGroup />
+            <UsageRadioGroup />
+          </Flex>
+          <Button type="submit" variation="primary">
+            Create Article
+          </Button>
         </Flex>
-        <View
-          name="image"
-          as="input"
-          type="file"
-          accept="image/*"
-          style={{ alignSelf: "center" }}
-          onChange={onImageSelected}
-          required
-        />
-        {selectedImage && (
-          <div>
-            <Image
-              src={selectedImage}
-              alt={"Preview Image"}
-              style={{ width: 400 }}
-            />
-          </div>
-        )}
       </View>
       <Heading level={2}>Current Clothing</Heading>
       <View margin="3rem 0">
@@ -78,7 +81,7 @@ export const Wardrobe = ({ articles, setArticles }) => {
             <Text as="span"><strong>Usage: </strong>{article.usage.label}</Text>
             <Image
               src={article.imageUrl}
-              alt={`visual aid for a ${article.usage}`}
+              alt={article.usage.label}
               style={{ width: 400 }}
             />
             <Button variation="link" onClick={() => deleteArticleFromWardrobe(article)}>
