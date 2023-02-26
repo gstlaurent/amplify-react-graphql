@@ -24,7 +24,7 @@ const WardrobeContents = ({ articles, setArticles }) => {
     return (
         <Expander type="multiple">
             {USAGES.map((usage) => (
-                <ExpanderItem title={usage.label} value={usage} key={usage}>
+                <ExpanderItem title={usage.plural_label} value={usage} key={usage}>
                     <Collection
                         items={articlesByUsage?.[usage]}
                         type="list"
