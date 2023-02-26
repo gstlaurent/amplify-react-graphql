@@ -51,7 +51,11 @@ const WardrobeContents = ({ articles, setArticles }) => {
                                             variation="link"
                                             size="small"
                                             title={`Delete ${usage.label} Article`}
-                                            onClick={() => deleteArticleFromWardrobe(article)}>
+                                            onClick={() => {
+                                                if (window.confirm(`Are you sure you want to delete this ${article.usage.label}?`)) {
+                                                    deleteArticleFromWardrobe(article);
+                                                }
+                                            }}>
                                             ❌
                                         </Button>
                                     </Flex>
