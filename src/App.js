@@ -35,7 +35,7 @@ const App = ({ signOut }) => {
           <Wardrobe articles={articles} setArticles={setArticles} />
         </TabItem>
       </Tabs>
-      <Button onClick={signOut}>Sign Out</Button>
+      <Button margin="1em" onClick={signOut}>Sign Out</Button>
     </View>
   );
 };
