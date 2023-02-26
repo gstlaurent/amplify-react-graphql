@@ -5,6 +5,7 @@ import {
     Flex,
     Image,
     Text,
+    Card,
 } from '@aws-amplify/ui-react';
 import { USAGES } from "./usage";
 import { deleteArticle } from "./api";
@@ -24,24 +25,32 @@ const WardrobeContents = ({ articles, setArticles }) => {
         <Expander type="multiple">
             {USAGES.map((usage) => (
                 <ExpanderItem title={usage.label} value={usage} key={usage}>
-                    <Collection items={articlesByUsage?.[usage]} type="list" direction="row" wrap="wrap">
+                    <Collection
+                        items={articlesByUsage?.[usage]}
+                        type="list"
+                        direction="row"
+                        wrap="nowrap"
+                        overflow="auto"
+                    >
                         {(article, index) => (
-                            <Flex
-                                key={article.id}
-                                direction="column"
-                                justifyContent="center"
-                                alignItems="center"
-                            >
-                                <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
-                                <Image
-                                    src={article.imageUrl}
-                                    alt={article.usage.label}
-                                    height="200px"
-                                />
-                                <Button variation="link" onClick={() => deleteArticleFromWardrobe(article)}>
-                                    Delete item
-                                </Button>
-                            </Flex>
+                            <Card variation="elevated" width="45%">
+                                <Flex
+                                    key={article.id}
+                                    direction="column"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                >
+                                    <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
+                                    <Image
+                                        src={article.imageUrl}
+                                        alt={article.usage.label}
+                                        objectFit="scale-down"
+                                    />
+                                    <Button variation="link" onClick={() => deleteArticleFromWardrobe(article)}>
+                                        Delete item
+                                    </Button>
+                                </Flex>
+                            </Card>
                         )}
                     </Collection>
                 </ExpanderItem>
