@@ -56,12 +56,11 @@ export const Wardrobe = ({ articles, setArticles }) => {
             <SeasonGroup />
             <UsageRadioGroup />
           </Flex>
-          <Button type="submit" variation="primary">
+          <Button type="submit" variation="primary" className="create-button">
             Create Article
           </Button>
         </Flex>
       </View>
-      <Heading level={2}>Current Clothing</Heading>
       <WardrobeContents articles={articles} setArticles={setArticles} />
     </div >
   );

@@ -21,3 +21,7 @@
 .new-article-image {
     margin: 0.5em 0.5em 0em 0.5em;
 }
+
+.create-button {
+    margin-bottom: 1em;
+}
