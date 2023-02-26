@@ -3,11 +3,11 @@ export class Usage {
   static TOP = new Usage('Top', 'TOP');
   static BOTTOM = new Usage('Bottom', 'BOTTOM');
   static DRESS = new Usage('Dress', 'DRESS');
+  static SWEATER = new Usage('Sweater', 'SWEATER');
   static OUTERWEAR = new Usage('Outerwear', 'OUTERWEAR');
   static SHOES = new Usage('Shoes', 'SHOES');
   static ACCESSORY = new Usage('Accessory', 'ACCESSORY');
   static BAG = new Usage('Bag', 'BAG');
-  static SWEATER = new Usage('Sweater', 'SWEATER');
 
   constructor(label, graphqlEnum) {
     this.label = label;
@@ -19,7 +19,7 @@ export class Usage {
   }
 }
 
-export const USAGES = Object.keys(Usage).map(usage => Usage[usage]);
+export const USAGES = Object.values(Usage);
 
 
 

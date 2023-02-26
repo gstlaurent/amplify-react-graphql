@@ -18,7 +18,7 @@ export class Season {
   }
 };
 
-export const SEASONS = Object.keys(Season).map(season => Season[season]);
+export const SEASONS = Object.values(Season);
 
 export const SeasonGroup = () => {
   const [numChecked, setNumChecked] = useState(0);
