@@ -39,19 +39,22 @@ const WardrobeContents = ({ articles, setArticles }) => {
                                     minWidth="125px"
                                     width="125px"
                                     height="95%">
-                                    <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
-                                    <Image
-                                        src={article.imageUrl}
-                                        alt={article.usage.label}
-                                    />
-                                    <Button
-                                        padding="0.5em"
-                                        variation="link"
-                                        size="small"
-                                        title={`Delete ${usage.label} Article`}
-                                        onClick={() => deleteArticleFromWardrobe(article)}>
-                                        ❌
-                                    </Button>
+                                    <Flex direction="column" justifyContent="space-between" height="100%">
+                                        <Flex direction="column" justifyContent="flex-start" gap="0">
+                                            <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
+                                            <Image
+                                                src={article.imageUrl}
+                                                alt={article.usage.label}
+                                            />
+                                        </Flex>
+                                        <Button
+                                            variation="link"
+                                            size="small"
+                                            title={`Delete ${usage.label} Article`}
+                                            onClick={() => deleteArticleFromWardrobe(article)}>
+                                            ❌
+                                        </Button>
+                                    </Flex>
                                 </Card>
                             </div>
                         )}
