@@ -32,24 +32,20 @@ const WardrobeContents = ({ articles, setArticles }) => {
                         wrap="nowrap"
                         overflow="auto"
                     >
-                        {(article, index) => (
-                            <Card variation="elevated" width="45%">
-                                <Flex
-                                    key={article.id}
-                                    direction="column"
-                                    justifyContent="center"
-                                    alignItems="center"
-                                >
-                                    <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
-                                    <Image
-                                        src={article.imageUrl}
-                                        alt={article.usage.label}
-                                        objectFit="scale-down"
-                                    />
-                                    <Button variation="link" onClick={() => deleteArticleFromWardrobe(article)}>
-                                        Delete item
-                                    </Button>
-                                </Flex>
+                        {(article) => (
+                            <Card
+                                key={article.id}
+                                variation="elevated"
+                                minWidth="125px"
+                                width="125px">
+                                <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
+                                <Image
+                                    src={article.imageUrl}
+                                    alt={article.usage.label}
+                                />
+                                <Button variation="link" size="small" isFullWidth={true} title="Delete" onClick={() => deleteArticleFromWardrobe(article)}>
+                                    ❌
+                                </Button>
                             </Card>
                         )}
                     </Collection>
