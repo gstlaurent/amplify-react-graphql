@@ -22,7 +22,7 @@ const WardrobeContents = ({ articles, setArticles }) => {
 
     const articlesByUsage = groupBy(articles, "usage", USAGES);
     return (
-        <Expander type="multiple">
+        <Expander type="single" isCollapsible={true}>
             {USAGES.map((usage) => (
                 <ExpanderItem title={usage.plural_label} value={usage} key={usage}>
                     <Collection

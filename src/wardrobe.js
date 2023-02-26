@@ -2,7 +2,6 @@ import { useState, } from "react";
 import {
   Button,
   Flex,
-  Heading,
   Image,
   View,
 } from '@aws-amplify/ui-react';
