@@ -38,7 +38,7 @@ export const Wardrobe = ({ articles, setArticles }) => {
           alignItems="center">
           <Image
             className="new-article-image"
-            src={selectedImage ?? "logoyorkshirehanger-md.png"}
+            src={selectedImage ?? "coathanger.png"}
             alt={"Preview Image"}
             height="200px"
             objectFit="scale-down"

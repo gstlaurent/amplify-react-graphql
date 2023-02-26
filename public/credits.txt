@@ -1,3 +1,2 @@
 http://www.clker.com/clipart-logoyorkshirehanger.html
-logoyorkshirehanger-md.png
-
+convert -interpolative-resize 50% logoyorkshirehanger-md.png coathanger.png
