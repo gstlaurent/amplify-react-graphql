@@ -33,25 +33,33 @@ const WardrobeContents = ({ articles, setArticles }) => {
                         overflow="auto"
                     >
                         {(article) => (
-                            <Card
-                                key={article.id}
-                                variation="elevated"
-                                minWidth="125px"
-                                width="125px">
-                                <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
-                                <Image
-                                    src={article.imageUrl}
-                                    alt={article.usage.label}
-                                />
-                                <Button variation="link" size="small" isFullWidth={true} title="Delete" onClick={() => deleteArticleFromWardrobe(article)}>
-                                    ❌
-                                </Button>
-                            </Card>
+                            <div key={article.id}>
+                                <Card
+                                    variation="elevated"
+                                    minWidth="125px"
+                                    width="125px"
+                                    height="95%">
+                                    <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
+                                    <Image
+                                        src={article.imageUrl}
+                                        alt={article.usage.label}
+                                    />
+                                    <Button
+                                        padding="0.5em"
+                                        variation="link"
+                                        size="small"
+                                        title={`Delete ${usage.label} Article`}
+                                        onClick={() => deleteArticleFromWardrobe(article)}>
+                                        ❌
+                                    </Button>
+                                </Card>
+                            </div>
                         )}
                     </Collection>
                 </ExpanderItem>
-            ))}
-        </Expander>
+            ))
+            }
+        </Expander >
     );
 };
 
