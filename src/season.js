@@ -34,7 +34,7 @@ export const SeasonGroup = () => {
   return (
     <fieldset>
       <legend>Seasons</legend>
-      {SEASONS.map(({ label, graphqlEnum }) => {
+      {SEASONS.map(({ label, graphqlEnum, emoji }) => {
         const id = `season-${graphqlEnum}`;
         return (
           <div className="list-item" key={id}>
@@ -46,7 +46,7 @@ export const SeasonGroup = () => {
               onChange={(e) => handleCheckChange(e.target.checked)}
               required={numChecked === 0}
             />
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id}>{`${emoji} ${label}`}</label>
           </div>
         );
       })}
