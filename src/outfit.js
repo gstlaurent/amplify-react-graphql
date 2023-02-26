@@ -44,13 +44,15 @@ const groupSeasonalArticlesByUsage = (season, articles) => {
 
 
 export const Outfit = ({ articles }) => {
-    const [currentSeason, setCurrentSeason] = useState(Season.WINTER);
+    const previousSessionSeason = localStorage.getItem("currentSeason");
+    const [currentSeason, setCurrentSeason] = useState(Season?.[previousSessionSeason] ?? Season.WINTER);
     const [articlesByUsage, setArticlesByUsage] = useState({});
     const [randomArticles, setRandomArticles] = useState({});
 
     useEffect(() => {
         const newArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
         setArticlesByUsage(newArticlesByUsage);
+        localStorage.setItem("currentSeason", currentSeason.graphqlEnum);
     }, [articles, currentSeason]);
 
 
