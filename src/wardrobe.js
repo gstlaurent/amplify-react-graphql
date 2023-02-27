@@ -11,6 +11,10 @@ import WardrobeContents from "./wardrobecontents";
 import { createArticle, fetchArticles } from "./api";
 import './styles.css';
 
+// The method used to customize the Image selection button:
+// https: //stackoverflow.com/questions/572768/styling-an-input-type-file-button
+// While this does continue to block saving if no image is selected
+// there is a drawback that the "please select image" text is also hidden.
 
 export const Wardrobe = ({ articles, setArticles }) => {
 
@@ -43,13 +47,20 @@ export const Wardrobe = ({ articles, setArticles }) => {
             objectFit="scale-down"
 
           />
+          <Button variation="secondary">
+            <label for="image-selection">
+              📷 Select Image
+            </label>
+          </Button>
           <View
+            id="image-selection"
             name="image"
             as="input"
             type="file"
             accept="image/*"
             onChange={onImageSelected}
             required
+            hidden
           />
           <Flex direction="row" justifyContent="center">
             <SeasonGroup />
