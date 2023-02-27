@@ -35,13 +35,13 @@ const generateImageName = async (image) => {
 };
 
 export const createArticle = async (imageFile, seasons, usage) => {
+    const compressedImageFile = await compressImage(imageFile);
     const data = {
-        image: await generateImageName(imageFile),
+        image: await generateImageName(compressedImageFile),
         seasons: seasons,
         usage: usage
     };
-    const compressedImage = await compressImage(imageFile);
-    await Storage.vault.put(data.image, compressedImage);
+    await Storage.vault.put(data.image, compressedImageFile);
     await API.graphql({
         query: createArticleMutation,
         variables: { input: data },

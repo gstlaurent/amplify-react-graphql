@@ -24,8 +24,8 @@ export const Wardrobe = ({ articles, setArticles }) => {
   const onImageSelected = async (event) => {
     if (event.target?.files?.[0]) {
       const imageFile = event.target.files[0];
-      const compressedImage = await compressImage(imageFile);
-      const compressedImageUrl = URL.createObjectURL(compressedImage);
+      const compressedImageFile = await compressImage(imageFile);
+      const compressedImageUrl = URL.createObjectURL(compressedImageFile);
       setSelectedImage(compressedImageUrl);
     }
   }

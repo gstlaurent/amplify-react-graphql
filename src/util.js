@@ -76,14 +76,20 @@ function scaleImage(imageUrl, scale, initalWidth, initalHeight) {
 
         ctx.canvas.toBlob((blob) => {
             resolve(blob);
-        }, "image/png");
+        }, "image/jpeg");
     });
 }
 
 export const compressImage = async (imageFile) => {
     const imageUrl = URL.createObjectURL(imageFile);
     const { width, height } = await getImageDimensions(imageUrl);
-    return await scaleImage(imageUrl, 0.5, width, height);
+
+    if (width <= 600) {
+        return imageFile;
+    }
+    const scale = 600 / width;
+    const compressedBlob = await scaleImage(imageUrl, scale, width, height);
+    return new File([compressedBlob], `compressedImage-${Date.now}.jpeg`);
 };
 
 
