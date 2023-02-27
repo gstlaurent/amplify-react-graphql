@@ -47,3 +47,43 @@ export const setRandomArticleByUsage = (randomArticles, usage, articlesByUsage) 
     }
 };
 
+// https://dev.to/ramko9999/client-side-image-compression-on-the-web-26j7
+function getImageDimensions(imageUrl) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = imageUrl;
+        img.onload = function (e) {
+            const width = this.width;
+            const height = this.height;
+            resolve({ height, width });
+        }
+    });
+}
+
+// https://dev.to/ramko9999/client-side-image-compression-on-the-web-26j7
+function scaleImage(imageUrl, scale, initalWidth, initalHeight) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = imageUrl;
+
+        const canvas = document.createElement("canvas");
+
+        canvas.width = scale * initalWidth;
+        canvas.height = scale * initalHeight;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        ctx.canvas.toBlob((blob) => {
+            resolve(blob);
+        }, "image/png");
+    });
+}
+
+export const compressImage = async (imageFile) => {
+    const imageUrl = URL.createObjectURL(imageFile);
+    const { width, height } = await getImageDimensions(imageUrl);
+    return await scaleImage(imageUrl, 0.5, width, height);
+};
+
+

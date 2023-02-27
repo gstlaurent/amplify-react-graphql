@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     Button,
     Collection,
@@ -6,15 +6,12 @@ import {
     Image,
     Text,
     Card,
-    ToggleButtonGroup,
-    ToggleButton
 } from '@aws-amplify/ui-react';
 import { USAGES } from "./usage";
 import { deleteArticle } from "./api";
 import './styles.css';
 import { Expander, ExpanderItem } from '@aws-amplify/ui-react';
 import { groupBy } from "./util";
-import { SEASONS } from "./season";
 
 const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
     const newArticles = articles.filter((article) => article.id !== articleToDelete.id);

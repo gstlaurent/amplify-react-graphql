@@ -10,9 +10,10 @@ import { UsageRadioGroup } from "./usage";
 import WardrobeContents from "./wardrobecontents";
 import { createArticle, fetchArticles } from "./api";
 import './styles.css';
+import { compressImage } from "./util";
 
 // The method used to customize the Image selection button:
-// https: //stackoverflow.com/questions/572768/styling-an-input-type-file-button
+// https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
 // While this does continue to block saving if no image is selected
 // there is a drawback that the "please select image" text is also hidden.
 
@@ -20,16 +21,26 @@ export const Wardrobe = ({ articles, setArticles }) => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const onImageSelected = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setSelectedImage(URL.createObjectURL(event.target.files[0]));
+  const onImageSelected = async (event) => {
+    if (event.target?.files?.[0]) {
+      const imageFile = event.target.files[0];
+      const compressedImage = await compressImage(imageFile);
+      const compressedImageUrl = URL.createObjectURL(compressedImage);
+      setSelectedImage(compressedImageUrl);
     }
   }
 
   const submitForm = async (event) => {
-    setSelectedImage(null);
-    await createArticle(event);
+    event.preventDefault();
+    const form = new FormData(event.target);
+    const imageFile = form.get("image");
+    const seasons = form.getAll("seasons");
+    const usage = form.get("usage");
+
     event.target.reset();
+    setSelectedImage(null);
+
+    await createArticle(imageFile, seasons, usage);
     setArticles(await fetchArticles());
   };
 
@@ -45,7 +56,6 @@ export const Wardrobe = ({ articles, setArticles }) => {
             alt={"Preview Image"}
             height="200px"
             objectFit="scale-down"
-
           />
           <Button variation="secondary">
             <label htmlFor="image-selection">

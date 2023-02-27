@@ -7,6 +7,8 @@ import {
 } from "./graphql/mutations";
 import { Season } from "./season";
 import { Usage } from "./usage";
+import { compressImage } from "./util";
+
 
 export const fetchArticles = async () => {
     const apiData = await API.graphql({ query: listArticles, authMode: 'AMAZON_COGNITO_USER_POOLS' });
@@ -25,23 +27,21 @@ export const fetchArticles = async () => {
     return articlesFromAPI;
 }
 
-export const generateImageName = async (image) => {
+const generateImageName = async (image) => {
     const data = await image.text();
     const hash = md5(data);
     const extension = image.name.split(".").at(-1);
     return `${hash}-${Date.now()}.${extension}`;
 };
 
-export const createArticle = async (event) => {
-    event.preventDefault();
-    const form = new FormData(event.target);
-    const image = form.get("image");
+export const createArticle = async (imageFile, seasons, usage) => {
     const data = {
-        image: await generateImageName(image),
-        seasons: form.getAll("seasons"),
-        usage: form.get("usage")
+        image: await generateImageName(imageFile),
+        seasons: seasons,
+        usage: usage
     };
-    await Storage.vault.put(data.image, image);
+    const compressedImage = await compressImage(imageFile);
+    await Storage.vault.put(data.image, compressedImage);
     await API.graphql({
         query: createArticleMutation,
         variables: { input: data },
