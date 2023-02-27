@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Button,
     Collection,
@@ -12,15 +12,23 @@ import { deleteArticle } from "./api";
 import './styles.css';
 import { Expander, ExpanderItem } from '@aws-amplify/ui-react';
 import { groupBy } from "./util";
+import { SEASONS } from "./season";
+
+const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
+    const newArticles = articles.filter((article) => article.id !== articleToDelete.id);
+    setArticles(newArticles);
+    deleteArticle(articleToDelete)
+};
 
 const WardrobeContents = ({ articles, setArticles }) => {
-    const deleteArticleFromWardrobe = (articleToDelete) => {
-        const newArticles = articles.filter((article) => article.id !== articleToDelete.id);
-        setArticles(newArticles);
-        deleteArticle(articleToDelete)
-    };
+    const [filteredSeasons, setFilteredSeasons] = useState(SEASONS);
 
-    const articlesByUsage = groupBy(articles, "usage", USAGES);
+    const filteredArticles = articles?.filter((article) =>
+        article.seasons.some((season) =>
+            filteredSeasons.includes(season)
+        )
+    );
+    const articlesByUsage = groupBy(filteredArticles, "usage", USAGES);
     return (
         <Expander type="single" isCollapsible={true}>
             {USAGES.map((usage) => (
@@ -53,7 +61,7 @@ const WardrobeContents = ({ articles, setArticles }) => {
                                             title={`Delete ${usage.label} Article`}
                                             onClick={() => {
                                                 if (window.confirm(`Are you sure you want to delete this ${article.usage.label}?`)) {
-                                                    deleteArticleFromWardrobe(article);
+                                                    deleteArticleFromWardrobe(article, articles, setArticles);
                                                 }
                                             }}>
                                             ❌

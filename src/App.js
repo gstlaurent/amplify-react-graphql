@@ -25,7 +25,7 @@ const App = ({ signOut }) => {
 
   return (
     <View className="App">
-      <Tabs defaultIndex={0}
+      <Tabs defaultIndex={1}
         style={{ display: "block" }}
       >
         <TabItem title="Outfit">
