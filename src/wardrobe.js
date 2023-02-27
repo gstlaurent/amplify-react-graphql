@@ -27,10 +27,10 @@ export const Wardrobe = ({ articles, setArticles }) => {
   }
 
   const submitForm = async (event) => {
+    setSelectedImage(null);
     await createArticle(event);
     setArticles(await fetchArticles());
     event.target.reset();
-    setSelectedImage(null);
   };
 
   return (
