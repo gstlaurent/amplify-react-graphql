@@ -29,8 +29,8 @@ export const Wardrobe = ({ articles, setArticles }) => {
   const submitForm = async (event) => {
     setSelectedImage(null);
     await createArticle(event);
-    setArticles(await fetchArticles());
     event.target.reset();
+    setArticles(await fetchArticles());
   };
 
   return (
@@ -48,7 +48,7 @@ export const Wardrobe = ({ articles, setArticles }) => {
 
           />
           <Button variation="secondary">
-            <label for="image-selection">
+            <label htmlFor="image-selection">
               📷 Select Image
             </label>
           </Button>

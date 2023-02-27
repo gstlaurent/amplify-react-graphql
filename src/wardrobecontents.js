@@ -23,26 +23,9 @@ const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
 };
 
 const WardrobeContents = ({ articles, setArticles }) => {
-    const [filteredSeasons, setFilteredSeasons] = useState(SEASONS);
-
-    const filteredArticles = articles?.filter((article) =>
-        article.seasons.some((season) =>
-            filteredSeasons.includes(season)
-        )
-    );
-    const articlesByUsage = groupBy(filteredArticles, "usage", USAGES);
+    const articlesByUsage = groupBy(articles, "usage", USAGES);
     return (
         <Flex direction="column" alignItems="center">
-            <h1 style={{ margin: "0" }}><b>My Articles</b></h1>
-            <ToggleButtonGroup
-                size="large"
-                value={filteredSeasons}
-                onChange={(value) => setFilteredSeasons(value)}
-            >
-                {SEASONS.map((season) => (
-                    <ToggleButton key={season} value={season} title={season.label}>{season.emoji}</ToggleButton>
-                ))}
-            </ToggleButtonGroup>
             <Expander type="single" isCollapsible={true}>
                 {USAGES.map((usage) => (
                     <ExpanderItem title={usage.plural_label} value={usage} key={usage}>
