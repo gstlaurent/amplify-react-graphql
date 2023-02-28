@@ -1,6 +1,8 @@
 import { useState, } from "react";
 import {
   Button,
+  Collection,
+  Card,
   Flex,
   Image,
   View,
@@ -13,13 +15,13 @@ import './styles.css';
 
 export const Wardrobe = ({ articles, setArticles }) => {
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
 
-  const onImageSelected = async (event) => {
-    if (event.target?.files?.[0]) {
-      const imageFile = event.target.files[0];
-      const imageUrl = URL.createObjectURL(imageFile);
-      setSelectedImage(imageUrl);
+  const onImagesSelected = async (event) => {
+    if (event.target?.files) {
+      const imageFiles = Array.from(event.target.files);
+      const imageUrls = imageFiles.map(imageFile => URL.createObjectURL(imageFile));
+      setSelectedImages(imageUrls);
     }
   }
 
@@ -31,7 +33,7 @@ export const Wardrobe = ({ articles, setArticles }) => {
     const usage = form.get("usage");
 
     event.target.reset();
-    setSelectedImage(null);
+    setSelectedImages([]);
 
     await createArticle(imageFile, seasons, usage);
     setArticles(await fetchArticles());
@@ -43,13 +45,35 @@ export const Wardrobe = ({ articles, setArticles }) => {
         <Flex
           direction="column"
           alignItems="center">
-          <Image
-            className="new-article-image"
-            src={selectedImage ?? "coathanger.png"}
-            alt={"Preview Image"}
-            height="200px"
-            objectFit="scale-down"
-          />
+          {selectedImages.length > 0 &&
+            <Collection
+              items={selectedImages}
+              type="list"
+              direction="row"
+              wrap="nowrap">
+              {(image, index) => (
+                <Card key={index}
+                  borderRadius="medium"
+                  maxWidth="20rem"
+                  variation="outlined">
+                  <Image
+                    className="new-article-image"
+                    src={image}
+                    alt={"Preview Image"}
+                    height="200px"
+                    objectFit="scale-down"
+                  />
+                </Card>
+              )}
+            </Collection>}
+          {selectedImages.length === 0 &&
+            <Image
+              className="new-article-image"
+              src={"coathanger.png"}
+              alt={"Placeholder Image"}
+              height="200px"
+              objectFit="scale-down"
+            />}
           <div className="image-selector">
             <Button variation="secondary">
               <label htmlFor="image-selection">
@@ -63,8 +87,9 @@ export const Wardrobe = ({ articles, setArticles }) => {
               as="input"
               type="file"
               accept="image/*"
-              onChange={onImageSelected}
+              onChange={onImagesSelected}
               required
+              multiple
             />
           </div>
           <Flex direction="row" justifyContent="center">
