@@ -10,7 +10,6 @@ import { UsageRadioGroup } from "./usage";
 import WardrobeContents from "./wardrobecontents";
 import { createArticle, fetchArticles } from "./api";
 import './styles.css';
-import { compressImage } from "./util";
 
 export const Wardrobe = ({ articles, setArticles }) => {
 
@@ -19,9 +18,8 @@ export const Wardrobe = ({ articles, setArticles }) => {
   const onImageSelected = async (event) => {
     if (event.target?.files?.[0]) {
       const imageFile = event.target.files[0];
-      const compressedImageFile = await compressImage(imageFile);
-      const compressedImageUrl = URL.createObjectURL(compressedImageFile);
-      setSelectedImage(compressedImageUrl);
+      const imageUrl = URL.createObjectURL(imageFile);
+      setSelectedImage(imageUrl);
     }
   }
 
