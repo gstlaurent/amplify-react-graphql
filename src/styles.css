@@ -25,3 +25,20 @@
 .create-button {
     margin-bottom: 1em;
 }
+
+/* Using Opacity=0 for image-input so it will dislplay the 'File not selected' validation message */
+/* https: //www.w3docs.com/snippets/html/how-to-overlay-one-div-over-another.html */
+/* https: //developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file */
+
+.image-selector {
+    position: relative;
+}
+
+.image-selector .image-input {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    opacity: 0;
+}
