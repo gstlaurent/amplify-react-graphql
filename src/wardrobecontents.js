@@ -25,7 +25,7 @@ const WardrobeContents = ({ articles, setArticles }) => {
         <Flex direction="column" alignItems="center">
             <Expander type="single" isCollapsible={true}>
                 {USAGES.map((usage) => (
-                    <ExpanderItem title={usage.plural_label} value={usage} key={usage}>
+                    <ExpanderItem title={`${usage.emoji} ${usage.plural_label}`} value={usage} key={usage}>
                         <Collection
                             items={articlesByUsage?.[usage]}
                             type="list"
