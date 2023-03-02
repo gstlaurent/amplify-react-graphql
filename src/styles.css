@@ -18,8 +18,9 @@
     padding-bottom: 0.5em
 }
 
-.new-article-image {
+.preview-image {
     margin: 0.5em 0.5em 0em 0.5em;
+    object-fit: scale-down;
 }
 
 .create-button {
@@ -41,4 +42,25 @@
     top: 0px;
     left: 0px;
     opacity: 0;
+}
+
+.images {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    height: 200px;
+    width: 100%;
+    align-content: center;
+}
+
+.next-images {
+    width: 33%;
+}
+
+.new-article-image {
+    width: 34%;
+}
+
+.spacer {
+    width: 33%;
 }

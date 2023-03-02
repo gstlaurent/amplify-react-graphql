@@ -45,35 +45,39 @@ export const Wardrobe = ({ articles, setArticles }) => {
         <Flex
           direction="column"
           alignItems="center">
-          {selectedImages.length > 0 &&
-            <Collection
-              items={selectedImages}
-              type="list"
-              direction="row"
-              wrap="nowrap">
-              {(image, index) => (
-                <Card key={index}
-                  borderRadius="medium"
-                  maxWidth="20rem"
-                  variation="outlined">
+          <div className="images">
+            {selectedImages.length > 1 &&
+              <Collection
+                items={selectedImages.slice(1)}
+                type="list"
+                direction="row-reverse"
+                wrap="nowrap"
+                overflow="hidden"
+                className="next-images"
+              >
+                {(image, index) => (
                   <Image
-                    className="new-article-image"
+                    key={index}
+                    className="preview-image"
                     src={image}
                     alt={"Preview Image"}
-                    height="200px"
-                    objectFit="scale-down"
                   />
-                </Card>
-              )}
-            </Collection>}
-          {selectedImages.length === 0 &&
+                )}
+              </Collection>
+            }
+            {selectedImages.length <= 1 &&
+              <div className="next-images">
+                &nbsp;
+              </div>}
             <Image
-              className="new-article-image"
-              src={"coathanger.png"}
-              alt={"Placeholder Image"}
-              height="200px"
-              objectFit="scale-down"
-            />}
+              className="preview-image new-article-image"
+              src={selectedImages?.[0] ?? "coathanger.png"}
+              alt={"Preview Image"}
+            />
+            <div className="spacer">
+              &nbsp;
+            </div>
+          </div>
           <div className="image-selector">
             <Button variation="secondary">
               <label htmlFor="image-selection">
