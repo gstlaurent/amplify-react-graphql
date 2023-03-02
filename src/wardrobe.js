@@ -2,7 +2,6 @@ import { useState, } from "react";
 import {
   Button,
   Collection,
-  Card,
   Flex,
   Image,
   View,
@@ -20,20 +19,21 @@ export const Wardrobe = ({ articles, setArticles }) => {
   const onImagesSelected = async (event) => {
     if (event.target?.files) {
       const imageFiles = Array.from(event.target.files);
-      const imageUrls = imageFiles.map(imageFile => URL.createObjectURL(imageFile));
-      setSelectedImages(imageUrls);
+      setSelectedImages(imageFiles);
     }
   }
 
   const submitForm = async (event) => {
     event.preventDefault();
     const form = new FormData(event.target);
-    const imageFile = form.get("image");
+    const imageFile = selectedImages[0];
     const seasons = form.getAll("seasons");
     const usage = form.get("usage");
 
-    event.target.reset();
-    setSelectedImages([]);
+    if (selectedImages.length === 1) {
+      event.target.reset();
+    }
+    setSelectedImages(selectedImages.slice(1));
 
     await createArticle(imageFile, seasons, usage);
     setArticles(await fetchArticles());
@@ -59,7 +59,7 @@ export const Wardrobe = ({ articles, setArticles }) => {
                   <Image
                     key={index}
                     className="preview-image"
-                    src={image}
+                    src={URL.createObjectURL(image)}
                     alt={"Preview Image"}
                   />
                 )}
@@ -71,7 +71,7 @@ export const Wardrobe = ({ articles, setArticles }) => {
               </div>}
             <Image
               className="preview-image new-article-image"
-              src={selectedImages?.[0] ?? "coathanger.png"}
+              src={selectedImages.length > 0 ? URL.createObjectURL(selectedImages[0]) : "coathanger.png"}
               alt={"Preview Image"}
             />
             <div className="spacer">
