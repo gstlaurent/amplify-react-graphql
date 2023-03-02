@@ -44,7 +44,28 @@ export const Wardrobe = ({ articles, setArticles }) => {
       <View as="form" onSubmit={submitForm}>
         <Flex
           direction="column"
-          alignItems="center">
+          alignItems="center"
+          gap="0.5em"
+          justifyContent="space-around"
+        >
+          <div className="image-selector">
+            <Button variation="secondary">
+              <label htmlFor="image-selection">
+                📷 Select Image(s)
+              </label>
+            </Button>
+            <View
+              className="image-input"
+              id="image-selection"
+              name="image"
+              as="input"
+              type="file"
+              accept="image/*"
+              onChange={onImagesSelected}
+              required
+              multiple
+            />
+          </div>
           <div className="images">
             {selectedImages.length > 1 &&
               <Collection
@@ -60,7 +81,7 @@ export const Wardrobe = ({ articles, setArticles }) => {
                     key={index}
                     className="preview-image"
                     src={URL.createObjectURL(image)}
-                    alt={"Preview Image"}
+                    alt={"Upcoming Preview Image"}
                   />
                 )}
               </Collection>
@@ -72,29 +93,11 @@ export const Wardrobe = ({ articles, setArticles }) => {
             <Image
               className="preview-image new-article-image"
               src={selectedImages.length > 0 ? URL.createObjectURL(selectedImages[0]) : "coathanger.png"}
-              alt={"Preview Image"}
+              alt={"Current Preview Image"}
             />
             <div className="spacer">
               &nbsp;
             </div>
-          </div>
-          <div className="image-selector">
-            <Button variation="secondary">
-              <label htmlFor="image-selection">
-                📷 Select Image
-              </label>
-            </Button>
-            <View
-              className="image-input"
-              id="image-selection"
-              name="image"
-              as="input"
-              type="file"
-              accept="image/*"
-              onChange={onImagesSelected}
-              required
-              multiple
-            />
           </div>
           <Flex direction="row" justifyContent="center">
             <SeasonGroup />
