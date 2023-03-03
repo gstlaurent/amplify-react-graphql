@@ -75,11 +75,12 @@ export const Wardrobe = ({ articles, setArticles }) => {
                 wrap="nowrap"
                 overflow="hidden"
                 className="next-images"
+                gap="0.25em"
               >
                 {(image, index) => (
                   <Image
                     key={index}
-                    className="preview-image"
+                    className="next-preview"
                     src={URL.createObjectURL(image)}
                     alt={"Upcoming Preview Image"}
                   />

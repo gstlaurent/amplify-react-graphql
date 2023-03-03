@@ -56,10 +56,19 @@
 
 .next-images {
     width: 33%;
+    height: 50%;
+    opacity: 50%;
+}
+
+.next-preview {
+    object-fit: scale-down;
+    margin: 0 0 0 0;
 }
 
 .new-article-image {
     width: 34%;
+    height: 100%;
+
 }
 
 .spacer {
