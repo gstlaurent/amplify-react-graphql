@@ -11,7 +11,17 @@ import { compressImage } from "./util";
 
 
 export const fetchArticles = async () => {
-    const apiData = await API.graphql({ query: listArticles, authMode: 'AMAZON_COGNITO_USER_POOLS' });
+    const variables = {
+        limit: 10000,
+    };
+    const apiData = await API.graphql({
+        query: listArticles,
+        authMode: 'AMAZON_COGNITO_USER_POOLS',
+        variables
+    });
+    if (apiData.data.listArticles.nextToken) {
+        console.error(`Only fetched first ${variables.limit} articles. Some left unfetched.`);
+    }
     const articlesFromAPI = apiData.data.listArticles.items;
     articlesFromAPI.forEach((article) => {
         article.usage = Usage[article.usage];
