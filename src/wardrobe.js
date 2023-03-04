@@ -9,7 +9,7 @@ import {
 import { SeasonGroup } from "./season";
 import { UsageRadioGroup } from "./usage";
 import WardrobeContents from "./wardrobecontents";
-import { createArticle, fetchArticles } from "./api";
+import { createArticle } from "./api";
 import './styles.css';
 
 export const Wardrobe = ({ articles, setArticles }) => {
@@ -35,8 +35,8 @@ export const Wardrobe = ({ articles, setArticles }) => {
     }
     setSelectedImages(selectedImages.slice(1));
 
-    await createArticle(imageFile, seasons, usage);
-    setArticles(await fetchArticles());
+    const newArticle = await createArticle(imageFile, seasons, usage);
+    setArticles([...articles, newArticle]);
   };
 
   return (

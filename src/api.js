@@ -52,11 +52,16 @@ export const createArticle = async (imageFile, seasons, usage) => {
         usage: usage
     };
     await Storage.vault.put(data.image, compressedImageFile);
-    await API.graphql({
+    const newArticleData = await API.graphql({
         query: createArticleMutation,
         variables: { input: data },
         authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
+    const newArticle = newArticleData.data.createArticle;
+    newArticle.usage = Usage[newArticle.usage];
+    newArticle.seasons = newArticle.seasons.map((season) => Season[season]);
+    newArticle.imageUrl = await Storage.vault.get(newArticle.image);
+    return newArticle;
 }
 
 export const deleteArticle = async ({ id, image }) => {
