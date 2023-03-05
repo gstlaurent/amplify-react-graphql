@@ -1,9 +1,9 @@
-import { listArticles } from "./graphql/queries";
+import { listArticleTests } from "./graphql/queries";
 import md5 from "md5";
 import { API, Storage } from 'aws-amplify';
 import {
-    createArticle as createArticleMutation,
-    deleteArticle as deleteArticleMutation,
+    createArticleTest as createArticleTestMutation,
+    deleteArticleTest as deleteArticleTestMutation,
 } from "./graphql/mutations";
 import { Season } from "./season";
 import { Usage } from "./usage";
@@ -15,26 +15,26 @@ export const fetchArticles = async () => {
         limit: 10000,
     };
     const apiData = await API.graphql({
-        query: listArticles,
+        query: listArticleTests,
         authMode: 'AMAZON_COGNITO_USER_POOLS',
         variables
     });
-    if (apiData.data.listArticles.nextToken) {
-        console.error(`Only fetched first ${variables.limit} articles. Some left unfetched.`);
+    if (apiData.data.listArticleTests.nextToken) {
+        console.error(`Only fetched first ${variables.limit} articletests. Some left unfetched.`);
     }
-    const articlesFromAPI = apiData.data.listArticles.items;
-    articlesFromAPI.forEach((article) => {
-        article.usage = Usage[article.usage];
-        article.seasons = article.seasons.map((season) => Season[season]);
+    const articletestsFromAPI = apiData.data.listArticleTests.items;
+    articletestsFromAPI.forEach((articletest) => {
+        articletest.usage = Usage[articletest.usage];
+        articletest.seasons = articletest.seasons.map((season) => Season[season]);
     });
     await Promise.all(
-        articlesFromAPI.map(async (article) => {
-            const url = await Storage.vault.get(article.image);
-            article.imageUrl = url;
-            return article;
+        articletestsFromAPI.map(async (articletest) => {
+            const url = await Storage.vault.get(articletest.image);
+            articletest.imageUrl = url;
+            return articletest;
         })
     );
-    return articlesFromAPI;
+    return articletestsFromAPI;
 }
 
 const generateImageName = async (image) => {
@@ -52,22 +52,22 @@ export const createArticle = async (imageFile, seasons, usage) => {
         usage: usage
     };
     await Storage.vault.put(data.image, compressedImageFile);
-    const newArticleData = await API.graphql({
-        query: createArticleMutation,
+    const newArticleTestData = await API.graphql({
+        query: createArticleTestMutation,
         variables: { input: data },
         authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
-    const newArticle = newArticleData.data.createArticle;
-    newArticle.usage = Usage[newArticle.usage];
-    newArticle.seasons = newArticle.seasons.map((season) => Season[season]);
-    newArticle.imageUrl = await Storage.vault.get(newArticle.image);
-    return newArticle;
+    const newArticleTest = newArticleTestData.data.createArticleTest;
+    newArticleTest.usage = Usage[newArticleTest.usage];
+    newArticleTest.seasons = newArticleTest.seasons.map((season) => Season[season]);
+    newArticleTest.imageUrl = await Storage.vault.get(newArticleTest.image);
+    return newArticleTest;
 }
 
 export const deleteArticle = async ({ id, image }) => {
     await Storage.vault.remove(image);
     await API.graphql({
-        query: deleteArticleMutation,
+        query: deleteArticleTestMutation,
         variables: { input: { id } },
         authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
