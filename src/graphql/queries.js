@@ -34,3 +34,36 @@ export const listArticles = /* GraphQL */ `
     }
   }
 `;
+export const getArticleTest = /* GraphQL */ `
+  query GetArticleTest($id: ID!) {
+    getArticleTest(id: $id) {
+      id
+      image
+      seasons
+      usage
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listArticleTests = /* GraphQL */ `
+  query ListArticleTests(
+    $filter: ModelArticleTestFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listArticleTests(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        image
+        seasons
+        usage
+        owner
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

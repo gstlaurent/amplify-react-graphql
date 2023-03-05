@@ -22,3 +22,11 @@ enum Usage {
   BAG
   SWEATER
 }
+
+type ArticleTest @model @auth(rules: [ { allow: owner } ] ){
+  id: ID!
+  image: String!
+  seasons: [Season]!
+  usage: Usage!
+  owner: String
+}
