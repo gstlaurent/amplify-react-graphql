@@ -41,8 +41,8 @@ export const getArticleTest = /* GraphQL */ `
       image
       seasons
       usage
-      owner
       createdAt
+      owner
       updatedAt
     }
   }
@@ -59,8 +59,38 @@ export const listArticleTests = /* GraphQL */ `
         image
         seasons
         usage
-        owner
         createdAt
+        owner
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const articleTestsByOwnerAndCreatedAt = /* GraphQL */ `
+  query ArticleTestsByOwnerAndCreatedAt(
+    $owner: String!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelArticleTestFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    articleTestsByOwnerAndCreatedAt(
+      owner: $owner
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
         updatedAt
       }
       nextToken

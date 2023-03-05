@@ -28,5 +28,6 @@ type ArticleTest @model @auth(rules: [ { allow: owner } ] ){
   image: String!
   seasons: [Season]!
   usage: Usage!
-  owner: String
+  createdAt: AWSDateTime!
+  owner: String @index(sortKeyFields: ["createdAt"])
 }

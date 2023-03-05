@@ -59,8 +59,8 @@ export const createArticleTest = /* GraphQL */ `
       image
       seasons
       usage
-      owner
       createdAt
+      owner
       updatedAt
     }
   }
@@ -75,8 +75,8 @@ export const updateArticleTest = /* GraphQL */ `
       image
       seasons
       usage
-      owner
       createdAt
+      owner
       updatedAt
     }
   }
@@ -91,8 +91,8 @@ export const deleteArticleTest = /* GraphQL */ `
       image
       seasons
       usage
-      owner
       createdAt
+      owner
       updatedAt
     }
   }
