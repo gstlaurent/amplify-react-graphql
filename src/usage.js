@@ -28,7 +28,7 @@ export const USAGES = Object.values(Usage);
 export const UsageRadioGroup = () => {
   return (
     <fieldset>
-      <legend>Usage</legend>
+      <legend>Category</legend>
       {USAGES.map(({ label, graphqlEnum, emoji }) => {
         const id = `usage-${graphqlEnum}`;
         return (
