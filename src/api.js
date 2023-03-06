@@ -1,6 +1,6 @@
-import { listArticleTests } from "./graphql/queries";
+import { articleTestsByOwnerAndCreatedAt } from "./graphql/queries";
 import md5 from "md5";
-import { API, Storage } from 'aws-amplify';
+import { API, Storage, Auth } from 'aws-amplify';
 import {
     createArticleTest as createArticleTestMutation,
     deleteArticleTest as deleteArticleTestMutation,
@@ -10,19 +10,22 @@ import { Usage } from "./usage";
 import { compressImage } from "./util";
 
 
+
 export const fetchArticles = async () => {
+    const currentUser = await Auth.currentAuthenticatedUser();
     const variables = {
         limit: 10000,
+        owner: `${currentUser.attributes.sub}::${currentUser.username}`
     };
     const apiData = await API.graphql({
-        query: listArticleTests,
+        query: articleTestsByOwnerAndCreatedAt,
         authMode: 'AMAZON_COGNITO_USER_POOLS',
         variables
     });
-    if (apiData.data.listArticleTests.nextToken) {
+    if (apiData.data.articleTestsByOwnerAndCreatedAt.nextToken) {
         console.error(`Only fetched first ${variables.limit} articletests. Some left unfetched.`);
     }
-    const articletestsFromAPI = apiData.data.listArticleTests.items;
+    const articletestsFromAPI = apiData.data.articleTestsByOwnerAndCreatedAt.items;
     articletestsFromAPI.forEach((articletest) => {
         articletest.usage = Usage[articletest.usage];
         articletest.seasons = articletest.seasons.map((season) => Season[season]);
