@@ -29,5 +29,5 @@ type ArticleTest @model @auth(rules: [ { allow: owner } ] ){
   seasons: [Season]!
   usage: Usage!
   createdAt: AWSDateTime!
-  owner: String @index(sortKeyFields: ["createdAt"])
+  owner: String @index(sortKeyFields: ["createdAt"]) @auth(rules: [{ allow: owner, operations: [read, delete] }])
 }
