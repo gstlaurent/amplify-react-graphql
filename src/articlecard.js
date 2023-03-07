@@ -1,13 +1,16 @@
-import React from "react";
+import { useState } from "react";
 import {
     Button,
     Flex,
     Image,
-    Text,
+    ToggleButton,
+    ToggleButtonGroup,
     Card,
 } from '@aws-amplify/ui-react';
 import { deleteArticle } from "./api";
 import './styles.css';
+import { SEASONS } from "./season";
+
 
 const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
     const newArticles = articles.filter((article) => article.id !== articleToDelete.id);
@@ -17,12 +20,30 @@ const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
 
 
 const ArticleCard = ({ article, articles, setArticles }) => {
+    const [seasons, setSeasons] = useState(article.seasons);
     return (
         <div key={article.id}>
             <Card variation="elevated" minWidth="125px" width="125px" height="95%">
                 <Flex direction="column" justifyContent="space-between" height="100%">
                     <Flex direction="column" justifyContent="flex-start" gap="0">
-                        <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
+                        <ToggleButtonGroup
+                            className="article-card-season-group"
+                            alignItems="flex-start"
+                            size="small"
+                            value={seasons}
+                            onChange={(value) => setSeasons(value)}
+                        >
+                            {SEASONS.map((season) => (
+                                <ToggleButton
+                                    className="article-card-season"
+                                    key={season}
+                                    value={season}
+                                    title={season.label}
+                                >
+                                    {season.emoji}
+                                </ToggleButton>
+                            ))}
+                        </ToggleButtonGroup>
                         <Image src={article.imageUrl} alt={article.usage.label} />
                     </Flex>
                     <Button variation="link" size="small" title={`Delete ${article.usage.label} Article`} onClick={() => {
