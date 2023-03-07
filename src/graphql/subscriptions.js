@@ -12,8 +12,8 @@ export const onCreateArticle = /* GraphQL */ `
       seasons
       usage
       createdAt
-      updatedAt
       owner
+      updatedAt
     }
   }
 `;
@@ -28,8 +28,8 @@ export const onUpdateArticle = /* GraphQL */ `
       seasons
       usage
       createdAt
-      updatedAt
       owner
+      updatedAt
     }
   }
 `;
@@ -44,8 +44,56 @@ export const onDeleteArticle = /* GraphQL */ `
       seasons
       usage
       createdAt
-      updatedAt
       owner
+      updatedAt
+    }
+  }
+`;
+export const onCreateArticleTest = /* GraphQL */ `
+  subscription OnCreateArticleTest(
+    $filter: ModelSubscriptionArticleTestFilterInput
+    $owner: String
+  ) {
+    onCreateArticleTest(filter: $filter, owner: $owner) {
+      id
+      image
+      seasons
+      usage
+      createdAt
+      owner
+      updatedAt
+    }
+  }
+`;
+export const onUpdateArticleTest = /* GraphQL */ `
+  subscription OnUpdateArticleTest(
+    $filter: ModelSubscriptionArticleTestFilterInput
+    $owner: String
+  ) {
+    onUpdateArticleTest(filter: $filter, owner: $owner) {
+      id
+      image
+      seasons
+      usage
+      createdAt
+      owner
+      updatedAt
+    }
+  }
+`;
+export const onDeleteArticleTest = /* GraphQL */ `
+  subscription OnDeleteArticleTest(
+    $filter: ModelSubscriptionArticleTestFilterInput
+    $owner: String
+  ) {
+    onDeleteArticleTest(filter: $filter, owner: $owner) {
+      id
+      image
+      seasons
+      usage
+      createdAt
+      owner
+      updatedAt
     }
   }
 `;

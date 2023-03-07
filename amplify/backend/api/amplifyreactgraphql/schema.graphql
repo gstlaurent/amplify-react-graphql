@@ -3,6 +3,8 @@ type Article @model @auth(rules: [ { allow: owner } ] ){
   image: String!
   seasons: [Season]!
   usage: Usage!
+  createdAt: AWSDateTime!
+  owner: String @index(sortKeyFields: ["createdAt"]) @auth(rules: [{ allow: owner, operations: [read, delete] }])
 }
 
 enum Season {
@@ -21,4 +23,14 @@ enum Usage {
   ACCESSORY
   BAG
   SWEATER
+}
+
+# This is for prototyping things without breaking. See articletest branch.
+type ArticleTest @model @auth(rules: [ { allow: owner } ] ){
+  id: ID!
+  image: String!
+  seasons: [Season]!
+  usage: Usage!
+  createdAt: AWSDateTime!
+  owner: String @index(sortKeyFields: ["createdAt"]) @auth(rules: [{ allow: owner, operations: [read, delete] }])
 }
