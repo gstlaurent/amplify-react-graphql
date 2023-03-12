@@ -81,6 +81,7 @@ export const Outfit = ({ articles }) => {
                 </ToggleButtonGroup>
                 {!isEmpty(randomArticles) && (
                     <Button
+                        style={{ borderRadius: "100%" }}
                         size="large"
                         onClick={() => setRandomArticles(generateRandomArticles(articlesByUsage))}
                     >

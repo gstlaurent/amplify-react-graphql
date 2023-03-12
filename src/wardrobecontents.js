@@ -26,6 +26,7 @@ const WardrobeContents = ({ articles, setArticles }) => {
                             {(article) => (
                                 <ArticleCard
                                     key={article.id}
+                                    usage={usage}
                                     article={article}
                                     articles={articles}
                                     setArticles={setArticles}
