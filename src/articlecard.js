@@ -10,6 +10,7 @@ import {
 import { deleteArticle } from "./api";
 import './styles.css';
 import { SEASONS } from "./season";
+import { Usage, USAGES } from "./usage";
 
 
 const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
@@ -21,6 +22,7 @@ const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
 
 const ArticleCard = ({ article, articles, setArticles }) => {
     const [seasons, setSeasons] = useState(article.seasons);
+    const [currentUsage, setCurrentUsage] = useState(article.usage);
     return (
         <div key={article.id}>
             <Card variation="elevated" minWidth="125px" width="125px" height="95%">
@@ -38,7 +40,7 @@ const ArticleCard = ({ article, articles, setArticles }) => {
                                 key={season}
                                 value={season}
                                 title={season.label}
-                                isFullWidth={true}
+                                isFullWidth
                             >
                                 {season.emoji}
                             </ToggleButton>
@@ -49,6 +51,24 @@ const ArticleCard = ({ article, articles, setArticles }) => {
                         <Button variation="secondary" size="small">
                             {article.usage.emoji}
                         </Button>
+                        <ToggleButtonGroup
+                            className="usage-buttons"
+                            size="small"
+                            value={currentUsage}
+                            onChange={(value) => setCurrentUsage(value)}
+                            isSelectionRequired
+                            isExclusive
+                        >
+                            {USAGES.map((usage) => (
+                                <ToggleButton
+                                    key={usage}
+                                    value={usage}
+                                    title={usage.label}
+                                >
+                                    {usage.emoji}
+                                </ToggleButton>
+                            ))}
+                        </ToggleButtonGroup>
                         <Button variation="link" size="small" title={`Delete ${article.usage.label} Article`} onClick={() => {
                             if (window.confirm(`Are you sure you want to delete this ${article.usage.label}?`)) {
                                 deleteArticleFromWardrobe(article, articles, setArticles);
