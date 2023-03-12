@@ -45,13 +45,20 @@ const ArticleCard = ({ article, articles, setArticles }) => {
                         ))}
                     </ToggleButtonGroup>
                     <Image className="article-card-image" src={article.imageUrl} alt={article.usage.label} />
-                    <Button variation="link" size="small" title={`Delete ${article.usage.label} Article`} onClick={() => {
-                        if (window.confirm(`Are you sure you want to delete this ${article.usage.label}?`)) {
-                            deleteArticleFromWardrobe(article, articles, setArticles);
-                        }
-                    }}>
-                        ❌
-                    </Button>
+                    <Flex direction="row" justifyContent="space-between">
+                        <Button variation="secondary" size="small">
+                            {article.usage.emoji}
+                        </Button>
+                        <Button variation="link" size="small" title={`Delete ${article.usage.label} Article`} onClick={() => {
+                            if (window.confirm(`Are you sure you want to delete this ${article.usage.label}?`)) {
+                                deleteArticleFromWardrobe(article, articles, setArticles);
+                            }
+                        }}>
+                            ❌
+                        </Button>
+
+                    </Flex>
+
                 </Flex>
             </Card>
         </div >
