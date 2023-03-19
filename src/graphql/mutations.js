@@ -61,6 +61,17 @@ export const createArticleTest = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
     }
   }
@@ -77,6 +88,17 @@ export const updateArticleTest = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
     }
   }
@@ -93,7 +115,198 @@ export const deleteArticleTest = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
+    }
+  }
+`;
+export const createOutfitTest = /* GraphQL */ `
+  mutation CreateOutfitTest(
+    $input: CreateOutfitTestInput!
+    $condition: ModelOutfitTestConditionInput
+  ) {
+    createOutfitTest(input: $input, condition: $condition) {
+      createdAt
+      owner
+      articles {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const updateOutfitTest = /* GraphQL */ `
+  mutation UpdateOutfitTest(
+    $input: UpdateOutfitTestInput!
+    $condition: ModelOutfitTestConditionInput
+  ) {
+    updateOutfitTest(input: $input, condition: $condition) {
+      createdAt
+      owner
+      articles {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const deleteOutfitTest = /* GraphQL */ `
+  mutation DeleteOutfitTest(
+    $input: DeleteOutfitTestInput!
+    $condition: ModelOutfitTestConditionInput
+  ) {
+    deleteOutfitTest(input: $input, condition: $condition) {
+      createdAt
+      owner
+      articles {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const createOutfitTestArticleTest = /* GraphQL */ `
+  mutation CreateOutfitTestArticleTest(
+    $input: CreateOutfitTestArticleTestInput!
+    $condition: ModelOutfitTestArticleTestConditionInput
+  ) {
+    createOutfitTestArticleTest(input: $input, condition: $condition) {
+      id
+      articleTestId
+      outfitTestId
+      articleTest {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfitTest {
+        createdAt
+        owner
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateOutfitTestArticleTest = /* GraphQL */ `
+  mutation UpdateOutfitTestArticleTest(
+    $input: UpdateOutfitTestArticleTestInput!
+    $condition: ModelOutfitTestArticleTestConditionInput
+  ) {
+    updateOutfitTestArticleTest(input: $input, condition: $condition) {
+      id
+      articleTestId
+      outfitTestId
+      articleTest {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfitTest {
+        createdAt
+        owner
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteOutfitTestArticleTest = /* GraphQL */ `
+  mutation DeleteOutfitTestArticleTest(
+    $input: DeleteOutfitTestArticleTestInput!
+    $condition: ModelOutfitTestArticleTestConditionInput
+  ) {
+    deleteOutfitTestArticleTest(input: $input, condition: $condition) {
+      id
+      articleTestId
+      outfitTestId
+      articleTest {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfitTest {
+        createdAt
+        owner
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
     }
   }
 `;

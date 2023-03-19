@@ -61,6 +61,17 @@ export const onCreateArticleTest = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
     }
   }
@@ -77,6 +88,17 @@ export const onUpdateArticleTest = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
     }
   }
@@ -93,7 +115,198 @@ export const onDeleteArticleTest = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
+    }
+  }
+`;
+export const onCreateOutfitTest = /* GraphQL */ `
+  subscription OnCreateOutfitTest(
+    $filter: ModelSubscriptionOutfitTestFilterInput
+    $owner: String
+  ) {
+    onCreateOutfitTest(filter: $filter, owner: $owner) {
+      createdAt
+      owner
+      articles {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const onUpdateOutfitTest = /* GraphQL */ `
+  subscription OnUpdateOutfitTest(
+    $filter: ModelSubscriptionOutfitTestFilterInput
+    $owner: String
+  ) {
+    onUpdateOutfitTest(filter: $filter, owner: $owner) {
+      createdAt
+      owner
+      articles {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const onDeleteOutfitTest = /* GraphQL */ `
+  subscription OnDeleteOutfitTest(
+    $filter: ModelSubscriptionOutfitTestFilterInput
+    $owner: String
+  ) {
+    onDeleteOutfitTest(filter: $filter, owner: $owner) {
+      createdAt
+      owner
+      articles {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const onCreateOutfitTestArticleTest = /* GraphQL */ `
+  subscription OnCreateOutfitTestArticleTest(
+    $filter: ModelSubscriptionOutfitTestArticleTestFilterInput
+    $owner: String
+  ) {
+    onCreateOutfitTestArticleTest(filter: $filter, owner: $owner) {
+      id
+      articleTestId
+      outfitTestId
+      articleTest {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfitTest {
+        createdAt
+        owner
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateOutfitTestArticleTest = /* GraphQL */ `
+  subscription OnUpdateOutfitTestArticleTest(
+    $filter: ModelSubscriptionOutfitTestArticleTestFilterInput
+    $owner: String
+  ) {
+    onUpdateOutfitTestArticleTest(filter: $filter, owner: $owner) {
+      id
+      articleTestId
+      outfitTestId
+      articleTest {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfitTest {
+        createdAt
+        owner
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteOutfitTestArticleTest = /* GraphQL */ `
+  subscription OnDeleteOutfitTestArticleTest(
+    $filter: ModelSubscriptionOutfitTestArticleTestFilterInput
+    $owner: String
+  ) {
+    onDeleteOutfitTestArticleTest(filter: $filter, owner: $owner) {
+      id
+      articleTestId
+      outfitTestId
+      articleTest {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfitTest {
+        createdAt
+        owner
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
     }
   }
 `;

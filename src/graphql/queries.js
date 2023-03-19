@@ -73,6 +73,17 @@ export const getArticleTest = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
     }
   }
@@ -91,6 +102,9 @@ export const listArticleTests = /* GraphQL */ `
         usage
         createdAt
         owner
+        outfits {
+          nextToken
+        }
         updatedAt
       }
       nextToken
@@ -121,7 +135,236 @@ export const articleTestsByOwnerAndCreatedAt = /* GraphQL */ `
         usage
         createdAt
         owner
+        outfits {
+          nextToken
+        }
         updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getOutfitTest = /* GraphQL */ `
+  query GetOutfitTest($id: ID!) {
+    getOutfitTest(id: $id) {
+      createdAt
+      owner
+      articles {
+        items {
+          id
+          articleTestId
+          outfitTestId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const listOutfitTests = /* GraphQL */ `
+  query ListOutfitTests(
+    $filter: ModelOutfitTestFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOutfitTests(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        createdAt
+        owner
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const outfitTestsByOwnerAndCreatedAt = /* GraphQL */ `
+  query OutfitTestsByOwnerAndCreatedAt(
+    $owner: String!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOutfitTestFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    outfitTestsByOwnerAndCreatedAt(
+      owner: $owner
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        createdAt
+        owner
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getOutfitTestArticleTest = /* GraphQL */ `
+  query GetOutfitTestArticleTest($id: ID!) {
+    getOutfitTestArticleTest(id: $id) {
+      id
+      articleTestId
+      outfitTestId
+      articleTest {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfitTest {
+        createdAt
+        owner
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listOutfitTestArticleTests = /* GraphQL */ `
+  query ListOutfitTestArticleTests(
+    $filter: ModelOutfitTestArticleTestFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOutfitTestArticleTests(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        articleTestId
+        outfitTestId
+        articleTest {
+          id
+          image
+          seasons
+          usage
+          createdAt
+          owner
+          updatedAt
+        }
+        outfitTest {
+          createdAt
+          owner
+          id
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const outfitTestArticleTestsByArticleTestId = /* GraphQL */ `
+  query OutfitTestArticleTestsByArticleTestId(
+    $articleTestId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelOutfitTestArticleTestFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    outfitTestArticleTestsByArticleTestId(
+      articleTestId: $articleTestId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        articleTestId
+        outfitTestId
+        articleTest {
+          id
+          image
+          seasons
+          usage
+          createdAt
+          owner
+          updatedAt
+        }
+        outfitTest {
+          createdAt
+          owner
+          id
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const outfitTestArticleTestsByOutfitTestId = /* GraphQL */ `
+  query OutfitTestArticleTestsByOutfitTestId(
+    $outfitTestId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelOutfitTestArticleTestFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    outfitTestArticleTestsByOutfitTestId(
+      outfitTestId: $outfitTestId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        articleTestId
+        outfitTestId
+        articleTest {
+          id
+          image
+          seasons
+          usage
+          createdAt
+          owner
+          updatedAt
+        }
+        outfitTest {
+          createdAt
+          owner
+          id
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        owner
       }
       nextToken
     }
