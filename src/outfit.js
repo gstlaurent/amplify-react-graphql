@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { groupBy, setRandomArticleByUsage, isEmpty } from "./util";
+import { groupBy, setRandomArticleByUsage, isEmpty, getRandomInt } from "./util";
 import {
     Button,
     ToggleButtonGroup,
@@ -11,14 +11,48 @@ import { Usage, USAGES } from "./usage";
 import { ArticlePic } from "./articlepic";
 import './styles.css';
 
-const generateRandomArticles = (articlesByUsage) => {
-    const randomArticles = {};
-    USAGES.forEach((usage) => {
-        setRandomArticleByUsage(randomArticles, usage, articlesByUsage);
-
-    });
-    return randomArticles;
+const moveDressesToTops = (articlesByUsage) => {
+    // Move DRESS to TOP, but first must ensure both exit
+    articlesByUsage[Usage.TOP] ??= [];
+    articlesByUsage[Usage.DRESS] ??= [];
+    articlesByUsage[Usage.TOP].push(
+        ...articlesByUsage[Usage.DRESS]
+    );
+    delete articlesByUsage[Usage.DRESS];
 }
+
+const removeBottomIfHasDress = (articles) => {
+    const hasDress = articles.find(article => article.usage === Usage.DRESS);
+    if (hasDress) {
+        const bottom = articles.find(article => article.usage === Usage.BOTTOM);
+        const indexOfBottom = articles.indexOf(bottom);
+        articles.splice(indexOfBottom, 1);
+    }
+}
+
+const sortArticles = (articles) => {
+    // TODO
+}
+
+const generateOutfit = (articlesByUsage) => {
+    moveDressesToTops(articlesByUsage);
+
+    const articleGroups = Object.values(articlesByUsage);
+    const oneOfEachTypeOfRandomArticle = articleGroups
+        .filter(articles => articles?.length > 0)
+        .map(articles => {
+            const randomIndex = getRandomInt(articles.length);
+            return articles[randomIndex];
+        });
+
+    removeBottomIfHasDress(oneOfEachTypeOfRandomArticle);
+
+    sortArticles(oneOfEachTypeOfRandomArticle);
+
+    return {
+        articles: oneOfEachTypeOfRandomArticle
+    };
+};
 
 const isArticleInSeason = (article, currentSeason) => {
     return article.seasons.includes(currentSeason);
@@ -30,24 +64,19 @@ const groupSeasonalArticlesByUsage = (season, articles) => {
     }
     const seasonalArticles = articles.filter((a) => isArticleInSeason(a, season));
     const groupedSeasonalArticles = groupBy(seasonalArticles, "usage");
-
-    // Move DRESS to TOP, but first must ensure both exit
-    groupedSeasonalArticles[Usage.TOP] ??= [];
-    groupedSeasonalArticles[Usage.DRESS] ??= [];
-    groupedSeasonalArticles[Usage.TOP].push(
-        ...groupedSeasonalArticles[Usage.DRESS]
-    );
-    delete groupedSeasonalArticles[Usage.DRESS];
-
     return groupedSeasonalArticles;
 };
 
+
+const generateNewArticleOfUsage = (uage) => {
+    // TODO
+};
 
 export const Outfit = ({ articles }) => {
     const previousSessionSeason = localStorage.getItem("currentSeason");
     const [currentSeason, setCurrentSeason] = useState(Season?.[previousSessionSeason] ?? Season.WINTER);
     const [articlesByUsage, setArticlesByUsage] = useState({});
-    const [randomArticles, setRandomArticles] = useState({});
+    const [outfit, setOutfit] = useState({ articles: [] });
 
     useEffect(() => {
         const newArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
@@ -57,11 +86,9 @@ export const Outfit = ({ articles }) => {
 
 
     useEffect(() => {
-        const newRandomArticles = generateRandomArticles(articlesByUsage);
-        setRandomArticles(newRandomArticles);
+        const newOutfit = generateOutfit(articlesByUsage);
+        setOutfit(newOutfit);
     }, [articlesByUsage]);
-
-    const topArticle = randomArticles[Usage.TOP];
 
     return (
         <div className="outfit">
@@ -79,30 +106,24 @@ export const Outfit = ({ articles }) => {
                         <ToggleButton key={season.graphqlEnum} value={season} title={season.label}>{season.emoji}</ToggleButton>
                     ))}
                 </ToggleButtonGroup>
-                {!isEmpty(randomArticles) && (
+                {!isEmpty(outfit.articles) && (
                     <Button
                         size="large"
-                        onClick={() => setRandomArticles(generateRandomArticles(articlesByUsage))}
+                        onClick={() => setOutfit(generateOutfit(articlesByUsage))}
                     >
                         🔄
                     </Button>
                 )}
             </Flex>
-            {!isEmpty(randomArticles) && (
+            {!isEmpty(outfit.articles) && (
                 <Flex className="article-pics" wrap="wrap" alignItems="flex-start" justifyContent="space-around">
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.TOP} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    {(!topArticle || topArticle.usage !== Usage.DRESS) &&
-                        <ArticlePic randomArticles={randomArticles} usage={Usage.BOTTOM} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    }
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.SWEATER} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.OUTERWEAR} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.SHOES} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.ACCESSORY} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
-                    <ArticlePic randomArticles={randomArticles} usage={Usage.BAG} articlesByUsage={articlesByUsage} setRandomArticles={setRandomArticles} />
+                    {outfit.articles.map(article => (
+                        <ArticlePic article={article} onRefresh={() => generateNewArticleOfUsage(article.usage)} />
+                    ))}
                 </Flex>
 
             )}
-            {isEmpty(randomArticles) && <span>Generating Random Outfit...</span>}
+            {isEmpty(outfit.articles) && <span>Generating Random Outfit...</span>}
 
         </div>
     )
