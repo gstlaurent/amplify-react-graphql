@@ -31,7 +31,14 @@ const removeBottomIfHasDress = (articles) => {
 }
 
 const sortArticles = (articles) => {
-    // TODO
+    const result = [];
+    for (const usage of USAGES) {
+        const articleOfUsage = articles.find(article => article.usage === usage);
+        if (articleOfUsage) {
+            result.push(articleOfUsage);
+        }
+    }
+    return result;
 }
 
 const generateOutfit = (articlesByUsage) => {
@@ -47,10 +54,10 @@ const generateOutfit = (articlesByUsage) => {
 
     removeBottomIfHasDress(oneOfEachTypeOfRandomArticle);
 
-    sortArticles(oneOfEachTypeOfRandomArticle);
+    const sortedArticles = sortArticles(oneOfEachTypeOfRandomArticle);
 
     return {
-        articles: oneOfEachTypeOfRandomArticle
+        articles: sortedArticles
     };
 };
 
@@ -83,7 +90,6 @@ export const Outfit = ({ articles }) => {
         setArticlesByUsage(newArticlesByUsage);
         localStorage.setItem("currentSeason", currentSeason.graphqlEnum);
     }, [articles, currentSeason]);
-
 
     useEffect(() => {
         const newOutfit = generateOutfit(articlesByUsage);
