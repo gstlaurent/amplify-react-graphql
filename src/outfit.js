@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { groupBy, setRandomArticleByUsage, isEmpty, getRandomInt } from "./util";
+import { groupBy, isEmpty, getRandomInt } from "./util";
 import {
     Button,
     ToggleButtonGroup,
@@ -12,21 +12,35 @@ import { ArticlePic } from "./articlepic";
 import './styles.css';
 
 const moveDressesToTops = (articlesByUsage) => {
-    // Move DRESS to TOP, but first must ensure both exit
-    articlesByUsage[Usage.TOP] ??= [];
-    articlesByUsage[Usage.DRESS] ??= [];
-    articlesByUsage[Usage.TOP].push(
-        ...articlesByUsage[Usage.DRESS]
+    const result = { ...articlesByUsage };
+
+    // Must first ensure both Top and Dress lists exists
+    result[Usage.TOP] ??= [];
+    result[Usage.DRESS] ??= [];
+
+    // And if it did exist, we must copy the TOP list, since we will be modifying it.
+    // We don't want to do a structuredClone because we don't want to copy the enums
+    // since then they won't match in comparisons later on
+    result[Usage.TOP] = [...result[Usage.TOP]];
+
+    result[Usage.TOP].push(
+        ...result[Usage.DRESS]
     );
-    delete articlesByUsage[Usage.DRESS];
+    delete result[Usage.DRESS];
+
+    return result;
+}
+
+const removeArticleOfUsage = (articles, usage) => {
+    const articlOfUsage = articles.find(article => article.usage === usage);
+    const indexOfArticleOfUsage = articles.indexOf(articlOfUsage);
+    articles.splice(indexOfArticleOfUsage, 1);
 }
 
 const removeBottomIfHasDress = (articles) => {
     const hasDress = articles.find(article => article.usage === Usage.DRESS);
     if (hasDress) {
-        const bottom = articles.find(article => article.usage === Usage.BOTTOM);
-        const indexOfBottom = articles.indexOf(bottom);
-        articles.splice(indexOfBottom, 1);
+        removeArticleOfUsage(articles, Usage.BOTTOM);
     }
 }
 
@@ -42,9 +56,9 @@ const sortArticles = (articles) => {
 }
 
 const generateOutfit = (articlesByUsage) => {
-    moveDressesToTops(articlesByUsage);
+    const articlesByUsageTopDresses = moveDressesToTops(articlesByUsage);
 
-    const articleGroups = Object.values(articlesByUsage);
+    const articleGroups = Object.values(articlesByUsageTopDresses);
     const oneOfEachTypeOfRandomArticle = articleGroups
         .filter(articles => articles?.length > 0)
         .map(articles => {
@@ -75,10 +89,6 @@ const groupSeasonalArticlesByUsage = (season, articles) => {
 };
 
 
-const generateNewArticleOfUsage = (uage) => {
-    // TODO
-};
-
 export const Outfit = ({ articles }) => {
     const previousSessionSeason = localStorage.getItem("currentSeason");
     const [currentSeason, setCurrentSeason] = useState(Season?.[previousSessionSeason] ?? Season.WINTER);
@@ -95,6 +105,23 @@ export const Outfit = ({ articles }) => {
         const newOutfit = generateOutfit(articlesByUsage);
         setOutfit(newOutfit);
     }, [articlesByUsage]);
+
+
+
+    const generateNewArticleOfUsage = (usage) => {
+        const articlesOfUsage = articlesByUsage[usage];
+        if (articlesOfUsage.length) {
+            const newArticles = [...outfit.articles];
+            const oldArticleOfUsage = newArticles.find(article => article.usage === usage);
+            const indexOfOldArticleOfUsage = newArticles.indexOf(oldArticleOfUsage);
+
+            const randomIndex = getRandomInt(articlesOfUsage.length);
+            const newArticleOfUsage = articlesOfUsage[randomIndex];
+
+            newArticles[indexOfOldArticleOfUsage] = newArticleOfUsage;
+            setOutfit({ articles: newArticles });
+        }
+    };
 
     return (
         <div className="outfit">
@@ -124,7 +151,7 @@ export const Outfit = ({ articles }) => {
             {!isEmpty(outfit.articles) && (
                 <Flex className="article-pics" wrap="wrap" alignItems="flex-start" justifyContent="space-around">
                     {outfit.articles.map(article => (
-                        <ArticlePic article={article} onRefresh={() => generateNewArticleOfUsage(article.usage)} />
+                        <ArticlePic key={article.imageUrl} article={article} onRefresh={() => generateNewArticleOfUsage(article.usage)} />
                     ))}
                 </Flex>
 
