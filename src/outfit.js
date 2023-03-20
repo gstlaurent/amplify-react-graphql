@@ -10,6 +10,7 @@ import { Season, SEASONS } from "./season";
 import { Usage, USAGES } from "./usage";
 import { ArticlePic } from "./articlepic";
 import './styles.css';
+import { createOutfit } from "./api";
 
 const moveDressesToTops = (articlesByUsage) => {
     const result = { ...articlesByUsage };
@@ -95,6 +96,16 @@ export const Outfit = ({ articles }) => {
     const [articlesByUsage, setArticlesByUsage] = useState({});
     const [outfit, setOutfit] = useState({ articles: [] });
 
+    const generateAndSaveOutfit = () => {
+        const newOutfit = generateOutfit(articlesByUsage);
+        setOutfit(newOutfit);
+        if (!isEmpty(newOutfit.articles)) {
+            (async function () {
+                createOutfit(newOutfit);
+            })();
+        }
+    };
+
     useEffect(() => {
         const newArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
         setArticlesByUsage(newArticlesByUsage);
@@ -102,11 +113,9 @@ export const Outfit = ({ articles }) => {
     }, [articles, currentSeason]);
 
     useEffect(() => {
-        const newOutfit = generateOutfit(articlesByUsage);
-        setOutfit(newOutfit);
+        generateAndSaveOutfit();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [articlesByUsage]);
-
-
 
     const generateNewArticleOfUsage = (usage) => {
         const articlesOfUsage = articlesByUsage[usage];
@@ -122,6 +131,8 @@ export const Outfit = ({ articles }) => {
             setOutfit({ articles: newArticles });
         }
     };
+
+
 
     return (
         <div className="outfit">
@@ -142,7 +153,7 @@ export const Outfit = ({ articles }) => {
                 {!isEmpty(outfit.articles) && (
                     <Button
                         size="large"
-                        onClick={() => setOutfit(generateOutfit(articlesByUsage))}
+                        onClick={generateAndSaveOutfit}
                     >
                         🔄
                     </Button>

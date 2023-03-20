@@ -1,9 +1,10 @@
-import { articlesByOwnerAndCreatedAt } from "./graphql/queries";
+import { articleTestsByOwnerAndCreatedAt as articlesByOwnerAndCreatedAt } from "./graphql/queries";
 import md5 from "md5";
 import { API, Storage, Auth } from 'aws-amplify';
 import {
-    createArticle as createArticleMutation,
-    deleteArticle as deleteArticleMutation,
+    createArticleTest as createArticleMutation,
+    deleteArticleTest as deleteArticleMutation,
+    createOutfitTest as createOutfitMutation,
 } from "./graphql/mutations";
 import { Season } from "./season";
 import { Usage } from "./usage";
@@ -21,10 +22,10 @@ export const fetchArticles = async () => {
         authMode: 'AMAZON_COGNITO_USER_POOLS',
         variables
     });
-    if (apiData.data.articlesByOwnerAndCreatedAt.nextToken) {
+    if (apiData.data.articleTestsByOwnerAndCreatedAt.nextToken) {
         console.error(`Only fetched first ${variables.limit} articles. Some left unfetched.`);
     }
-    const articlesFromAPI = apiData.data.articlesByOwnerAndCreatedAt.items;
+    const articlesFromAPI = apiData.data.articleTestsByOwnerAndCreatedAt.items;
     articlesFromAPI.forEach((article) => {
         article.usage = Usage[article.usage];
         article.seasons = article.seasons.map((season) => Season[season]);
@@ -59,7 +60,7 @@ export const createArticle = async (imageFile, seasons, usage) => {
         variables: { input: data },
         authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
-    const newArticle = newArticleData.data.createArticle;
+    const newArticle = newArticleData.data.createArticleTest;
     newArticle.usage = Usage[newArticle.usage];
     newArticle.seasons = newArticle.seasons.map((season) => Season[season]);
     newArticle.imageUrl = await Storage.vault.get(newArticle.image);
@@ -75,3 +76,19 @@ export const deleteArticle = async ({ id, image }) => {
     });
 }
 
+export const createOutfit = async ({ articles }) => {
+    const outfit = {}
+    //     articles: []
+    // };
+    await API.graphql({
+        query: createOutfitMutation,
+        variables: { input: outfit },
+        authMode: 'AMAZON_COGNITO_USER_POOLS'
+    });
+}
+
+// articles.map(article => (
+//     {
+//         id: article.id
+//     }
+// ))

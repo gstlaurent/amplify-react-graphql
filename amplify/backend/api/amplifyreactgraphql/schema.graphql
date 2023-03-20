@@ -39,5 +39,6 @@ type ArticleTest @model @auth(rules: [ { allow: owner } ] ){
 type OutfitTest @model @auth(rules: [ { allow: owner } ] ){
   createdAt: AWSDateTime!
   owner: String @index(sortKeyFields: ["createdAt"]) @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  season: Season!
   articles: [ArticleTest] @manyToMany(relationName: "OutfitTestArticleTest")
 }

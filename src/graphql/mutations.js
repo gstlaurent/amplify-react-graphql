@@ -138,6 +138,7 @@ export const createOutfitTest = /* GraphQL */ `
     createOutfitTest(input: $input, condition: $condition) {
       createdAt
       owner
+      season
       articles {
         items {
           id
@@ -162,6 +163,7 @@ export const updateOutfitTest = /* GraphQL */ `
     updateOutfitTest(input: $input, condition: $condition) {
       createdAt
       owner
+      season
       articles {
         items {
           id
@@ -186,6 +188,7 @@ export const deleteOutfitTest = /* GraphQL */ `
     deleteOutfitTest(input: $input, condition: $condition) {
       createdAt
       owner
+      season
       articles {
         items {
           id
@@ -226,6 +229,7 @@ export const createOutfitTestArticleTest = /* GraphQL */ `
       outfitTest {
         createdAt
         owner
+        season
         articles {
           nextToken
         }
@@ -262,6 +266,7 @@ export const updateOutfitTestArticleTest = /* GraphQL */ `
       outfitTest {
         createdAt
         owner
+        season
         articles {
           nextToken
         }
@@ -298,6 +303,7 @@ export const deleteOutfitTestArticleTest = /* GraphQL */ `
       outfitTest {
         createdAt
         owner
+        season
         articles {
           nextToken
         }

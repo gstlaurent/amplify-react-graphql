@@ -149,6 +149,7 @@ export const getOutfitTest = /* GraphQL */ `
     getOutfitTest(id: $id) {
       createdAt
       owner
+      season
       articles {
         items {
           id
@@ -175,6 +176,7 @@ export const listOutfitTests = /* GraphQL */ `
       items {
         createdAt
         owner
+        season
         articles {
           nextToken
         }
@@ -205,6 +207,7 @@ export const outfitTestsByOwnerAndCreatedAt = /* GraphQL */ `
       items {
         createdAt
         owner
+        season
         articles {
           nextToken
         }
@@ -236,6 +239,7 @@ export const getOutfitTestArticleTest = /* GraphQL */ `
       outfitTest {
         createdAt
         owner
+        season
         articles {
           nextToken
         }
@@ -275,6 +279,7 @@ export const listOutfitTestArticleTests = /* GraphQL */ `
         outfitTest {
           createdAt
           owner
+          season
           id
           updatedAt
         }
@@ -317,6 +322,7 @@ export const outfitTestArticleTestsByArticleTestId = /* GraphQL */ `
         outfitTest {
           createdAt
           owner
+          season
           id
           updatedAt
         }
@@ -359,6 +365,7 @@ export const outfitTestArticleTestsByOutfitTestId = /* GraphQL */ `
         outfitTest {
           createdAt
           owner
+          season
           id
           updatedAt
         }
