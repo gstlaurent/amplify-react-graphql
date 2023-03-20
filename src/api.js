@@ -5,6 +5,7 @@ import {
     createArticleTest as createArticleMutation,
     deleteArticleTest as deleteArticleMutation,
     createOutfitTest as createOutfitMutation,
+    createOutfitTestArticleTest
 } from "./graphql/mutations";
 import { Season } from "./season";
 import { Usage } from "./usage";
@@ -76,19 +77,27 @@ export const deleteArticle = async ({ id, image }) => {
     });
 }
 
-export const createOutfit = async ({ articles }) => {
-    const outfit = {}
-    //     articles: []
-    // };
-    await API.graphql({
+export const createOutfit = async ({ season, articles }) => {
+    const outfitData = { season: season.graphqlEnum };
+    const newOutfitData = await API.graphql({
         query: createOutfitMutation,
-        variables: { input: outfit },
+        variables: { input: outfitData },
         authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
+    const newOutfit = newOutfitData.data.createOutfitTest;
+    for (const article of articles) {
+        const joinData = {
+            articleTestId: article.id,
+            outfitTestId: newOutfit.id,
+        };
+        await API.graphql({
+            query: createOutfitTestArticleTest,
+            variables: { input: joinData },
+            authMode: 'AMAZON_COGNITO_USER_POOLS'
+        });
+    }
 }
 
-// articles.map(article => (
-//     {
-//         id: article.id
-//     }
-// ))
+export const fetchLastOutfit = async () => {
+    // TODO
+}

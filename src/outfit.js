@@ -10,7 +10,7 @@ import { Season, SEASONS } from "./season";
 import { Usage, USAGES } from "./usage";
 import { ArticlePic } from "./articlepic";
 import './styles.css';
-import { createOutfit } from "./api";
+import { createOutfit, fetchLastOutfit } from "./api";
 
 const moveDressesToTops = (articlesByUsage) => {
     const result = { ...articlesByUsage };
@@ -56,7 +56,7 @@ const sortArticles = (articles) => {
     return result;
 }
 
-const generateOutfit = (articlesByUsage) => {
+const generateOutfit = (currentSeason, articlesByUsage) => {
     const articlesByUsageTopDresses = moveDressesToTops(articlesByUsage);
 
     const articleGroups = Object.values(articlesByUsageTopDresses);
@@ -72,6 +72,7 @@ const generateOutfit = (articlesByUsage) => {
     const sortedArticles = sortArticles(oneOfEachTypeOfRandomArticle);
 
     return {
+        season: currentSeason,
         articles: sortedArticles
     };
 };
@@ -97,7 +98,7 @@ export const Outfit = ({ articles }) => {
     const [outfit, setOutfit] = useState({ articles: [] });
 
     const generateAndSaveOutfit = () => {
-        const newOutfit = generateOutfit(articlesByUsage);
+        const newOutfit = generateOutfit(currentSeason, articlesByUsage);
         setOutfit(newOutfit);
         if (!isEmpty(newOutfit.articles)) {
             (async function () {
@@ -105,6 +106,12 @@ export const Outfit = ({ articles }) => {
             })();
         }
     };
+
+    useEffect(() => {
+        (async function () {
+            setOutfit(await fetchLastOutfit());
+        })();
+    }, []);
 
     useEffect(() => {
         const newArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
@@ -117,7 +124,7 @@ export const Outfit = ({ articles }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [articlesByUsage]);
 
-    const generateNewArticleOfUsage = (usage) => {
+    const generateNewArticleOfUsage = async (usage) => {
         const articlesOfUsage = articlesByUsage[usage];
         if (articlesOfUsage.length) {
             const newArticles = [...outfit.articles];
@@ -128,11 +135,14 @@ export const Outfit = ({ articles }) => {
             const newArticleOfUsage = articlesOfUsage[randomIndex];
 
             newArticles[indexOfOldArticleOfUsage] = newArticleOfUsage;
-            setOutfit({ articles: newArticles });
+            const newOutfit = {
+                season: currentSeason,
+                articles: newArticles
+            };
+            setOutfit(newOutfit);
+            createOutfit(newOutfit);
         }
     };
-
-
 
     return (
         <div className="outfit">
