@@ -98,18 +98,20 @@ export const Outfit = ({ articles }) => {
     const [outfit, setOutfit] = useState({ articles: [] });
 
     const generateAndSaveOutfit = () => {
-        const newOutfit = generateOutfit(currentSeason, articlesByUsage);
-        setOutfit(newOutfit);
-        if (!isEmpty(newOutfit.articles)) {
-            (async function () {
-                createOutfit(newOutfit);
-            })();
-        }
+        // const newOutfit = generateOutfit(currentSeason, articlesByUsage);
+        // // setOutfit(newOutfit);
+        // if (!isEmpty(newOutfit.articles)) {
+        //     (async function () {
+        //         createOutfit(newOutfit);
+        //     })();
+        // }
     };
 
     useEffect(() => {
         (async function () {
-            setOutfit(await fetchLastOutfit());
+            const latestOutfit = await fetchLastOutfit();
+            latestOutfit.articles = sortArticles(latestOutfit.articles);
+            setOutfit(latestOutfit);
         })();
     }, []);
 

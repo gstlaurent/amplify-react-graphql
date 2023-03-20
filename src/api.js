@@ -1,11 +1,15 @@
-import { articleTestsByOwnerAndCreatedAt as articlesByOwnerAndCreatedAt } from "./graphql/queries";
+import {
+    articleTestsByOwnerAndCreatedAt as articlesByOwnerAndCreatedAt,
+    outfitTestsByOwnerAndCreatedAt,
+    outfitTestArticleTestsByOutfitTestId
+} from "./graphql/queries";
 import md5 from "md5";
 import { API, Storage, Auth } from 'aws-amplify';
 import {
     createArticleTest as createArticleMutation,
     deleteArticleTest as deleteArticleMutation,
     createOutfitTest as createOutfitMutation,
-    createOutfitTestArticleTest
+    createOutfitTestArticleTest,
 } from "./graphql/mutations";
 import { Season } from "./season";
 import { Usage } from "./usage";
@@ -27,14 +31,12 @@ export const fetchArticles = async () => {
         console.error(`Only fetched first ${variables.limit} articles. Some left unfetched.`);
     }
     const articlesFromAPI = apiData.data.articleTestsByOwnerAndCreatedAt.items;
-    articlesFromAPI.forEach((article) => {
-        article.usage = Usage[article.usage];
-        article.seasons = article.seasons.map((season) => Season[season]);
-    });
     await Promise.all(
         articlesFromAPI.map(async (article) => {
             const url = await Storage.vault.get(article.image);
             article.imageUrl = url;
+            article.usage = Usage[article.usage];
+            article.seasons = article.seasons.map((season) => Season[season]);
             return article;
         })
     );
@@ -99,5 +101,39 @@ export const createOutfit = async ({ season, articles }) => {
 }
 
 export const fetchLastOutfit = async () => {
-    // TODO
+    const currentUser = await Auth.currentAuthenticatedUser();
+    const variables = {
+        limit: 1,
+        owner: `${currentUser.attributes.sub}::${currentUser.username}`,
+        sortDirection: "DESC",
+    };
+    const apiData = await API.graphql({
+        query: outfitTestsByOwnerAndCreatedAt,
+        authMode: 'AMAZON_COGNITO_USER_POOLS',
+        variables
+    });
+    const lastOutfit = apiData.data.outfitTestsByOwnerAndCreatedAt.items?.[0];
+    if (!lastOutfit) {
+        return null;
+    }
+
+    const articleTestData = await API.graphql({
+        query: outfitTestArticleTestsByOutfitTestId,
+        authMode: 'AMAZON_COGNITO_USER_POOLS',
+        variables: {
+            outfitTestId: lastOutfit.id,
+        }
+    });
+    const lastArticles = articleTestData.data.outfitTestArticleTestsByOutfitTestId.items;
+    lastOutfit.articles = lastArticles.map(art => art.articleTest);
+    await Promise.all(
+        lastOutfit.articles.map(async (article) => {
+            const url = await Storage.vault.get(article.image);
+            article.imageUrl = url;
+            article.usage = Usage[article.usage];
+            article.seasons = article.seasons.map((season) => Season[season]);
+            return article;
+        })
+    );
+    return lastOutfit;
 }
