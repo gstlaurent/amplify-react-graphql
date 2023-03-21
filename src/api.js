@@ -1,8 +1,7 @@
 import {
     articleTestsByOwnerAndCreatedAt as articlesByOwnerAndCreatedAt,
-    outfitTestsByOwnerAndCreatedAt,
-    outfitTestArticleTestsByOutfitTestId
 } from "./graphql/queries";
+import { Season } from "./season";
 import md5 from "md5";
 import { API, Storage, Auth } from 'aws-amplify';
 import {
@@ -11,7 +10,7 @@ import {
     createOutfitTest as createOutfitMutation,
     createOutfitTestArticleTest,
 } from "./graphql/mutations";
-import { Season } from "./season";
+import { outfitTestsWithArticleTestsByOwnerAndCreatedAt } from "./graphql/mygql";
 import { Usage } from "./usage";
 import { compressImage } from "./util";
 
@@ -108,7 +107,7 @@ export const fetchLastOutfit = async () => {
         sortDirection: "DESC",
     };
     const apiData = await API.graphql({
-        query: outfitTestsByOwnerAndCreatedAt,
+        query: outfitTestsWithArticleTestsByOwnerAndCreatedAt,
         authMode: 'AMAZON_COGNITO_USER_POOLS',
         variables
     });
@@ -116,16 +115,8 @@ export const fetchLastOutfit = async () => {
     if (!lastOutfit) {
         return null;
     }
-
-    const articleTestData = await API.graphql({
-        query: outfitTestArticleTestsByOutfitTestId,
-        authMode: 'AMAZON_COGNITO_USER_POOLS',
-        variables: {
-            outfitTestId: lastOutfit.id,
-        }
-    });
-    const lastArticles = articleTestData.data.outfitTestArticleTestsByOutfitTestId.items;
-    lastOutfit.articles = lastArticles.map(art => art.articleTest);
+    lastOutfit.season = Season[lastOutfit.season];
+    lastOutfit.articles = lastOutfit.articles.items.map(art => art.articleTest);
     await Promise.all(
         lastOutfit.articles.map(async (article) => {
             const url = await Storage.vault.get(article.image);
