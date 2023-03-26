@@ -1,5 +1,6 @@
 import {
     articleTestsByOwnerAndCreatedAt as articlesByOwnerAndCreatedAt,
+    outfitTestArticleTestsByArticleTestId
 } from "./graphql/queries";
 import { Season } from "./season";
 import md5 from "md5";
@@ -9,6 +10,7 @@ import {
     deleteArticleTest as deleteArticleMutation,
     createOutfitTest as createOutfitMutation,
     createOutfitTestArticleTest,
+    deleteOutfitTestArticleTest,
 } from "./graphql/mutations";
 import { outfitTestsWithArticleTestsByOwnerAndCreatedAt } from "./graphql/mygql";
 import { Usage } from "./usage";
@@ -71,11 +73,28 @@ export const createArticle = async (imageFile, seasons, usage) => {
 
 export const deleteArticle = async ({ id, image }) => {
     await Storage.vault.remove(image);
+    const joinRecordData = await API.graphql({
+        query: outfitTestArticleTestsByArticleTestId,
+        variables: { articleTestId: id },
+        authMode: 'AMAZON_COGNITO_USER_POOLS'
+    });
+    for (const joinRecord of joinRecordData.data.outfitTestArticleTestsByArticleTestId.items) {
+        await API.graphql({
+            query: deleteOutfitTestArticleTest,
+            variables: {
+                input: {
+                    id: joinRecord.id
+                }
+            },
+            authMode: 'AMAZON_COGNITO_USER_POOLS'
+        });
+    }
     await API.graphql({
         query: deleteArticleMutation,
         variables: { input: { id } },
         authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
+
 }
 
 export const createOutfit = async ({ season, articles }) => {
