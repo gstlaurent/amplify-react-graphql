@@ -6,7 +6,7 @@ import {
     ToggleButton,
     Flex,
 } from '@aws-amplify/ui-react';
-import { Season, SEASONS } from "./season";
+import { SEASONS } from "./season";
 import { Usage, USAGES } from "./usage";
 import { ArticlePic } from "./articlepic";
 import './styles.css';
@@ -14,18 +14,15 @@ import { createOutfit, fetchLastOutfit } from "./api";
 
 
 export const Outfit = ({ articles }) => {
-    const [currentSeason, setCurrentSeason] = useState(Season.WINTER);
-    const [useGeneratedOutfit, setUseGeneratedOutfit] = useState(false);
+    const [currentSeason, setCurrentSeason] = useState(null);
     const [currentOutfit, setCurrentOutfit] = useState(null);
 
-    const articlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
+    let seasonArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
 
     useEffect(() => {
         fetchLastOutfit().then(lastOutfit => {
-            if (!useGeneratedOutfit) {
-                setCurrentSeason(lastOutfit.season);
-                setCurrentOutfit(lastOutfit);
-            }
+            setCurrentSeason(lastOutfit.season);
+            setCurrentOutfit(lastOutfit);
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -40,7 +37,11 @@ export const Outfit = ({ articles }) => {
                     value={currentSeason}
                     isExclusive
                     isSelectionRequired
-                    onChange={(value) => setCurrentSeason(value)}
+                    onChange={(newSeason) => {
+                        seasonArticlesByUsage = groupSeasonalArticlesByUsage(newSeason, articles);
+                        generateAndSaveOutfit(newSeason);
+                        setCurrentSeason(newSeason);
+                    }}
                 >
                     {SEASONS.map((season) => (
                         <ToggleButton key={season.graphqlEnum} value={season} title={season.label}>{season.emoji}</ToggleButton>
@@ -49,27 +50,29 @@ export const Outfit = ({ articles }) => {
                 {currentOutfit && (
                     <Button
                         size="large"
-                        onClick={generateAndSaveOutfit}
+                        onClick={() => generateAndSaveOutfit(currentSeason)}
                     >
                         🔄
                     </Button>
                 )}
             </Flex>
-            {currentOutfit && (
-                <Flex className="article-pics" wrap="wrap" alignItems="flex-start" justifyContent="space-around">
-                    {sortArticles(currentOutfit.articles).map(article => (
-                        <ArticlePic key={article.imageUrl} article={article} onRefresh={() => generateNewArticleOfUsage(article.usage)} />
-                    ))}
-                </Flex>
+            {
+                currentOutfit && (
+                    <Flex className="article-pics" wrap="wrap" alignItems="flex-start" justifyContent="space-around">
+                        {sortArticles(currentOutfit.articles).map(article => (
+                            <ArticlePic key={article.imageUrl} article={article} onRefresh={() => generateNewArticleOfUsage(article.usage)} />
+                        ))}
+                    </Flex>
 
-            )}
+                )
+            }
             {!currentOutfit && <span>Generating Random Outfit...</span>}
 
-        </div>
+        </div >
     );
 
-    function generateAndSaveOutfit() {
-        const newOutfit = generateOutfit(currentSeason, articlesByUsage);
+    function generateAndSaveOutfit(season) {
+        const newOutfit = generateOutfit(season, seasonArticlesByUsage);
         saveOutfit(newOutfit);
     }
 
@@ -78,11 +81,10 @@ export const Outfit = ({ articles }) => {
             createOutfit(newOutfit);
         }
         setCurrentOutfit(newOutfit);
-        setUseGeneratedOutfit(true);
     }
 
     function generateNewArticleOfUsage(usage) {
-        const articlesOfUsage = articlesByUsage[usage];
+        const articlesOfUsage = seasonArticlesByUsage[usage];
         if (articlesOfUsage.length) {
             const newArticles = [...currentOutfit.articles];
             const oldArticleOfUsage = newArticles.find(article => article.usage === usage);
@@ -130,20 +132,20 @@ const moveDressesToTops = (articlesByUsage) => {
     return result;
 }
 
-const removeArticleOfUsage = (articles, usage) => {
+function removeArticleOfUsage(articles, usage) {
     const articlOfUsage = articles.find(article => article.usage === usage);
     const indexOfArticleOfUsage = articles.indexOf(articlOfUsage);
     articles.splice(indexOfArticleOfUsage, 1);
 }
 
-const removeBottomIfHasDress = (articles) => {
+function removeBottomIfHasDress(articles) {
     const hasDress = articles.find(article => article.usage === Usage.DRESS);
     if (hasDress) {
         removeArticleOfUsage(articles, Usage.BOTTOM);
     }
 }
 
-const sortArticles = (articles) => {
+function sortArticles(articles) {
     const result = [];
     for (const usage of USAGES) {
         const articleOfUsage = articles.find(article => article.usage === usage);
@@ -154,7 +156,7 @@ const sortArticles = (articles) => {
     return result;
 }
 
-const generateOutfit = (currentSeason, articlesByUsage) => {
+function generateOutfit(currentSeason, articlesByUsage) {
     const articlesByUsageTopDresses = moveDressesToTops(articlesByUsage);
 
     const articleGroups = Object.values(articlesByUsageTopDresses);
@@ -175,6 +177,6 @@ const generateOutfit = (currentSeason, articlesByUsage) => {
     };
 };
 
-const isArticleInSeason = (article, currentSeason) => {
+function isArticleInSeason(article, currentSeason) {
     return article.seasons.includes(currentSeason);
 };
