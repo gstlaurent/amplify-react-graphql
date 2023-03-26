@@ -21,8 +21,12 @@ export const Outfit = ({ articles }) => {
 
     useEffect(() => {
         fetchLastOutfit().then(lastOutfit => {
-            setCurrentSeason(lastOutfit.season);
-            setCurrentOutfit(lastOutfit);
+            if (lastOutfit) {
+                setCurrentSeason(lastOutfit.season);
+                setCurrentOutfit(lastOutfit);
+            } else {
+                setCurrentOutfit({ articles: [] });
+            }
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -66,7 +70,7 @@ export const Outfit = ({ articles }) => {
 
                 )
             }
-            {!currentOutfit && <span>Generating Random Outfit...</span>}
+            {!currentOutfit && <span>Retrieving last outfit...</span>}
 
         </div >
     );
