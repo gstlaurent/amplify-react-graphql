@@ -12,6 +12,104 @@ import { ArticlePic } from "./articlepic";
 import './styles.css';
 import { createOutfit, fetchLastOutfit } from "./api";
 
+
+export const Outfit = ({ articles }) => {
+    const [currentSeason, setCurrentSeason] = useState(Season.WINTER);
+    const [useGeneratedOutfit, setUseGeneratedOutfit] = useState(false);
+    const [currentOutfit, setCurrentOutfit] = useState(null);
+
+    const articlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
+
+    useEffect(() => {
+        fetchLastOutfit().then(lastOutfit => {
+            if (!useGeneratedOutfit) {
+                setCurrentSeason(lastOutfit.season);
+                setCurrentOutfit(lastOutfit);
+            }
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return (
+        <div className="currentOutfit">
+            <Flex justifyContent="space-between" align="top">
+                <ToggleButtonGroup
+                    alignItems="flex-start"
+                    style={{ "marginTop": 7, "marginBottom": 7 }}
+                    size="small"
+                    value={currentSeason}
+                    isExclusive
+                    isSelectionRequired
+                    onChange={(value) => setCurrentSeason(value)}
+                >
+                    {SEASONS.map((season) => (
+                        <ToggleButton key={season.graphqlEnum} value={season} title={season.label}>{season.emoji}</ToggleButton>
+                    ))}
+                </ToggleButtonGroup>
+                {currentOutfit && (
+                    <Button
+                        size="large"
+                        onClick={generateAndSaveOutfit}
+                    >
+                        🔄
+                    </Button>
+                )}
+            </Flex>
+            {currentOutfit && (
+                <Flex className="article-pics" wrap="wrap" alignItems="flex-start" justifyContent="space-around">
+                    {sortArticles(currentOutfit.articles).map(article => (
+                        <ArticlePic key={article.imageUrl} article={article} onRefresh={() => generateNewArticleOfUsage(article.usage)} />
+                    ))}
+                </Flex>
+
+            )}
+            {!currentOutfit && <span>Generating Random Outfit...</span>}
+
+        </div>
+    );
+
+    function generateAndSaveOutfit() {
+        const newOutfit = generateOutfit(currentSeason, articlesByUsage);
+        saveOutfit(newOutfit);
+    }
+
+    function saveOutfit(newOutfit) {
+        if (!isEmpty(newOutfit.articles)) {
+            createOutfit(newOutfit);
+        }
+        setCurrentOutfit(newOutfit);
+        setUseGeneratedOutfit(true);
+    }
+
+    function generateNewArticleOfUsage(usage) {
+        const articlesOfUsage = articlesByUsage[usage];
+        if (articlesOfUsage.length) {
+            const newArticles = [...currentOutfit.articles];
+            const oldArticleOfUsage = newArticles.find(article => article.usage === usage);
+            const indexOfOldArticleOfUsage = newArticles.indexOf(oldArticleOfUsage);
+
+            const randomIndex = getRandomInt(articlesOfUsage.length);
+            const newArticleOfUsage = articlesOfUsage[randomIndex];
+
+            newArticles[indexOfOldArticleOfUsage] = newArticleOfUsage;
+            const newOutfit = {
+                season: currentSeason,
+                articles: newArticles
+            };
+            saveOutfit(newOutfit);
+        }
+    };
+}
+
+function groupSeasonalArticlesByUsage(currentSeason, articles) {
+    if (!articles) {
+        return {};
+    }
+    const seasonalArticles = articles.filter((a) => isArticleInSeason(a, currentSeason));
+    const groupedSeasonalArticles = groupBy(seasonalArticles, "usage");
+    return groupedSeasonalArticles;
+};
+
 const moveDressesToTops = (articlesByUsage) => {
     const result = { ...articlesByUsage };
 
@@ -80,107 +178,3 @@ const generateOutfit = (currentSeason, articlesByUsage) => {
 const isArticleInSeason = (article, currentSeason) => {
     return article.seasons.includes(currentSeason);
 };
-
-const groupSeasonalArticlesByUsage = (season, articles) => {
-    if (!articles) {
-        return {};
-    }
-    const seasonalArticles = articles.filter((a) => isArticleInSeason(a, season));
-    const groupedSeasonalArticles = groupBy(seasonalArticles, "usage");
-    return groupedSeasonalArticles;
-};
-
-
-export const Outfit = ({ articles }) => {
-    const previousSessionSeason = localStorage.getItem("currentSeason");
-    const [currentSeason, setCurrentSeason] = useState(Season?.[previousSessionSeason] ?? Season.WINTER);
-    const [articlesByUsage, setArticlesByUsage] = useState({});
-    const [outfit, setOutfit] = useState({ articles: [] });
-
-    const generateAndSaveOutfit = () => {
-        // const newOutfit = generateOutfit(currentSeason, articlesByUsage);
-        // // setOutfit(newOutfit);
-        // if (!isEmpty(newOutfit.articles)) {
-        //     (async function () {
-        //         createOutfit(newOutfit);
-        //     })();
-        // }
-    };
-
-    useEffect(() => {
-        (async function () {
-            const latestOutfit = await fetchLastOutfit();
-            latestOutfit.articles = sortArticles(latestOutfit.articles);
-            setOutfit(latestOutfit);
-        })();
-    }, []);
-
-    useEffect(() => {
-        const newArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
-        setArticlesByUsage(newArticlesByUsage);
-        localStorage.setItem("currentSeason", currentSeason.graphqlEnum);
-    }, [articles, currentSeason]);
-
-    useEffect(() => {
-        generateAndSaveOutfit();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [articlesByUsage]);
-
-    const generateNewArticleOfUsage = async (usage) => {
-        const articlesOfUsage = articlesByUsage[usage];
-        if (articlesOfUsage.length) {
-            const newArticles = [...outfit.articles];
-            const oldArticleOfUsage = newArticles.find(article => article.usage === usage);
-            const indexOfOldArticleOfUsage = newArticles.indexOf(oldArticleOfUsage);
-
-            const randomIndex = getRandomInt(articlesOfUsage.length);
-            const newArticleOfUsage = articlesOfUsage[randomIndex];
-
-            newArticles[indexOfOldArticleOfUsage] = newArticleOfUsage;
-            const newOutfit = {
-                season: currentSeason,
-                articles: newArticles
-            };
-            setOutfit(newOutfit);
-            createOutfit(newOutfit);
-        }
-    };
-
-    return (
-        <div className="outfit">
-            <Flex justifyContent="space-between" align="top">
-                <ToggleButtonGroup
-                    alignItems="flex-start"
-                    style={{ "marginTop": 7, "marginBottom": 7 }}
-                    size="small"
-                    value={currentSeason}
-                    isExclusive
-                    isSelectionRequired
-                    onChange={(value) => setCurrentSeason(value)}
-                >
-                    {SEASONS.map((season) => (
-                        <ToggleButton key={season.graphqlEnum} value={season} title={season.label}>{season.emoji}</ToggleButton>
-                    ))}
-                </ToggleButtonGroup>
-                {!isEmpty(outfit.articles) && (
-                    <Button
-                        size="large"
-                        onClick={generateAndSaveOutfit}
-                    >
-                        🔄
-                    </Button>
-                )}
-            </Flex>
-            {!isEmpty(outfit.articles) && (
-                <Flex className="article-pics" wrap="wrap" alignItems="flex-start" justifyContent="space-around">
-                    {outfit.articles.map(article => (
-                        <ArticlePic key={article.imageUrl} article={article} onRefresh={() => generateNewArticleOfUsage(article.usage)} />
-                    ))}
-                </Flex>
-
-            )}
-            {isEmpty(outfit.articles) && <span>Generating Random Outfit...</span>}
-
-        </div>
-    )
-}

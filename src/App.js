@@ -13,13 +13,10 @@ import { fetchArticles } from "./api";
 import { Outfit } from "./outfit";
 
 const App = ({ signOut }) => {
-
   const [articles, setArticles] = useState(null);
 
   useEffect(() => {
-    (async function () {
-      setArticles(await fetchArticles());
-    })();
+    fetchArticles().then(articles => setArticles(articles));
   }, []);
 
 
