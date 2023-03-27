@@ -13,6 +13,17 @@ export const createArticle = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
     }
   }
@@ -29,6 +40,17 @@ export const updateArticle = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
     }
   }
@@ -45,6 +67,92 @@ export const deleteArticle = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      updatedAt
+    }
+  }
+`;
+export const createOutfit = /* GraphQL */ `
+  mutation CreateOutfit(
+    $input: CreateOutfitInput!
+    $condition: ModelOutfitConditionInput
+  ) {
+    createOutfit(input: $input, condition: $condition) {
+      createdAt
+      owner
+      season
+      articles {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const updateOutfit = /* GraphQL */ `
+  mutation UpdateOutfit(
+    $input: UpdateOutfitInput!
+    $condition: ModelOutfitConditionInput
+  ) {
+    updateOutfit(input: $input, condition: $condition) {
+      createdAt
+      owner
+      season
+      articles {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const deleteOutfit = /* GraphQL */ `
+  mutation DeleteOutfit(
+    $input: DeleteOutfitInput!
+    $condition: ModelOutfitConditionInput
+  ) {
+    deleteOutfit(input: $input, condition: $condition) {
+      createdAt
+      owner
+      season
+      articles {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
       updatedAt
     }
   }
@@ -202,6 +310,117 @@ export const deleteOutfitTest = /* GraphQL */ `
       }
       id
       updatedAt
+    }
+  }
+`;
+export const createOutfitArticleJoin = /* GraphQL */ `
+  mutation CreateOutfitArticleJoin(
+    $input: CreateOutfitArticleJoinInput!
+    $condition: ModelOutfitArticleJoinConditionInput
+  ) {
+    createOutfitArticleJoin(input: $input, condition: $condition) {
+      id
+      articleId
+      outfitId
+      article {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfit {
+        createdAt
+        owner
+        season
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateOutfitArticleJoin = /* GraphQL */ `
+  mutation UpdateOutfitArticleJoin(
+    $input: UpdateOutfitArticleJoinInput!
+    $condition: ModelOutfitArticleJoinConditionInput
+  ) {
+    updateOutfitArticleJoin(input: $input, condition: $condition) {
+      id
+      articleId
+      outfitId
+      article {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfit {
+        createdAt
+        owner
+        season
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteOutfitArticleJoin = /* GraphQL */ `
+  mutation DeleteOutfitArticleJoin(
+    $input: DeleteOutfitArticleJoinInput!
+    $condition: ModelOutfitArticleJoinConditionInput
+  ) {
+    deleteOutfitArticleJoin(input: $input, condition: $condition) {
+      id
+      articleId
+      outfitId
+      article {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfit {
+        createdAt
+        owner
+        season
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
     }
   }
 `;

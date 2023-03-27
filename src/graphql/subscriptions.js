@@ -13,6 +13,17 @@ export const onCreateArticle = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
     }
   }
@@ -29,6 +40,17 @@ export const onUpdateArticle = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
     }
   }
@@ -45,6 +67,92 @@ export const onDeleteArticle = /* GraphQL */ `
       usage
       createdAt
       owner
+      outfits {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      updatedAt
+    }
+  }
+`;
+export const onCreateOutfit = /* GraphQL */ `
+  subscription OnCreateOutfit(
+    $filter: ModelSubscriptionOutfitFilterInput
+    $owner: String
+  ) {
+    onCreateOutfit(filter: $filter, owner: $owner) {
+      createdAt
+      owner
+      season
+      articles {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const onUpdateOutfit = /* GraphQL */ `
+  subscription OnUpdateOutfit(
+    $filter: ModelSubscriptionOutfitFilterInput
+    $owner: String
+  ) {
+    onUpdateOutfit(filter: $filter, owner: $owner) {
+      createdAt
+      owner
+      season
+      articles {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
+      updatedAt
+    }
+  }
+`;
+export const onDeleteOutfit = /* GraphQL */ `
+  subscription OnDeleteOutfit(
+    $filter: ModelSubscriptionOutfitFilterInput
+    $owner: String
+  ) {
+    onDeleteOutfit(filter: $filter, owner: $owner) {
+      createdAt
+      owner
+      season
+      articles {
+        items {
+          id
+          articleId
+          outfitId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      id
       updatedAt
     }
   }
@@ -202,6 +310,117 @@ export const onDeleteOutfitTest = /* GraphQL */ `
       }
       id
       updatedAt
+    }
+  }
+`;
+export const onCreateOutfitArticleJoin = /* GraphQL */ `
+  subscription OnCreateOutfitArticleJoin(
+    $filter: ModelSubscriptionOutfitArticleJoinFilterInput
+    $owner: String
+  ) {
+    onCreateOutfitArticleJoin(filter: $filter, owner: $owner) {
+      id
+      articleId
+      outfitId
+      article {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfit {
+        createdAt
+        owner
+        season
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateOutfitArticleJoin = /* GraphQL */ `
+  subscription OnUpdateOutfitArticleJoin(
+    $filter: ModelSubscriptionOutfitArticleJoinFilterInput
+    $owner: String
+  ) {
+    onUpdateOutfitArticleJoin(filter: $filter, owner: $owner) {
+      id
+      articleId
+      outfitId
+      article {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfit {
+        createdAt
+        owner
+        season
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteOutfitArticleJoin = /* GraphQL */ `
+  subscription OnDeleteOutfitArticleJoin(
+    $filter: ModelSubscriptionOutfitArticleJoinFilterInput
+    $owner: String
+  ) {
+    onDeleteOutfitArticleJoin(filter: $filter, owner: $owner) {
+      id
+      articleId
+      outfitId
+      article {
+        id
+        image
+        seasons
+        usage
+        createdAt
+        owner
+        outfits {
+          nextToken
+        }
+        updatedAt
+      }
+      outfit {
+        createdAt
+        owner
+        season
+        articles {
+          nextToken
+        }
+        id
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
     }
   }
 `;
