@@ -12,12 +12,14 @@ import { ArticlePic } from "./articlepic";
 import './styles.css';
 import { createOutfit, fetchLastOutfit } from "./api";
 
+const CURRENT_SEASON_STORAGE = "currentSeason";
 
 export const Outfit = ({ articles }) => {
-    const [currentSeason, setCurrentSeason] = useState(null);
+    const previousSessionSeason = localStorage.getItem(CURRENT_SEASON_STORAGE);
+    const [currentSeason, setCurrentSeason] = useState(Season?.[previousSessionSeason] ?? Season.SPRING);
     const [currentOutfit, setCurrentOutfit] = useState(null);
 
-    let seasonArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
+    let seasonalArticlesByUsage = groupSeasonalArticlesByUsage(currentSeason, articles);
 
     useEffect(() => {
         fetchLastOutfit().then(lastOutfit => {
@@ -25,8 +27,8 @@ export const Outfit = ({ articles }) => {
                 setCurrentSeason(lastOutfit.season);
                 setCurrentOutfit(lastOutfit);
             } else {
-                setCurrentSeason(Season.SPRING);
-                setCurrentOutfit({ articles: [] });
+                const outfit = generateAndSaveOutfit(currentSeason);
+                setCurrentOutfit(outfit);
             }
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,9 +45,10 @@ export const Outfit = ({ articles }) => {
                     isExclusive
                     isSelectionRequired
                     onChange={(newSeason) => {
-                        seasonArticlesByUsage = groupSeasonalArticlesByUsage(newSeason, articles);
+                        seasonalArticlesByUsage = groupSeasonalArticlesByUsage(newSeason, articles);
                         generateAndSaveOutfit(newSeason);
                         setCurrentSeason(newSeason);
+                        localStorage.setItem(CURRENT_SEASON_STORAGE, newSeason.graphqlEnum);
                     }}
                 >
                     {SEASONS.map((season) => (
@@ -77,7 +80,7 @@ export const Outfit = ({ articles }) => {
     );
 
     function generateAndSaveOutfit(season) {
-        const newOutfit = generateOutfit(season, seasonArticlesByUsage);
+        const newOutfit = generateOutfit(season, seasonalArticlesByUsage);
         saveOutfit(newOutfit);
     }
 
@@ -89,7 +92,7 @@ export const Outfit = ({ articles }) => {
     }
 
     function generateNewArticleOfUsage(usage) {
-        const articlesOfUsage = seasonArticlesByUsage[usage];
+        const articlesOfUsage = seasonalArticlesByUsage[usage];
         if (articlesOfUsage.length) {
             const newArticles = [...currentOutfit.articles];
             const oldArticleOfUsage = newArticles.find(article => article.usage === usage);
@@ -109,7 +112,7 @@ export const Outfit = ({ articles }) => {
 }
 
 function groupSeasonalArticlesByUsage(currentSeason, articles) {
-    if (!articles) {
+    if (!articles || !currentSeason) {
         return {};
     }
     const seasonalArticles = articles.filter((a) => isArticleInSeason(a, currentSeason));
