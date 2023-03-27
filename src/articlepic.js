@@ -3,13 +3,11 @@ import {
     Image,
     Button
 } from '@aws-amplify/ui-react';
-import { setRandomArticleByUsage } from "./util";
 
 
 
-export const ArticlePic = ({ randomArticles, usage, articlesByUsage, setRandomArticles }) => {
-    const article = randomArticles[usage];
-    return (article &&
+export const ArticlePic = ({ article, onRefresh }) => {
+    return (
         <div className="outfit-article">
             <Image
                 key={article.id}
@@ -21,12 +19,7 @@ export const ArticlePic = ({ randomArticles, usage, articlesByUsage, setRandomAr
             <Button
                 className="article-refresh"
                 size="small"
-                onClick={() => {
-                    const newRandomArticles = { ...randomArticles };
-                    setRandomArticleByUsage(newRandomArticles, usage, articlesByUsage);
-                    setRandomArticles(newRandomArticles);
-
-                }}
+                onClick={onRefresh}
             >
                 🔄
             </Button>

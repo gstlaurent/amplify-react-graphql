@@ -1,12 +1,21 @@
-import { articlesByOwnerAndCreatedAt } from "./graphql/queries";
-import md5 from "md5";
-import { API, Storage, Auth } from 'aws-amplify';
+import {
+    articlesByOwnerAndCreatedAt,
+    outfitArticleJoinsByArticleId
+} from "./graphql/queries";
 import {
     createArticle as createArticleMutation,
     deleteArticle as deleteArticleMutation,
+    createOutfit as createOutfitMutation,
+    createOutfitArticleJoin,
+    deleteOutfitArticleJoin,
 } from "./graphql/mutations";
-import { Season } from "./season";
+import { outfitsWithArticlesByOwnerAndCreatedAt } from "./graphql/mygql";
+
+import md5 from "md5";
+import { API, Storage, Auth } from 'aws-amplify';
+
 import { Usage } from "./usage";
+import { Season } from "./season";
 import { compressImage } from "./util";
 
 
@@ -25,14 +34,12 @@ export const fetchArticles = async () => {
         console.error(`Only fetched first ${variables.limit} articles. Some left unfetched.`);
     }
     const articlesFromAPI = apiData.data.articlesByOwnerAndCreatedAt.items;
-    articlesFromAPI.forEach((article) => {
-        article.usage = Usage[article.usage];
-        article.seasons = article.seasons.map((season) => Season[season]);
-    });
     await Promise.all(
         articlesFromAPI.map(async (article) => {
             const url = await Storage.vault.get(article.image);
             article.imageUrl = url;
+            article.usage = Usage[article.usage];
+            article.seasons = article.seasons.map((season) => Season[season]);
             return article;
         })
     );
@@ -68,10 +75,77 @@ export const createArticle = async (imageFile, seasons, usage) => {
 
 export const deleteArticle = async ({ id, image }) => {
     await Storage.vault.remove(image);
+    const joinRecordData = await API.graphql({
+        query: outfitArticleJoinsByArticleId,
+        variables: { articleId: id },
+        authMode: 'AMAZON_COGNITO_USER_POOLS'
+    });
+    for (const joinRecord of joinRecordData.data.outfitArticleJoinsByArticleId.items) {
+        await API.graphql({
+            query: deleteOutfitArticleJoin,
+            variables: {
+                input: {
+                    id: joinRecord.id
+                }
+            },
+            authMode: 'AMAZON_COGNITO_USER_POOLS'
+        });
+    }
     await API.graphql({
         query: deleteArticleMutation,
         variables: { input: { id } },
         authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
+
 }
 
+export const createOutfit = async ({ season, articles }) => {
+    const outfitData = { season: season.graphqlEnum };
+    const newOutfitData = await API.graphql({
+        query: createOutfitMutation,
+        variables: { input: outfitData },
+        authMode: 'AMAZON_COGNITO_USER_POOLS'
+    });
+    const newOutfit = newOutfitData.data.createOutfit;
+    for (const article of articles) {
+        const joinData = {
+            articleId: article.id,
+            outfitId: newOutfit.id,
+        };
+        await API.graphql({
+            query: createOutfitArticleJoin,
+            variables: { input: joinData },
+            authMode: 'AMAZON_COGNITO_USER_POOLS'
+        });
+    }
+}
+
+export const fetchLastOutfit = async () => {
+    const currentUser = await Auth.currentAuthenticatedUser();
+    const variables = {
+        limit: 1,
+        owner: `${currentUser.attributes.sub}::${currentUser.username}`,
+        sortDirection: "DESC",
+    };
+    const apiData = await API.graphql({
+        query: outfitsWithArticlesByOwnerAndCreatedAt,
+        authMode: 'AMAZON_COGNITO_USER_POOLS',
+        variables
+    });
+    const lastOutfit = apiData.data.outfitsByOwnerAndCreatedAt.items?.[0];
+    if (!lastOutfit) {
+        return null;
+    }
+    lastOutfit.season = Season[lastOutfit.season];
+    lastOutfit.articles = lastOutfit.articles.items.map(art => art.article);
+    await Promise.all(
+        lastOutfit.articles.map(async (article) => {
+            const url = await Storage.vault.get(article.image);
+            article.imageUrl = url;
+            article.usage = Usage[article.usage];
+            article.seasons = article.seasons.map((season) => Season[season]);
+            return article;
+        })
+    );
+    return lastOutfit;
+}
