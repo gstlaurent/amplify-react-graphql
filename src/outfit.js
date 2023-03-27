@@ -6,7 +6,7 @@ import {
     ToggleButton,
     Flex,
 } from '@aws-amplify/ui-react';
-import { SEASONS } from "./season";
+import { Season, SEASONS } from "./season";
 import { Usage, USAGES } from "./usage";
 import { ArticlePic } from "./articlepic";
 import './styles.css';
@@ -25,6 +25,7 @@ export const Outfit = ({ articles }) => {
                 setCurrentSeason(lastOutfit.season);
                 setCurrentOutfit(lastOutfit);
             } else {
+                setCurrentSeason(Season.SPRING);
                 setCurrentOutfit({ articles: [] });
             }
         });
