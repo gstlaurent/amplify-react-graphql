@@ -6,6 +6,7 @@ import {
     createArticle as createArticleMutation,
     deleteArticle as deleteArticleMutation,
     createOutfit as createOutfitMutation,
+    updateArticle as updateArticleMutation,
     createOutfitArticleJoin,
     deleteOutfitArticleJoin,
 } from "./graphql/mutations";
@@ -148,4 +149,18 @@ export const fetchLastOutfit = async () => {
         })
     );
     return lastOutfit;
+}
+
+export const updateArticle = async (updatedArticle) => {
+    const data = {
+        id: updateArticle.id,
+        seasons: updatedArticle.seasons.map(s => s.graphqlEnum),
+        usage: updatedArticle.usage.graphqlEnum,
+    };
+    await API.graphql({
+        query: updateArticleMutation,
+        variables: { input: data },
+        authMode: 'AMAZON_COGNITO_USER_POOLS'
+    });
+    return updateArticle;
 }

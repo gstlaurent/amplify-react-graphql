@@ -16,7 +16,7 @@ const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
 };
 
 
-const ArticleCard = ({ article, articles, setArticles }) => {
+const ArticleCard = ({ article, articles, setArticles, onChange }) => {
     return (
         <div key={article.id}>
             <Card variation="elevated" minWidth="125px" width="125px" height="95%">
