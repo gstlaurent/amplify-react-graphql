@@ -8,6 +8,8 @@ import ArticleCard from "./articlecard";
 import './styles.css';
 import { Expander, ExpanderItem } from '@aws-amplify/ui-react';
 import { groupBy } from "./util";
+import { updateArticle } from "./api";
+
 
 const WardrobeContents = ({ articles, setArticles }) => {
     const articlesByUsage = groupBy(articles, "usage", USAGES);

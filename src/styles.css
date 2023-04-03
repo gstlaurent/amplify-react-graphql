@@ -74,3 +74,8 @@
 .spacer {
     width: 33%;
 }
+
+body.modal-open {
+    overflow: hidden;
+    /* see "modal-open" in Modal.tsx */
+}

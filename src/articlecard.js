@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Button,
     Flex,
@@ -7,6 +7,7 @@ import {
     Card,
 } from '@aws-amplify/ui-react';
 import { deleteArticle } from "./api";
+import ArticleModalDialog from "./articlemodaldialog"
 import './styles.css';
 
 const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
@@ -17,9 +18,11 @@ const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
 
 
 const ArticleCard = ({ article, articles, setArticles, onChange }) => {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     return (
         <div key={article.id}>
-            <Card variation="elevated" minWidth="125px" width="125px" height="95%">
+            <Card variation="elevated" minWidth="125px" width="125px" height="95%"
+                onClick={() => setIsDialogOpen(true)}>
                 <Flex direction="column" justifyContent="space-between" height="100%">
                     <Flex direction="column" justifyContent="flex-start" gap="0">
                         <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
@@ -34,6 +37,7 @@ const ArticleCard = ({ article, articles, setArticles, onChange }) => {
                     </Button>
                 </Flex>
             </Card>
+            <ArticleModalDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
         </div>
     )
 }
