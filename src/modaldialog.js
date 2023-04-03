@@ -1,15 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-    Button,
-    Flex,
-    Image,
-    Text,
-    Card,
-} from '@aws-amplify/ui-react';
-import { deleteArticle } from "./api";
+import React, { useEffect, useRef } from "react";
 import './styles.css';
 
-const ArticleModalDialog = ({ isOpen, onClose }) => {
+const ModalDialog = ({ isOpen, onClose, children }) => {
     const ref = useRef(null);
 
     useEffect(() => {
@@ -25,7 +17,7 @@ const ArticleModalDialog = ({ isOpen, onClose }) => {
     return (
         <dialog ref={ref} onClick={onClose}>
             <div onClick={e => e.stopPropagation()}>
-                <span>Graham says Hello!</span>
+                {children}
             </div>
         </dialog>
 
@@ -33,4 +25,4 @@ const ArticleModalDialog = ({ isOpen, onClose }) => {
 
 };
 
-export default ArticleModalDialog;
+export default ModalDialog;

@@ -7,7 +7,7 @@ import {
     Card,
 } from '@aws-amplify/ui-react';
 import { deleteArticle } from "./api";
-import ArticleModalDialog from "./articlemodaldialog"
+import ModalDialog from "./modaldialog"
 import './styles.css';
 
 const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
@@ -37,7 +37,9 @@ const ArticleCard = ({ article, articles, setArticles, onChange }) => {
                     </Button>
                 </Flex>
             </Card>
-            <ArticleModalDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
+            <ModalDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+                <Image src={article.imageUrl} alt={article.usage.label} />
+            </ModalDialog>
         </div>
     )
 }
