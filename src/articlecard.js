@@ -8,6 +8,7 @@ import {
 } from '@aws-amplify/ui-react';
 import { deleteArticle } from "./api";
 import ModalDialog from "./modaldialog"
+import ArticleEditor from "./articleeditor";
 import './styles.css';
 
 const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
@@ -38,7 +39,7 @@ const ArticleCard = ({ article, articles, setArticles, onChange }) => {
                 </Flex>
             </Card>
             <ModalDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
-                <Image src={article.imageUrl} alt={article.usage.label} />
+                <ArticleEditor article={article} />
             </ModalDialog>
         </div>
     )
