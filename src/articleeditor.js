@@ -2,23 +2,25 @@ import React, { useState } from "react";
 import {
     Flex,
     Image,
-    Text,
     ToggleButtonGroup,
     ToggleButton,
 } from '@aws-amplify/ui-react';
 import './styles.css';
-import { Season, SEASONS } from "./season";
-import { Usage, USAGES } from "./usage";
+import { SEASONS } from "./season";
+import { USAGES } from "./usage";
 
 
-const ArticleEditor = ({ article, onChange }) => {
+const ArticleEditor = ({ article }) => {
+    const [seasons, setSeasons] = useState(article.seasons);
+    const [usage, setUsage] = useState(article.usage);
+
     return (
         <Flex direction="column" justifyContent="space-around">
             <ToggleButtonGroup
                 justifyContent="center"
                 size="large"
-                value={article.seasons}
-                onChange={(newSeasons) => { }}
+                value={seasons}
+                onChange={setSeasons}
             >
                 {SEASONS.map((season) => (
                     <ToggleButton
@@ -36,9 +38,9 @@ const ArticleEditor = ({ article, onChange }) => {
                 justifyContent="space-between"
                 gap="0"
                 size="large"
-                value={article.usage}
+                value={usage}
                 isExclusive
-                onChange={(newUsage) => { }}
+                onChange={setUsage}
             >
                 {USAGES.map((usage) => (
                     <ToggleButton
