@@ -21,19 +21,35 @@ const ArticleEditor = ({ article, onChange }) => {
                 onChange={(newSeasons) => { }}
             >
                 {SEASONS.map((season) => (
-                    <ToggleButton key={season.graphqlEnum} value={season} title={season.label}>{season.emoji}</ToggleButton>
+                    <ToggleButton
+                        key={season.graphqlEnum}
+                        className="usage-button"
+                        value={season}
+                        title={season.label}
+                    >
+                        {season.emoji}
+                    </ToggleButton>
                 ))}
             </ToggleButtonGroup>
             <Image src={article.imageUrl} alt={article.usage.label} />
             <ToggleButtonGroup
-                justifyContent="center"
+                justifyContent="space-between"
+                gap="0"
                 size="large"
                 value={article.usage}
                 isExclusive
                 onChange={(newUsage) => { }}
             >
                 {USAGES.map((usage) => (
-                    <ToggleButton key={usage.graphqlEnum} value={usage} title={usage.label}>{usage.emoji}</ToggleButton>
+                    <ToggleButton
+                        key={usage.graphqlEnum}
+                        className="usage-button"
+                        value={usage}
+                        title={usage.label}
+
+                    >
+                        {usage.emoji}
+                    </ToggleButton>
                 ))}
             </ToggleButtonGroup>
 
@@ -42,3 +58,4 @@ const ArticleEditor = ({ article, onChange }) => {
 }
 
 export default ArticleEditor;
+
