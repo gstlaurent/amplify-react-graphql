@@ -82,10 +82,16 @@ body.modal-open {
 
 dialog {
     max-height: 80%;
+    min-width: 90%;
 }
 
 dialog .amplify-image {
     border-radius: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 400px;
+    object-fit: scale-down;
 }
 
 dialog .amplify-togglebutton {

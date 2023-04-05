@@ -15,7 +15,7 @@ const ArticleEditor = ({ article }) => {
     const [usage, setUsage] = useState(article.usage);
 
     return (
-        <Flex direction="column" justifyContent="space-around">
+        <Flex direction="column" justifyContent="space-between">
             <ToggleButtonGroup
                 justifyContent="center"
                 size="large"
