@@ -33,7 +33,7 @@ const WardrobeContents = ({ articles, setArticles }) => {
                                     setArticles={setArticles}
                                     onChange={(updatedArticle) => {
                                         updateArticle(updatedArticle);
-                                        const newArticles = articles;
+                                        const newArticles = [...articles];
                                         const i = newArticles.indexOf(article);
                                         newArticles[i] = updatedArticle;
                                         setArticles(newArticles);

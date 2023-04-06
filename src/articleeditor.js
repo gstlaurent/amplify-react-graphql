@@ -22,8 +22,9 @@ const ArticleEditor = ({ article, onChange }) => {
                 value={seasons}
                 onChange={(newSeasons) => {
                     setSeasons(newSeasons);
-                    article.seasons = newSeasons;
-                    onChange(article);
+                    const newArticle = { ...article };
+                    newArticle.seasons = newSeasons;
+                    onChange(newArticle);
                 }}
             >
                 {SEASONS.map((season) => (
@@ -46,8 +47,9 @@ const ArticleEditor = ({ article, onChange }) => {
                 isExclusive
                 onChange={(newUsage) => {
                     setUsage(newUsage);
-                    article.usage = newUsage;
-                    onChange(article);
+                    const newArticle = { ...article };
+                    newArticle.usage = newUsage;
+                    onChange(newArticle);
                 }}
             >
                 {USAGES.map((usage) => (

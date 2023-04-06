@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     Flex,
@@ -22,10 +22,15 @@ const ArticleCard = ({ article, articles, setArticles, onChange }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [updatedArticle, setUpdatedArticle] = useState(null);
 
-    if (updatedArticle && !isDialogOpen) {
-        setUpdatedArticle(null);
-        onChange(updatedArticle);
-    }
+    useEffect(() => {
+        // This must be in an effect or else the 'setUpdatedArticle' will trigger a
+        // re-render while ArticleCard is already being re-rendered, which is not allowed.
+        if (updatedArticle && !isDialogOpen) {
+            setUpdatedArticle(null);
+            onChange(updatedArticle);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isDialogOpen]);
 
     return (
         <div key={article.id}>
@@ -47,7 +52,7 @@ const ArticleCard = ({ article, articles, setArticles, onChange }) => {
             </Card>
             <ModalDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
                 <ArticleEditor
-                    article={article}
+                    article={updatedArticle ?? article}
                     onChange={setUpdatedArticle} />
             </ModalDialog>
         </div>
