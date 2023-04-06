@@ -31,12 +31,13 @@ const WardrobeContents = ({ articles, setArticles }) => {
                                     article={article}
                                     articles={articles}
                                     setArticles={setArticles}
-                                    onchange={(updatedArticle) => {
-                                        updateArticle(updatedArticle);
-                                        const newArticles = articles;
-                                        const i = newArticles.findIndex(article);
-                                        newArticles[i] = updatedArticle;
-                                        setArticles(newArticles);
+                                    onChange={(updatedArticle) => {
+                                        // updateArticle(updatedArticle);
+                                        // const newArticles = articles;
+                                        // const i = newArticles.findIndex(article);
+                                        // newArticles[i] = updatedArticle;
+                                        // setArticles(newArticles);
+                                        console.log('Updating an article:' + JSON.stringify(updatedArticle))
                                     }}
                                 />
                             )}

@@ -20,6 +20,13 @@ const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
 
 const ArticleCard = ({ article, articles, setArticles, onChange }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [updatedArticle, setUpdatedArticle] = useState(null);
+
+    if (updatedArticle && !isDialogOpen) {
+        setUpdatedArticle(null);
+        onChange(updatedArticle);
+    }
+
     return (
         <div key={article.id}>
             <Card variation="elevated" minWidth="125px" width="125px" height="95%"
@@ -39,7 +46,9 @@ const ArticleCard = ({ article, articles, setArticles, onChange }) => {
                 </Flex>
             </Card>
             <ModalDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
-                <ArticleEditor article={article} />
+                <ArticleEditor
+                    article={article}
+                    onChange={setUpdatedArticle} />
             </ModalDialog>
         </div>
     )

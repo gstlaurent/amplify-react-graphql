@@ -10,7 +10,7 @@ import { SEASONS } from "./season";
 import { USAGES } from "./usage";
 
 
-const ArticleEditor = ({ article }) => {
+const ArticleEditor = ({ article, onChange }) => {
     const [seasons, setSeasons] = useState(article.seasons);
     const [usage, setUsage] = useState(article.usage);
 
@@ -20,7 +20,11 @@ const ArticleEditor = ({ article }) => {
                 justifyContent="center"
                 size="large"
                 value={seasons}
-                onChange={setSeasons}
+                onChange={(newSeasons) => {
+                    setSeasons(newSeasons);
+                    article.seasons = newSeasons;
+                    onChange(article);
+                }}
             >
                 {SEASONS.map((season) => (
                     <ToggleButton
@@ -40,7 +44,11 @@ const ArticleEditor = ({ article }) => {
                 size="large"
                 value={usage}
                 isExclusive
-                onChange={setUsage}
+                onChange={(newUsage) => {
+                    setUsage(newUsage);
+                    article.usage = newUsage;
+                    onChange(article);
+                }}
             >
                 {USAGES.map((usage) => (
                     <ToggleButton
