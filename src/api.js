@@ -153,7 +153,7 @@ export const fetchLastOutfit = async () => {
 
 export const updateArticle = async (updatedArticle) => {
     const data = {
-        id: updateArticle.id,
+        id: updatedArticle.id,
         seasons: updatedArticle.seasons.map(s => s.graphqlEnum),
         usage: updatedArticle.usage.graphqlEnum,
     };
