@@ -6,12 +6,12 @@ import {
     ToggleButton,
 } from '@aws-amplify/ui-react';
 import './styles.css';
-import { SEASONS } from "./season";
+import { Season, SEASONS } from "./season";
 import { USAGES } from "./usage";
 
 
 const ArticleEditor = ({ article, onChange }) => {
-    const [seasons, setSeasons] = useState(article.seasons);
+    const [seasons, setSeasons] = useState(article.seasons.map(s => s.graphqlEnum));
     const [usage, setUsage] = useState(article.usage);
 
     return (
@@ -23,7 +23,7 @@ const ArticleEditor = ({ article, onChange }) => {
                 onChange={(newSeasons) => {
                     setSeasons(newSeasons);
                     const newArticle = { ...article };
-                    newArticle.seasons = newSeasons;
+                    newArticle.seasons = newSeasons.map(s => Season[s]);
                     onChange(newArticle);
                 }}
             >
@@ -31,7 +31,7 @@ const ArticleEditor = ({ article, onChange }) => {
                     <ToggleButton
                         key={season.graphqlEnum}
                         className="usage-button"
-                        value={season}
+                        value={season.graphqlEnum}
                         title={season.label}
                     >
                         {season.emoji}
