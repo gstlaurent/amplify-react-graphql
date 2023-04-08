@@ -6,10 +6,12 @@ import {
     Text,
     Card,
 } from '@aws-amplify/ui-react';
+import { isEmpty } from "./util";
 import { deleteArticle } from "./api";
 import ModalDialog from "./modaldialog"
 import ArticleEditor from "./articleeditor";
 import './styles.css';
+import { SEASONS } from "./season";
 
 const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
     const newArticles = articles.filter((article) => article.id !== articleToDelete.id);
@@ -32,13 +34,19 @@ const ArticleCard = ({ article, articles, setArticles, onChange }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isDialogOpen]);
 
+    const seasonEmojis = SEASONS
+        .filter(season => article.seasons.includes(season))
+        .map(season => season.emoji);
+
     return (
         <div key={article.id}>
             <Card variation="elevated" minWidth="125px" width="125px" height="95%"
                 onClick={() => setIsDialogOpen(true)}>
                 <Flex direction="column" justifyContent="space-between" height="100%">
                     <Flex direction="column" justifyContent="flex-start" gap="0">
-                        <Text as="span">{article.seasons.map(s => s.emoji)}</Text>
+                        {isEmpty(seasonEmojis)
+                            ? <Text as="span">&nbsp;</Text>
+                            : <Text as="span">{seasonEmojis}</Text>}
                         <Image src={article.imageUrl} alt={article.usage.label} />
                     </Flex>
                     <Button variation="link" size="small" title={`Delete ${article.usage.label} Article`} onClick={() => {
