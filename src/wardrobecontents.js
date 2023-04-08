@@ -31,8 +31,8 @@ const WardrobeContents = ({ articles, setArticles }) => {
                                     article={article}
                                     articles={articles}
                                     setArticles={setArticles}
-                                    onChange={(updatedArticle) => {
-                                        updateArticle(updatedArticle);
+                                    onChange={async (updatedArticle) => {
+                                        await updateArticle(updatedArticle);
                                         const newArticles = [...articles];
                                         const i = newArticles.indexOf(article);
                                         newArticles[i] = updatedArticle;
