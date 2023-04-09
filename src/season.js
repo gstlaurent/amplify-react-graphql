@@ -44,6 +44,8 @@ export const SeasonGroup = () => {
               name="seasons"
               value={graphqlEnum}
               onChange={(e) => handleCheckChange(e.target.checked)}
+              // Setting required conditionally here is an easy way to use default
+              // validations to ensure at least one is checked
               required={numChecked === 0}
             />
             <label htmlFor={id}>{`${emoji} ${label}`}</label>
