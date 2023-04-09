@@ -92,4 +92,6 @@ export const compressImage = async (imageFile) => {
     return new File([compressedBlob], `compressedImage-${Date.now}.jpeg`);
 };
 
-
+const date = new Date();
+// Month is 0-based, day (date) is 1-based. This is 4/12.
+export const isBirthday = date.getMonth() === 3 && date.getDate() === 12;

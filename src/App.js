@@ -11,6 +11,7 @@ import {
 import { Wardrobe } from './wardrobe';
 import { fetchArticles } from "./api";
 import { Outfit } from "./outfit";
+import { isBirthday } from "./util";
 
 const App = ({ signOut }) => {
   const [articles, setArticles] = useState(null);
@@ -22,6 +23,7 @@ const App = ({ signOut }) => {
 
   return (
     <View className="App">
+      {isBirthday && (<h4 className="birthday-message">🎂🎈🥳Happy Birthday, Shelley!🥳🎈🎂</h4>)}
       <Tabs defaultIndex={0}
         style={{ display: "block" }}
       >

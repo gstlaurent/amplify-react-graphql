@@ -3,8 +3,7 @@ import {
     Image,
     Button
 } from '@aws-amplify/ui-react';
-
-
+import { isBirthday } from './util';
 
 export const ArticlePic = ({ article, onRefresh }) => {
     return (
@@ -21,7 +20,7 @@ export const ArticlePic = ({ article, onRefresh }) => {
                 size="small"
                 onClick={onRefresh}
             >
-                🔄
+                {isBirthday ? '🥳' : '🔄'}
             </Button>
         </div>
     );

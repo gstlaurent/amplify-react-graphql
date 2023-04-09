@@ -1,13 +1,15 @@
+import { isBirthday } from "./util";
+
 // https://masteringjs.io/tutorials/fundamentals/enum
 export class Usage {
-  static TOP = new Usage('Top', 'Tops', 'TOP', '👚');
-  static BOTTOM = new Usage('Bottom', 'Bottoms', 'BOTTOM', '👖');
-  static DRESS = new Usage('Dress', 'Dresses', 'DRESS', '👗');
-  static SWEATER = new Usage('Sweater', 'Sweaters', 'SWEATER', '🥋');
-  static OUTERWEAR = new Usage('Outerwear', 'Outerwear', 'OUTERWEAR', '🧥');
-  static SHOES = new Usage('Shoes', 'Shoes', 'SHOES', '👟');
-  static ACCESSORY = new Usage('Accessory', 'Accessories', 'ACCESSORY', '📿');
-  static BAG = new Usage('Bag', 'Bags', 'BAG', '👜');
+  static TOP = new Usage('Top', 'Tops', 'TOP', isBirthday ? '🍰' : '👚');
+  static BOTTOM = new Usage('Bottom', 'Bottoms', 'BOTTOM', isBirthday ? '🧁' : '👖');
+  static DRESS = new Usage('Dress', 'Dresses', 'DRESS', isBirthday ? '🎈' : '👗');
+  static SWEATER = new Usage('Sweater', 'Sweaters', 'SWEATER', isBirthday ? '💐' : '🥋');
+  static OUTERWEAR = new Usage('Outerwear', 'Outerwear', 'OUTERWEAR', isBirthday ? '🌷' : '🧥');
+  static SHOES = new Usage('Shoes', 'Shoes', 'SHOES', isBirthday ? '🥧' : '👟');
+  static ACCESSORY = new Usage('Accessory', 'Accessories', 'ACCESSORY', isBirthday ? '🍩' : '📿');
+  static BAG = new Usage('Bag', 'Bags', 'BAG', isBirthday ? '🍪' : '👜');
 
   constructor(label, plural_label, graphqlEnum, emoji) {
     this.label = label;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { groupBy, isEmpty, getRandomInt } from "./util";
+import { groupBy, isEmpty, getRandomInt, isBirthday } from "./util";
 import {
     Button,
     ToggleButtonGroup,
@@ -11,6 +11,7 @@ import { Usage, USAGES } from "./usage";
 import { ArticlePic } from "./articlepic";
 import './styles.css';
 import { createOutfit, fetchLastOutfit } from "./api";
+
 
 const CURRENT_SEASON_STORAGE = "currentSeason";
 
@@ -60,7 +61,7 @@ export const Outfit = ({ articles }) => {
                         size="large"
                         onClick={() => generateAndSaveOutfit(currentSeason)}
                     >
-                        🔄
+                        {isBirthday ? '🥳' : '🔄'}
                     </Button>
                 )}
             </Flex>

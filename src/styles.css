@@ -99,3 +99,11 @@ dialog .amplify-togglebutton {
     padding-left: 0;
     padding-right: 0;
 }
+
+.birthday-message {
+    border: solid;
+    padding: 0.5em;
+    margin: 0.5em;
+    border-radius: .25em;
+    background-color: #0000ff44;
+}

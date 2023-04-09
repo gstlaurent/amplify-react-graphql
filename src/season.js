@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { isBirthday } from "./util";
 
 // https://masteringjs.io/tutorials/fundamentals/enum
 export class Season {
-  static SPRING = new Season('Spring', 'SPRING', '🌱');
-  static SUMMER = new Season('Summer', 'SUMMER', '🌞');
-  static FALL = new Season('Autumn', 'FALL', '🍂');
-  static WINTER = new Season('Winter', 'WINTER', '❄️');
+  static SPRING = new Season('Spring', 'SPRING', isBirthday ? '🎂' : '🌱');
+  static SUMMER = new Season('Summer', 'SUMMER', isBirthday ? '🎊' : '🌞');
+  static FALL = new Season('Autumn', 'FALL', isBirthday ? '🎁' : '🍂');
+  static WINTER = new Season('Winter', 'WINTER', isBirthday ? '🎉' : '❄️');
 
   constructor(label, graphqlEnum, emoji) {
     this.label = label;
