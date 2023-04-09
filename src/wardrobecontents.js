@@ -8,8 +8,7 @@ import ArticleCard from "./articlecard";
 import './styles.css';
 import { Expander, ExpanderItem } from '@aws-amplify/ui-react';
 import { groupBy } from "./util";
-import { updateArticle } from "./api";
-
+import { updateArticle, deleteArticle } from "./api";
 
 const WardrobeContents = ({ articles, setArticles }) => {
     const articlesByUsage = groupBy(articles, "usage", USAGES);
@@ -31,6 +30,13 @@ const WardrobeContents = ({ articles, setArticles }) => {
                                     article={article}
                                     articles={articles}
                                     setArticles={setArticles}
+                                    onDelete={(articleToDelete) => {
+                                        const newArticles = articles.filter(
+                                            (a) => a.id !== articleToDelete.id
+                                        );
+                                        setArticles(newArticles);
+                                        deleteArticle(articleToDelete)
+                                    }}
                                     onChange={async (updatedArticle) => {
                                         await updateArticle(updatedArticle);
                                         const newArticles = [...articles];

@@ -7,20 +7,12 @@ import {
     Card,
 } from '@aws-amplify/ui-react';
 import { isEmpty } from "./util";
-import { deleteArticle } from "./api";
 import ModalDialog from "./modaldialog"
 import ArticleEditor from "./articleeditor";
 import './styles.css';
 import { SEASONS } from "./season";
 
-const deleteArticleFromWardrobe = (articleToDelete, articles, setArticles) => {
-    const newArticles = articles.filter((article) => article.id !== articleToDelete.id);
-    setArticles(newArticles);
-    deleteArticle(articleToDelete)
-};
-
-
-const ArticleCard = ({ article, articles, setArticles, onChange }) => {
+const ArticleCard = ({ article, onDelete, onChange }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [updatedArticle, setUpdatedArticle] = useState(null);
 
@@ -51,7 +43,7 @@ const ArticleCard = ({ article, articles, setArticles, onChange }) => {
                     </Flex>
                     <Button variation="link" size="small" title={`Delete ${article.usage.label} Article`} onClick={() => {
                         if (window.confirm(`Are you sure you want to delete this ${article.usage.label}?`)) {
-                            deleteArticleFromWardrobe(article, articles, setArticles);
+                            onDelete(article);
                         }
                     }}>
                         ❌
