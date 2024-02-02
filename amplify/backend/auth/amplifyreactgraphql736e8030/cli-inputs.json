@@ -40,20 +40,6 @@
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true,
-    "authRoleArn": {
-      "Fn::GetAtt": [
-        "AuthRole",
-        "Arn"
-      ]
-    },
-    "unauthRoleArn": {
-      "Fn::GetAtt": [
-        "UnauthRole",
-        "Arn"
-      ]
-    },
-    "breakCircularDependency": true,
-    "dependsOn": []
+    "useEnabledMfas": true
   }
 }
